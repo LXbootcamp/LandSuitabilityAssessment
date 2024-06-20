@@ -283,12 +283,34 @@ document.getElementById('searchData').onclick = () => {
 
 // 입력 버튼 클릭시 작성한 지표값 db에 저장
 document.getElementById('insertData').onclick = () => {
-  
   let insertedA20 = document.getElementById("aaa01").value;
-  
-  document.getElementById("fetchData_link").href = "./fetchData.jsp?selectedA1=" + clickedFeatureA1 + "&insertedA20=" + insertedA20;
- 
+
+  // 선택된 지번과 레이어 정보 저장
+  localStorage.setItem('clickedFeatureA1', clickedFeatureA1);
+  localStorage.setItem('insertedA20', insertedA20);
+
+  sendData(clickedFeatureA1, insertedA20);
+
+  // 페이지 새로고침
+  // window.location.reload();
 }
+
+// 서버로 데이터 전송
+function sendData(clickedFeatureA1, insertedA20) {
+  var url = "./fetchData.jsp?selectedA1=" + encodeURIComponent(clickedFeatureA1) + "&insertedA20=" + encodeURIComponent(insertedA20);
+  fetch(url, {
+      method: 'POST', // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
+  })
+  .then(response => response.text())
+  .then(data => {
+      console.log("Response from server:", data);
+      // 서버로부터의 응답을 처리합니다
+  })
+  .catch(error => {
+      console.error("Error:", error);
+  });
+}
+
 
 document.getElementById('backButton').onclick = () => {
   // 슬라이드 애니메이션을 위해 기존 클래스 제거
@@ -341,3 +363,21 @@ for (let i = 1; i <= 9; i++) {
   };
 }
 
+// // 페이지 로드 시 localStorage에서 데이터 복구
+// window.onload = function() {
+//   const selectedLayer = localStorage.getItem('selectedLayer');
+//   const savedFeatureA1 = localStorage.getItem('clickedFeatureA1');
+//   const savedFeatureA20 = localStorage.getItem('clickedFeatureA20');
+//   const insertedA20 = localStorage.getItem('insertedA20');
+
+//   if (selectedLayer) {
+//     makeWFSSource(selectedLayer);
+//   }
+//   if (savedFeatureA1 && savedFeatureA20) {
+//     clickedFeatureA1 = savedFeatureA1;
+//     clickedFeatureA20 = savedFeatureA20;
+//     document.getElementById("aaa01").value = insertedA20;
+//     console.log('Restored A1:', clickedFeatureA1);
+//     console.log('Restored A20:', clickedFeatureA20);
+//   }
+// }
