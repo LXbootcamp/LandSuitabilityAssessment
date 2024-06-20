@@ -15,7 +15,7 @@
 </head>
 <body> --%>
 
-
+ 
 <%!
 String checkNull(String data){
 	if (data == null){
