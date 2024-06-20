@@ -1,21 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.sql.*"%>
-<%-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <!-- 웹 페이지 이름 삽입 -->
     <title>무안군 토지적성 평가 프로그램 DB 페이지</title>
-    <link rel="stylesheet" href="node_modules/ol/ol.css">
-    <link rel="icon" type="image/x-icon" href="https://openlayers.org/favicon.ico" />
-    <!-- 구글 링크 붙여넣기 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
-</head>
-<body> --%>
+ </head>
+<body>
 
- 
+
 <%!
 String checkNull(String data){
 	if (data == null){
@@ -46,6 +39,9 @@ String pwd = "tiger";
 Connection con = null;
 Statement stmt = null;
 ResultSet rs = null;
+ResultSet rs3 = null;
+String a20_2 = "";
+
 try
 {
 	// JDBC 읽어오기
@@ -57,7 +53,6 @@ try
 	// insert 쿼리문
 	String query = "select * from muan_all2 where a1 ='" + selectedA1 +"'";
 	out.println("<br><br>query = " + query + "<br><br>");
-	//int rs2 = stmt.executeUpdate(query);
 	rs = stmt.executeQuery(query);
 
 	// while (rs.next()) // selectedA1가 primary key 이므로 if가 적합
@@ -77,8 +72,21 @@ try
 		String a13 = rs.getString("a13"); a13 = checkNull(a13);
         String a14 = rs.getString("a14"); a14 = checkNull(a14);
 		String a20 = rs.getString("a20"); a20 = checkNull(a20);
-
         out.println("<br><br>a20 = " +a20);
+
+		String query2 = "update muan_all2 set a20 = '" + insertedA20 + "' where a1 = '" + selectedA1 + "'";
+		out.println("<br><br>query2 = " +query2);
+		int rs2 = stmt.executeUpdate(query2);
+		
+		String query3 = "select * from muan_all2 where a1 ='" + selectedA1 +"'";
+		out.println("<br><br>query3 = " + query3 + "<br><br>");
+		rs3 = stmt.executeQuery(query3);
+		if (rs3.next()) {
+			a20_2 = rs3.getString("a20"); a20_2 = checkNull(a20_2);
+			out.println("<br><br>a20_2 = " +a20_2);
+
+		}
+		rs3.close();
     } 
 	rs.close();
 	stmt.close();	
@@ -90,5 +98,11 @@ catch(Exception ex)		// 위 try{} 에서 문제가 발생하면 이 안으로 �
 	out.println("err: " + ex.toString());
 }
 %>
+<script type="text/javascript">
+  const a20 = "<%= a20_2 %>";
+  console.log("a20 from JSP:", a20);
+  // 이후 main.js에서 a20 변수를 사용할 수 있습니다.
+</script>
+
 </body>
 </html>
