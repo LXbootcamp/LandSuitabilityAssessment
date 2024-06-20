@@ -287,7 +287,7 @@ document.getElementById('insertData').onclick = () => {
   let insertedA20 = document.getElementById("aaa01").value;
   
   document.getElementById("fetchData_link").href = "./fetchData.jsp?selectedA1=" + clickedFeatureA1 + "&insertedA20=" + insertedA20;
-
+ 
 }
 
 document.getElementById('backButton').onclick = () => {
