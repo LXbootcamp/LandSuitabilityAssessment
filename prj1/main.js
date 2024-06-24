@@ -1,18 +1,23 @@
+import './style.css';
 import VectorSource from 'ol/source/Vector.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import { Fill, Stroke, Style, Circle } from 'ol/style.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
-import Map from 'ol/Map.js';
+import { Map, Overlay, View } from 'ol';
 import Tile from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
-import View from 'ol/View.js';
-import { Select, Draw } from 'ol/interaction.js';
+import { Select, Draw, defaults } from 'ol/interaction.js';
+import { pointerMove, click } from 'ol/events/condition';
 import Feature from 'ol/Feature.js';
 
 var vectorLayer;
 var vectorSource;
+var vectorSource3;
+var selectLayer;
+let overlay;
 
 const centers = {
+  'emd00': [14071801, 4158523],
   'emd01': [14068894, 4163817],
   'emd02': [14082805, 4153124],
   'emd03': [14079690, 4162675],
@@ -22,7 +27,7 @@ const centers = {
   'emd07': [14074240, 4153853],
   'emd08': [14059486, 4177606],
   'emd09': [14072457, 4169013],
-  
+
 };
 
 // 초기 지도 중심과 확대 수준
@@ -33,7 +38,9 @@ const initialZoom = 11;
 function makeFilter1(method) {
   let filter1 = "";
 
-  if ('emd01' == method)
+  if ('emd00' == method)
+    filter1 = "a3 like '%무안군%'";
+  else if ('emd01' == method)
     filter1 = "a3 like '%망운면%'";
   else if ('emd02' == method)
     filter1 = "a3 like '%몽탄면%'";
@@ -72,6 +79,41 @@ const vectorLayer2 = new VectorLayer({
   })
 });
 
+///////////////선택 지번 레이어에 대한 부분/////////////
+function makeFilter(clickedFeatureJibun) {
+  let filter = "jibun = '";
+  filter += clickedFeatureJibun + "'";
+  return filter;
+}
+
+function makeWFSSource2(clickedFeatureJibun) {
+  vectorSource3 = new VectorSource({
+    url: encodeURI('http://localhost:42888/geoserver/campWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campWS:muan_all2&outputFormat=application/json&CQL_FILTER=' + makeFilter(clickedFeatureJibun)),
+    format: new GeoJSON(),
+  });
+  if (null != selectLayer){
+    selectLayer.setSource(vectorSource3);
+    selectLayer.setVisible(true);
+  }
+};
+
+selectLayer = new VectorLayer({
+  source: null, // 초기에는 소스를 설정하지 않음
+  visible: false, // 초기에는 보이지 않도록 설정
+  style: new Style({
+    fill: new Fill({
+      color: 'rgba(127, 0, 255, 1)'
+    }),
+    stroke: new Stroke({
+      color: 'rgba(76, 0, 153, 1)',
+      width: 2
+    })
+  })
+});
+////////////////////////////////////////////////////
+
+
+
 function makeWFSSource(method) {
   vectorSource = new VectorSource({
     url: encodeURI('http://localhost:42888/geoserver/campWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campWS:muan_all2&outputFormat=application/json&CQL_FILTER=' + makeFilter1(method)),
@@ -83,16 +125,16 @@ function makeWFSSource(method) {
   }
   // 지도 중심 및 확대 수준 설정
   const view = map.getView();
+  let zoomLevel = method === 'emd00' ? 11 : 12.5; // 삼항함수 - emd00인 경우  zoomLevel을 11로 설정
   view.animate({
     center: centers[method],
-    zoom: 12.5,
+    zoom: zoomLevel,
     duration: 1000 // 1초 동안 애니메이션
   });
 };
 //makeWFSSource("");
 
 vectorLayer = new VectorLayer({
-  // source: vectorSource,
   source: null, // 초기에는 소스를 설정하지 않음
   visible: false, // 초기에는 보이지 않도록 설정
   style: new Style({
@@ -151,14 +193,52 @@ const SelectionsVector = new VectorLayer({
 
 
 
+/////////////// 팝업 부분 ///////////////
+const info = document.getElementById('info');
+
+let currentFeature;
+const displayFeatureInfo = function (pixel, target) {
+  const feature = target.closest('.ol-control')
+    ? undefined
+    : map.forEachFeatureAtPixel(pixel, function (feature) {
+        return feature;
+      });
+  if (feature) {
+    console.log("feature:" + feature);
+    info.style.left = pixel[0] + 'px';
+    info.style.top = pixel[1] + 'px';
+    if (feature !== currentFeature) {
+      info.style.visibility = 'visible';
+      info.innerText = feature.get('jibun');
+    }
+  } else {
+    info.style.visibility = 'hidden';
+  }
+  currentFeature = feature;
+};
+
+const popup = document.getElementById('popup');
+
+overlay = new Overlay({
+  element: popup,
+  autoPan: {
+    animation: {
+      duration: 250,
+    },
+  },
+});
+
+/////////////////////////////////////////
+
 const map = new Map({
-  layers: [raster, vectorLayer2, vectorLayer, SelectionsVector, DrawVector],
+  layers: [raster, vectorLayer2, vectorLayer, SelectionsVector, DrawVector, selectLayer],
+  overlays: [overlay],
   target: 'map',
   view: new View({
     center: initialCenter,
     maxZoom: 19,
     zoom: initialZoom
-  })
+  }),
 });
 
 const selectedStyle = new Style({
@@ -229,18 +309,14 @@ const selectedValueDisplay = document.getElementById('selectedValueDisplay');
 let clickedFeatureJibun = null;
 let clickedFeatureA1 = null; // pnu
 let clickedFeatureA20 = null; // 경사도(ex: 완만함)
-
-comboBox.addEventListener('change', function () {
-  selectedValueDisplay.textContent = comboBox.value;
-  clickedFeatureJibun = comboBox.value;
-});
+let insertedA20 = {};
 
 selectedFeatures.on(['add', 'remove'], function () {
   const names = selectedFeatures.getArray().map(function (feature) {
     const jibun = feature.get('jibun') || '필지 선택';
     const a1 = feature.get('a1') || '';  // a1 값을 가져옴
     const a20 = feature.get('a20') || '';
-    return {jibun, a1, a20};
+    return { jibun, a1, a20 };
   });
   updateComboBox(names);
 });
@@ -266,51 +342,67 @@ comboBox.addEventListener('change', function () {
   const selectedOption = comboBox.options[comboBox.selectedIndex];
   clickedFeatureA1 = selectedOption.getAttribute('a1');
   clickedFeatureA20 = selectedOption.getAttribute('a20');
-  console.log('Selected Jibun:', clickedFeatureJibun);
-  console.log('Selected A1:', clickedFeatureA1); 
-  console.log('Selected A20:', clickedFeatureA20); 
-  document.getElementById("fetchData_link").href ="./fetchData.jsp?selectedA1='" + clickedFeatureA1 + "'";
-  return clickedFeatureA1;
+
+  document.getElementById("fetchData_link").href = "./fetchData.jsp?selectedA1='" + clickedFeatureA1 + "'";
+
+  // 필드 값 비우기
+  document.getElementById("aaa01").value = '';
+
+  // selectLayer 업데이트 및 표시
+  makeWFSSource2(clickedFeatureJibun);
+
+  return clickedFeatureA1, clickedFeatureJibun;
 });
+
 
 // 조회 버튼 클릭시 db에 저장된 지표값 표시
 document.getElementById('searchData').onclick = () => {
-
-  document.getElementById("aaa01").value =clickedFeatureA20;
-
+  if (insertedA20[clickedFeatureA1] === undefined) {
+    console.log('insertedA20 is null for current A1');
+    document.getElementById("aaa01").value = clickedFeatureA20;
+  } else {
+    console.log('insertedA20 is not null for current A1');
+    document.getElementById("aaa01").value = insertedA20[clickedFeatureA1];
+  }
+  // 팝업 표시
+  const selectedFeature = vectorSource.getFeatures().find(feature => feature.get('jibun') === clickedFeatureJibun);
+  if (selectedFeature) {
+      const coordinates = selectedFeature.getGeometry().getCoordinates();
+      document.getElementById("info-title").innerHTML = clickedFeatureJibun;
+      overlay.setPosition(coordinates);
+  }
 }
+
 
 
 // 입력 버튼 클릭시 작성한 지표값 db에 저장
 document.getElementById('insertData').onclick = () => {
-  let insertedA20 = document.getElementById("aaa01").value;
+  const value = document.getElementById("aaa01").value;
+  insertedA20[clickedFeatureA1] = value;
 
   // 선택된 지번과 레이어 정보 저장
   localStorage.setItem('clickedFeatureA1', clickedFeatureA1);
-  localStorage.setItem('insertedA20', insertedA20);
+  localStorage.setItem('insertedA20', JSON.stringify(insertedA20));
 
-  sendData(clickedFeatureA1, insertedA20);
-
-  // 페이지 새로고침
-  // window.location.reload();
+  sendData(clickedFeatureA1, value);
+  
 }
 
 // 서버로 데이터 전송
 function sendData(clickedFeatureA1, insertedA20) {
   var url = "./fetchData.jsp?selectedA1=" + encodeURIComponent(clickedFeatureA1) + "&insertedA20=" + encodeURIComponent(insertedA20);
   fetch(url, {
-      method: 'POST', // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
+    method: 'POST', // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
   })
-  .then(response => response.text())
-  .then(data => {
+    .then(response => response.text())
+    .then(data => {
       console.log("Response from server:", data);
       // 서버로부터의 응답을 처리합니다
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error("Error:", error);
-  });
+    });
 }
-
 
 document.getElementById('backButton').onclick = () => {
   // 슬라이드 애니메이션을 위해 기존 클래스 제거
@@ -342,7 +434,7 @@ document.getElementById('backButton').onclick = () => {
   DrawVector.setVisible(false);
 };
 
-for (let i = 1; i <= 9; i++) {
+for (let i = 0; i <= 9; i++) {
   const id = i < 10 ? '0' + i : i.toString();
   document.getElementById('emd' + id).onclick = () => {
     console.log('emd' + id + ' clicked');
@@ -362,22 +454,3 @@ for (let i = 1; i <= 9; i++) {
     document.getElementById('menu2').classList.remove('hidden');
   };
 }
-
-// // 페이지 로드 시 localStorage에서 데이터 복구
-// window.onload = function() {
-//   const selectedLayer = localStorage.getItem('selectedLayer');
-//   const savedFeatureA1 = localStorage.getItem('clickedFeatureA1');
-//   const savedFeatureA20 = localStorage.getItem('clickedFeatureA20');
-//   const insertedA20 = localStorage.getItem('insertedA20');
-
-//   if (selectedLayer) {
-//     makeWFSSource(selectedLayer);
-//   }
-//   if (savedFeatureA1 && savedFeatureA20) {
-//     clickedFeatureA1 = savedFeatureA1;
-//     clickedFeatureA20 = savedFeatureA20;
-//     document.getElementById("aaa01").value = insertedA20;
-//     console.log('Restored A1:', clickedFeatureA1);
-//     console.log('Restored A20:', clickedFeatureA20);
-//   }
-// }
