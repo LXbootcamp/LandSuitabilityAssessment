@@ -9,37 +9,6 @@ import OSM from "ol/source/OSM";
 import { Select, Draw } from "ol/interaction.js";
 import Feature from "ol/Feature.js";
 
-var additionalVectorLayers = [];
-var additionalVectorSources = [];
-
-// 종합적성값에 따른 색상 설정
-const additionalColors = [
-  "rgba(255, 255, 255, 0.5)", // 흰색 (0-20)
-  "rgba(255, 255, 0, 0.5)", // 노란색 (21-40)
-  "rgba(0, 128, 0, 0.5)", // 초록색 (41-60)
-  "rgba(0, 0, 255, 0.5)", // 파란색 (61-80)
-  "rgba(255, 0, 0, 0.5)", // 빨간색 (81-100)
-];
-
-// 추가 벡터 레이어 및 소스 생성
-for (let i = 0; i < 5; i++) {
-  additionalVectorSources.push(new VectorSource());
-  additionalVectorLayers.push(
-    new VectorLayer({
-      source: additionalVectorSources[i],
-      style: new Style({
-        fill: new Fill({
-          color: additionalColors[i],
-        }),
-        stroke: new Stroke({
-          color: "rgba(100, 100, 100, 1.0)",
-          width: 1,
-        }),
-      }),
-    })
-  );
-}
-
 var vectorLayer;
 var vectorSource;
 var vectorSource3;
@@ -272,7 +241,6 @@ const map = new Map({
     SelectionsVector,
     DrawVector,
     selectLayer,
-    ...additionalVectorLayers,
   ],
   overlays: [overlay],
   target: "map",
@@ -574,31 +542,6 @@ for (let i = 0; i <= 9; i++) {
     popup.style.display = "block";
   };
 }
-
-// input4 값에 따라 벡터 레이어 업데이트 함수
-function updateAdditionalVectorLayers() {
-  additionalVectorSources.forEach((source) => source.clear()); // 모든 소스를 초기화
-
-  vectorSource.forEachFeature((feature) => {
-    const value = feature.get("종합적성값");
-    if (value >= 0 && value <= 20) {
-      additionalVectorSources[0].addFeature(feature);
-    } else if (value > 20 && value <= 40) {
-      additionalVectorSources[1].addFeature(feature);
-    } else if (value > 40 && value <= 60) {
-      additionalVectorSources[2].addFeature(feature);
-    } else if (value > 60 && value <= 80) {
-      additionalVectorSources[3].addFeature(feature);
-    } else if (value > 80 && value <= 100) {
-      additionalVectorSources[4].addFeature(feature);
-    }
-  });
-}
-
-// 버튼 클릭 이벤트에 벡터 레이어 업데이트 함수 연결
-document.getElementById("insertResultData").addEventListener("click", () => {
-  updateAdditionalVectorLayers();
-});
 
 // aaaa01 ~ aaaa04, bbbb01 ~ bbbb05의 값을 합산하여 devVal에 설정하는 함수
 function calculateDevVal() {
