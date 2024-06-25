@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>토지적성평가 프로그램</title>
+  <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
+  <link rel="stylesheet" href="node_modules/ol/ol.css">
+  <!-- 구글 링크 붙여넣기 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <div class="container">
+    <div id="header">
+      <div class="topDecal"></div>
+      <h1> 무안군 토지적성평가 프로그램</h1>
+    </div> <!-- header 닫힘 -->
+    <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
+    <div id="contents">
+      <div id="menu1">
+        <div class="contents2">
+          <h2> 읍면동 선택</h2>
+          <ul class="campsiteList">
+            <!-- &middot;은 글자 중간에 가운데 점을 찍는 html 특수문자  -->
+            <li> <span id="emd01">망운면</span></li>
+            <li> <span id="emd02">몽탄면</span></li>
+            <li> <span id="emd03">무안읍</span></li>
+            <li> <span id="emd04">삼향읍</span></li>
+            <li> <span id="emd05">운남면</span></li>
+            <li> <span id="emd06">일로읍</span></li>
+            <li> <span id="emd07">청계면</span></li>
+            <li> <span id="emd08">해제면</span></li>
+            <li> <span id="emd09">현경면</span></li>
+          </ul>
+        </div>
+      </div> <!-- menu1 닫힘 -->
+      <div id="menu2" class="hidden">
+
+        <div class="contents1">
+          <h2>평가 지표 입력</h2><br>
+          <div>
+            <select id="selectedRegions" style="width: 200px; font-size: 17px;">
+            </select><br>
+            <div style="margin-top: 10px; font-size: 17px; color: rgb(17, 82, 44);">
+              선택된 지번: <span id="selectedValueDisplay"></span>
+            </div>
+          </div>
+
+          <a href="" id="fetchData_link" target="_blank"><input type="submit" value='조회'
+              style="width: 100px; font-size: 17px;" /></a><br>
+
+          <table class="campsiteTable">
+            <tr>
+              <th colspan=3>필 수 지 표 </td>
+            </tr>
+            <tr>
+              <th width="100">개발적성</th>
+              <td>
+                <label for="aaa01">경사도</label><br>
+                <label for="aaa02">표고(m)</label><br>
+                <label for="aaa03">기개발지와의거리(m)</label><br>
+                <label for="aaa04">공공편익시설과의거리(m)</label>
+              </td>
+              <td>
+                <input style="width:60px" type="text" id="aaa01" value="" required><br>
+                <input style="width:60px" type="text" id="aaa02" value="" required><br>
+                <input style="width:60px" type="text" id="aaa03" value="" required><br>
+                <input style="width:60px" type="text" id="aaa04" value="" required>
+              </td>
+            </tr>
+            <tr>
+              <th width="100"> 보전적성 </th>
+              <td>
+                <label for="bbb01">경지정리면적비율(%)</label><br>
+                <label for="bbb02">생태자연도상위등급비율(%)</label><br>
+                <label for="bbb03">공적규제지역면적비율(%)</label><br>
+                <label for="bbb04">공적규제지역과의거리(m)</label>
+              </td>
+              <td>
+                <input style="width:60px" type="text" id="bbb01" required><br>
+                <input style="width:60px" type="text" id="bbb02" required><br>
+                <input style="width:60px" type="text" id="bbb03" required><br>
+                <input style="width:60px" type="text" id="bbb04" required>
+              </td>
+            </tr>
+          </table>
+          <table class="campsiteTable2">
+            <tr>
+              <th colspan=3>선 택 지 표 </td>
+            </tr>
+            <tr>
+              <th width="100">개발적성</th>
+              <td>
+                <label for="ccc01">도지용지비율(%)</label><br>
+
+                <label for="ccc02">용도전용비율(%)</label><br>
+
+                <label for="ccc03">도시용지인접비율(%)</label><br>
+
+                <label for="ccc04">지가수준</label><br>
+
+                <label for="ccc05">도로와의거리(m)</label><br>
+
+              </td>
+              <td>
+                <input style="width:60px" type="text" id="ccc01" required><br>
+                <input style="width:60px" type="text" id="ccc02" required><br>
+                <input style="width:60px" type="text" id="ccc03" required><br>
+                <input style="width:60px" type="text" id="ccc04" required><br>
+                <input style="width:60px" type="text" id="ccc05" required>
+              </td>
+            </tr>
+            <tr>
+              <th width="100"> 보전적성 </th>
+              <td>
+                <label for="ddd01">전답과수원면적비율(%)</label><br>
+                <label for="ddd02">농업진흥지역비율(%)</label><br>
+                <label for="ddd03">임상도상위등급비율(%)</label><br>
+                <label for="ddd04">보전산지비율(%)</label><br>
+                <label for="ddd05">경지정리지역과의거리(m)</label><br>
+              </td>
+              <td>
+                <input style="width:60px" type="text" id="ddd01" required><br>
+                <input style="width:60px" type="text" id="ddd02" required><br>
+                <input style="width:60px" type="text" id="ddd03" required><br>
+                <input style="width:60px" type="text" id="ddd04" required><br>
+                <input style="width:60px" type="text" id="ddd05" required>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+
+        <input type='submit' value='입력' style="width: 100px; font-size: 17px;"><br><br>
+        <button style="width: 200px; height: 35px; font-size: 17px;" id="backButton">읍면동 선택으로 돌아가기</button>
+      </div> <!-- menu2 닫힘 -->
+      <div id="mapArea">
+        <div id="map" class="map">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- popup의 모양 정의 -->
+  <!-- <div id="popup">
+    <a href="" id="popup_link" target="_blank">
+      <h3 id="info-title"></h3>
+    </a>
+    <span id="lineintro"></span>
+  </div> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.6.1/jsts.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
+  <script type="module" src="main.js"></script>
+
+
+
+</body>
+
+</html>
