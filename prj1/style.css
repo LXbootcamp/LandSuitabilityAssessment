@@ -21,14 +21,14 @@ body {
 }
 
 #header {
-  height: 90px;
+  height: 60px;
   background: #fff;
   border-bottom: 1px solid #d4d4d4;
 }
 
 #contents {
   position: absolute;
-  top: 91px;
+  top: 81px;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -53,6 +53,7 @@ body {
   padding: 5px;
   transform: translateX(0);
   transition: transform 0.5s;
+  overflow-y: auto;
 }
 
 #mapArea {
@@ -79,7 +80,7 @@ body {
 
 /* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
 ul.emdList,
-table.dataTable, table.dataTable2 {
+table.dataTable, table.dataTable2, table.dataTable3 {
   background: #efefef;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -150,6 +151,25 @@ table.dataTable2 th {
   font-weight: bold;
 }
 
+table.dataTable3 {
+  width: 100%;
+}
+
+table.dataTable3 td,
+table.dataTable3 th {
+  border-top: 1px solid #fff;
+  padding: 4px 5px;
+}
+
+table.dataTable3 tr:first-child td,
+table.dataTable3 tr:first-child th {
+  border-top: none;
+}
+
+table.dataTable3 th {
+  font-weight: bold;
+}
+
 .slide-out {
   animation: slideOut 0.5s forwards;
 }
@@ -214,6 +234,12 @@ table.dataTable2 th {
   display: none;
 }
 
+.center-btn{
+	text-align: center;
+}
+.center-btn1{
+	display :inline-block;
+}
 
 #info {
   position: absolute;
@@ -235,9 +261,9 @@ table.dataTable2 th {
 #popup 
 {
   width: 200px;
-  height: 300px;
+  height: 200px;
   padding: 5px;
-  border: 1px solid gray;
+  border: 3px solid gray;
   border-radius: 5px;
   background-color: white;  
 }
