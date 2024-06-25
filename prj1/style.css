@@ -35,7 +35,7 @@ body {
 }
 
 /* DIV영역 여러개를 나란히 놓으려면, float 속성을 이용 */
-#menu1 {
+#menu1 { 
   width: 160px;
   height: 100%;
   float: left;
