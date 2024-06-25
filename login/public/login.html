@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        #signupForm {
+            display: none;
+            /* 회원가입 폼을 처음에는 숨김 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loginStatus">
+        <h2>Login</h2>
+        <form id="loginForm" method="POST" onsubmit="return validateLoginForm(event)">
+            Username: <input type="text" id="loginUsername" name="username"><br>
+            Password: <input type="password" id="loginPassword" name="password"><br>
+            <input type="submit" value="Login">
+            <button type="button" onclick="showSignupForm()">Sign Up</button>
+        </form>
+
+        <h2 id="signupTitle" style="display:none;">Sign Up</h2>
+        <form id="signupForm" method="POST" onsubmit="return validateSignupForm(event)">
+            Username: <input type="text" id="signupUsername" name="username"><br>
+            Password: <input type="password" id="signupPassword" name="password"><br>
+            이름 : <input type="text" id="signupName" name="name"><br>
+            전화번호 : <input type="text" id="signupPhone" name="phone"><br>
+            <input type="submit" value="Sign Up">
+            <button type="button" onclick="hideSignupForm()">Cancel</button>
+        </form>
+    </div>
+    <script>
+        // 특수 문자를 HTML 이스케이프 처리하는 함수
+        function escapeHtml(text) {
+            var map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+        }
+
+        // 로그인 폼 검증 및 제출 함수
+        function validateLoginForm(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            var username = document.getElementById('loginUsername').value;
+            var password = document.getElementById('loginPassword').value;
+
+            // 사용자 입력 검증
+            if (!username || !password) {
+                alert('Both fields are required.');
+                return false;
+            }
+
+            // 사용자 입력을 서버에 보내기 전에 이스케이프 처리
+            username = escapeHtml(username);
+            password = escapeHtml(password);
+
+            console.log('Sending login request:', { username, password });
+
+            // fetch API를 사용하여 서버로 폼 데이터 전송
+            fetch('http://172.20.221.159:3000/login', { // Node.js 서버의 주소를 명시
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password }),
+                credentials: 'include' // 세션 쿠키 포함
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            }).then(data => {
+                if (data.success) {
+                    console.log('Login successful:', data);
+                    alert('Login success!');
+                    // 로그인 성공 시 index.html로 이동
+                    window.location.href = 'index.html';
+                } else {
+                    console.log('Login failed:', data);
+                    // 로그인 실패 시 경고 메시지 표시
+                    alert('Login failed!');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Login failed!');
+            });
+
+            return false; // 기본 폼 제출 방지
+        }
+
+        // 회원가입 폼 검증 및 제출 함수
+        function validateSignupForm(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            var username = document.getElementById('signupUsername').value;
+            var password = document.getElementById('signupPassword').value;
+            var name = document.getElementById('signupName').value;
+            var phone = document.getElementById('signupPhone').value;
+
+            // 사용자 입력 검증
+            if (!username || !password || !name || !phone) {
+                alert('All fields are required.');
+                return false;
+            }
+
+            // 사용자 입력을 서버에 보내기 전에 이스케이프 처리
+            username = escapeHtml(username);
+            password = escapeHtml(password);
+            name = escapeHtml(name);
+            phone = escapeHtml(phone);
+
+            console.log('Sending signup request:', { username, password, name, phone });
+
+            // fetch API를 사용하여 서버로 폼 데이터 전송
+            fetch('http://172.20.221.159:3000/signup', { // Node.js 서버의 주소를 명시
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password, name: name, phone: phone }),
+                credentials: 'include' // 세션 쿠키 포함
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            }).then(data => {
+                if (data.success) {
+                    console.log('Signup successful:', data);
+                    alert('Signup success! You can now login.');
+                    hideSignupForm(); // 회원가입 성공 시 폼 숨김
+                } else {
+                    console.log('Signup failed:', data);
+                    // 회원가입 실패 시 경고 메시지 표시
+                    alert('Signup failed!');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Signup failed!');
+            });
+
+            return false; // 기본 폼 제출 방지
+        }
+
+        // 회원가입 폼 표시 함수
+        function showSignupForm() {
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('signupTitle').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+        }
+
+        // 회원가입 폼 숨김 함수
+        function hideSignupForm() {
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('signupTitle').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
