@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
- 
+
 </head>
 
 <body>
@@ -44,7 +44,7 @@
           <h3>기본 정보 및 지표 조회</h3>
           <div>
             <select id="selectedRegions" style="width: 200px; height: 25px;font-size: 15px;">
-            </select> <button style="width: 80px; height: 25px; font-size: 15px;" id="searchData">조회</button> <button
+            </select> <button style="width: 70px; height: 25px; font-size: 15px;" id="searchData">조회</button> <button
               style="width: 100px; font-size: 15px;" id="backButton">읍면동 선택</button><br>
             <div style="margin-top: 10px; font-size: 15px; color: rgb(150, 24, 24);">
               선택된 지번: <span id="selectedValueDisplay"></span>
@@ -69,12 +69,13 @@
               </td>
               <td style="text-align: center; font-size: 14.5px;">
                 <span id="aaa01"></span><br>
-                <input style="width:40px;" type="text" id="aaa02"><br>
-                <input style="width:40px;" type="text" id="aaa03"><br>
-                <input style="width:40px;" type="text" id="aaa04">
+                <span id="aaa02"></span><br>
+                <span id="aaa03"></span><br>
+                <span id="aaa04"></span>
               </td>
               <td style="text-align: right;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa01" value="" required><br>
+                <input style="width:40px; font-size: 14.5px; text-align: center;" type="text" id="aaaa01" value="" required><br>
+                <!-- <span id="aaaa01"></span><br> -->
                 <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa02"><br>
                 <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa03"><br>
                 <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa04">
@@ -86,22 +87,19 @@
                 <label for="bbb01">도지용지비율(%)</label><br>
                 <label for="bbb02">용도전용비율(%)</label><br>
                 <label for="bbb03">도시용지인접비율(%)</label><br>
-                <label for="bbb04">지가수준</label><br>
-                <label for="bbb05">도로와의거리(m)</label>
+                <label for="bbb04">도로와의거리(m)</label>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb05">
+                <span id="bbb01"></span><br>
+                <span id="bbb02"></span><br>
+                <span id="bbb03"></span><br>
+                <span id="bbb04"></span>
               </td>
               <td style="text-align: right;">
                 <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb01"><br>
                 <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb02"><br>
                 <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb05">
+                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb04">
               </td>
             </tr>
             <tr>
@@ -127,10 +125,10 @@
                 <label for="ccc04">공적규제지역과의거리(m)</label>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc04">
+                <span id="ccc01"></span><br>
+                <span id="ccc02"></span><br>
+                <span id="ccc03"></span><br>
+                <span id="ccc04"></span>
               </td>
               <td style="text-align: right;">
                 <input style="width:40px; font-size: 14.5px;" type="text" id="cccc01"><br>
@@ -149,11 +147,11 @@
                 <label for="ddd05">경지정리지역과의거리(m)</label><br>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd05">
+                <span id="ddd01"></span><br>
+                <span id="ddd02"></span><br>
+                <span id="ddd03"></span><br>
+                <span id="ddd04"></span><br>
+                <span id="ddd05"></span>
               </td>
               <td style="text-align: right;">
                 <input style="width:40px; font-size: 14.5px;" type="text" id="dddd01"><br>
@@ -171,10 +169,12 @@
               </td>
             </tr>
           </table>
-          <div class ="center-btn">
-            <button style="width: 100px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및 수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button style="width: 100px; font-size: 15px;" id="deleteData" onclick="sendData();">삭제</button>
+          <div class="center-btn">
+            <button style="width: 100px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및
+              수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
+              style="width: 100px; font-size: 15px;" id="deleteData" onclick="sendData();">삭제</button>
           </div>
-          
+
         </div>
         <a href="" id="fetchData_link" target="_blank">
           <!-- <button>테스트</button> -->
@@ -197,16 +197,16 @@
                   <td><input type="text" id="input4" style="width: 60px;"></td>
                 </tr>
             </table>
-            <div class ="center-btn">
-              <button style="width: 100px; font-size: 15px;" id="resultData" onclick="sendData();">결과 계산</button>
-              <button style="width: 120px; font-size: 15px; " id="insertResultData" onclick="sendData();">결과 입력 및 수정</button>
+            <div class="center-btn">
+              <button style="width: 120px; font-size: 15px; " id="insertResultData" onclick="sendData();">결과 입력 및
+                수정</button>
               <button style="width: 100px; font-size: 15px; " id="deleteResultData" onclick="sendData();">결과 삭제</button>
             </div>
             <br>
-            <div class ="center-btn">
+            <div class="center-btn">
               <button style="width: 120px; font-size: 15px;" id="notyet" onclick="sendData();">지도로 결과 보기</button>
             </div>
-            
+
           </div>
         </div>
       </div> <!-- menu2 닫힘 -->
