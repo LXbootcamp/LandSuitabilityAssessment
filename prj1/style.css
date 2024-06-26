@@ -267,8 +267,7 @@ table.dataTable3 th {
   border-radius: 5px;
   background-color: white;  
 }
-
-.margin-adjust {
-  /* margin-left: 20px; 왼쪽으로부터 20px 떨어뜨립니다 */
-  margin-top: 10px;  /* 위로부터 10px 떨어뜨립니다 */
+.height-span {
+  display: inline-block;
+  height: 23px;  /* 원하는 높이 설정 */
 }
