@@ -10,15 +10,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
-  <link rel="stylesheet" href="/style_07b0596c2b1323f7869a.css">
+  <link rel="stylesheet" href="/dist/style_df2f73d3ea470b028495.css">
 
-<link href="/style_07b0596c2b1323f7869a.css" rel="stylesheet"></head>
+<link href="/dist/style_df2f73d3ea470b028495.css" rel="stylesheet"></head>
 
 <body>
   <div class="container">
     <div id="header">
       <div class="topDecal"></div>
-      <h1> <img style="width: 65px;" src="./lxLogo.png" alt="로고" style="vertical-align: middle; margin-right: 10px;">
+      <h1> <img style="width: 65px;" src="/static/lxLogo.png" alt="로고"
+          style="vertical-align: middle; margin-right: 10px;">
         무안군 토지적성평가 프로그램</h1>
     </div> <!-- header 닫힘 -->
     <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
@@ -44,7 +45,7 @@
           <h3>기본 정보 및 지표 조회</h3>
           <div>
             <select id="selectedRegions" style="width: 200px; height: 25px;font-size: 15px;">
-            </select> <button style="width: 80px; height: 25px; font-size: 15px;" id="searchData">조회</button> <button
+            </select> <button style="width: 70px; height: 25px; font-size: 15px;" id="searchData">조회</button> <button
               style="width: 100px; font-size: 15px;" id="backButton">읍면동 선택</button><br>
             <div style="margin-top: 10px; font-size: 15px; color: rgb(150, 24, 24);">
               선택된 지번: <span id="selectedValueDisplay"></span>
@@ -56,28 +57,26 @@
               <td colspan=1 width="50" style="text-align: center;">지표값</td>
               <td colspan=1 style="text-align: center;">점수</td>
             </tr>
-            <!-- <tr>
-              <td colspan="4" style="text-align: right;">지표값 점수</td> 
-            </tr> -->
             <tr>
               <th width="80">필수지표</th>
               <td width="200" style="font-size: 14.5px;">
                 <label for="aaa01">경사도</label><br>
                 <label for="aaa02">표고(m)</label><br>
-                <label for="aaa03">기개발지와의거리(m)</label><br>
-                <label for="aaa04">공공편익시설과의거리(m)</label>
+                <label for="aaa03">기개발지와의거리(km)</label><br>
+                <label for="aaa04">공공편익시설과의거리(km)</label>
               </td>
               <td style="text-align: center; font-size: 14.5px;">
-                <span id="aaa01"></span><br>
-                <input style="width:40px;" type="text" id="aaa02"><br>
-                <input style="width:40px;" type="text" id="aaa03"><br>
-                <input style="width:40px;" type="text" id="aaa04">
+                <span id="aaa01" class="height-span"></span><br>
+                <span id="aaa02" class="height-span"></span><br>
+                <span id="aaa03" class="height-span"></span><br>
+                <span id="aaa04" class="height-span"></span>
               </td>
-              <td style="text-align: right;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa01" value="" required><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="aaaa04">
+              <td style="text-align: center;">
+                <input style="width:40px; height:17px; font-size: 14.5px; " type="text" id="aaaa01" value=""
+                  required><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa02"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa03"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa04">
               </td>
             </tr>
             <tr>
@@ -86,27 +85,24 @@
                 <label for="bbb01">도지용지비율(%)</label><br>
                 <label for="bbb02">용도전용비율(%)</label><br>
                 <label for="bbb03">도시용지인접비율(%)</label><br>
-                <label for="bbb04">지가수준</label><br>
-                <label for="bbb05">도로와의거리(m)</label>
+                <label for="bbb04">도로와의거리(m)</label>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbb05">
+                <span id="bbb01" class="height-span"></span><br>
+                <span id="bbb02" class="height-span"></span><br>
+                <span id="bbb03" class="height-span"></span><br>
+                <span id="bbb04" class="height-span"></span>
               </td>
-              <td style="text-align: right;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="bbbb05">
+              <td style="text-align: center;">
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb01"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb02"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb03"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb04">
               </td>
             </tr>
             <tr>
               <td>
-              <th>개발적성값 (A)</th>
+              <th>개발적성값 (C)</th>
               <td colspan=2 style="text-align: center;"> <input
                   style="width:100px; font-size: 14.5px; text-align: right;" type="text" id="devVal"> </td>
               </td>
@@ -124,19 +120,19 @@
                 <label for="ccc01">경지정리면적비율(%)</label><br>
                 <label for="ccc02">생태자연도상위등급비율(%)</label><br>
                 <label for="ccc03">공적규제지역면적비율(%)</label><br>
-                <label for="ccc04">공적규제지역과의거리(m)</label>
+                <label for="ccc04">공적규제지역과의거리(km)</label>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ccc04">
+                <span id="ccc01" class="height-span"></span><br>
+                <span id="ccc02" class="height-span"></span><br>
+                <span id="ccc03" class="height-span"></span><br>
+                <span id="ccc04" class="height-span"></span>
               </td>
-              <td style="text-align: right;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="cccc01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="cccc02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="cccc03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="cccc04">
+              <td style="text-align: center;">
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc01"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc02"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc03"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc04">
               </td>
             </tr>
             <tr>
@@ -149,23 +145,23 @@
                 <label for="ddd05">경지정리지역과의거리(m)</label><br>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="ddd05">
+                <span id="ddd01" class="height-span"></span><br>
+                <span id="ddd02" class="height-span"></span><br>
+                <span id="ddd03" class="height-span"></span><br>
+                <span id="ddd04" class="height-span"></span><br>
+                <span id="ddd05" class="height-span"></span>
               </td>
-              <td style="text-align: right;">
-                <input style="width:40px; font-size: 14.5px;" type="text" id="dddd01"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="dddd02"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="dddd03"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="dddd04"><br>
-                <input style="width:40px; font-size: 14.5px;" type="text" id="dddd05">
+              <td style="text-align: center;">
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd01"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd02"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd03"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd04"><br>
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd05">
               </td>
             </tr>
             <tr>
               <td>
-              <th>보전적성값 (B)</th>
+              <th>보전적성값 (D)</th>
               <td colspan=2 style="text-align: center;"> <input
                   style="width:100px; font-size: 14.5px; text-align: right;" type="text" id="conVal"> </td>
               </td>
@@ -188,9 +184,9 @@
               <th colspan="4">토지적성평가 결과</td>
                 <tr>
                   <th style="width: 50px;">지번</th>
-                  <th style="width: 50px;">개발적성값 (A)</th>
-                  <th style="width: 50px;">보전적성값 (B)</th>
-                  <th style="width: 60px;">종합적성값 (C) = (A) - (B)</th>
+                  <th style="width: 50px;">개발적성값 (C)</th>
+                  <th style="width: 50px;">보전적성값 (D)</th>
+                  <th style="width: 60px;">종합적성값 (S) = (C) - (D)</th>
                 </tr>
                 <tr style="text-align: center;">
                   <td><span id="selectedValueDisplay2"></span></td>
@@ -200,7 +196,6 @@
                 </tr>
             </table>
             <div class="center-btn">
-              <button style="width: 100px; font-size: 15px;" id="resultData" onclick="sendData();">결과 계산</button>
               <button style="width: 120px; font-size: 15px; " id="insertResultData" onclick="sendData();">결과 입력 및
                 수정</button>
               <button style="width: 100px; font-size: 15px; " id="deleteResultData" onclick="sendData();">결과 삭제</button>
@@ -232,8 +227,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
 
-  <script type="module" src="/main_1c26ea12aa5d900eac93.js"></script>
+  <script type="module" src="/dist/main_9f3c5815c5cb3a66538d.js"></script>
 
-<script type="module" src="/main_1c26ea12aa5d900eac93.js"></script></body>
+<script type="module" src="/dist/main_9f3c5815c5cb3a66538d.js"></script></body>
 
 </html>

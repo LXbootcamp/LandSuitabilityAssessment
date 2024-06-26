@@ -85,11 +85,19 @@ app.use((req, res, next) => {
   next();
 });
 
+// 정적 파일 서빙
+// app.use(express.static(path.join(__dirname, "dist")));
+
+// 주의: src 폴더를 정적 파일 서빙에서 제외
+app.use("/dist", express.static(path.join(__dirname, "dist")));
+
 // 기타 정적 파일 서빙 설정
 app.use("/static", express.static(path.join(__dirname, "static")));
 
-// 정적 파일 서빙
-app.use(express.static(path.join(__dirname, "dist")));
+// JSP 파일 서빙 설정
+app.get("/fetchData.jsp", (req, res) => {
+  res.sendFile(path.join(__dirname, "static", "fetchData.jsp"));
+});
 
 // 비밀번호 해싱 함수 (bcrypt 사용)
 async function hashPassword(password) {
@@ -167,6 +175,18 @@ app.post("/signup", async (req, res) => {
     console.error("Error inserting user:", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
+});
+
+// 로그인 여부에 따라 index.html과 login.html을 서빙하도록 설정
+app.get("/", (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/login.html");
+  }
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+app.get("/login.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "login.html"));
 });
 
 // 모든 경로에 대해 index.html을 서빙하도록 설정

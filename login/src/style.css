@@ -6,7 +6,7 @@
   padding: 0;
   font-family: "Noto Sans KR";
 }
- 
+
 html,
 body {
   margin: 0;
@@ -35,7 +35,7 @@ body {
 }
 
 /* DIV영역 여러개를 나란히 놓으려면, float 속성을 이용 */
-#menu1 { 
+#menu1 {
   width: 160px;
   height: 100%;
   float: left;
@@ -80,7 +80,9 @@ body {
 
 /* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
 ul.emdList,
-table.dataTable, table.dataTable2, table.dataTable3 {
+table.dataTable,
+table.dataTable2,
+table.dataTable3 {
   background: #efefef;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -234,11 +236,11 @@ table.dataTable3 th {
   display: none;
 }
 
-.center-btn{
-	text-align: center;
+.center-btn {
+  text-align: center;
 }
-.center-btn1{
-	display :inline-block;
+.center-btn1 {
+  display: inline-block;
 }
 
 #info {
@@ -258,12 +260,11 @@ table.dataTable3 th {
   pointer-events: none;
 }
 
-#popup 
-{
+#popup {
   width: 200px;
   height: 200px;
   padding: 5px;
   border: 3px solid gray;
   border-radius: 5px;
-  background-color: white;  
+  background-color: white;
 }
