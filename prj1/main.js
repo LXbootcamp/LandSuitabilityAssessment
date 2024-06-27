@@ -144,13 +144,13 @@ function makeWFSSource(method) {
 function styleFunction(feature) {
   var value = feature.get('value_comp');
   var color;
-  if (value < -180) {
+  if (value < -360) {
     color = "rgba(0, 78, 0, 1.0)";
-  } else if (value < -60) {
+  } else if (value < -120) {
     color = "rgba(0, 200, 0, 1.0)";
-  } else if (value < 60) {
+  } else if (value < 120) {
     color = "rgba(255, 211, 0, 1.0)";
-  } else if (value < 180) {
+  } else if (value < 360) {
     color = "rgba(255, 75, 0, 1.0)";
   } else {
     color = "rgba(180, 0, 0, 1.0)";
@@ -475,8 +475,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const value_develop = feature.get("value_develop") || "";
       const value_conserv = feature.get("value_conserv") || "";
       const value_comp = feature.get("value_comp") || "";
-      console.log("record_slope:" + record_slope);
-      console.log("<br>record_height:" + record_height);
+      // console.log("record_slope:" + record_slope);
+      // console.log("<br>record_height:" + record_height);
       return { jibun, pnu, lndcgr_code_nm, lndpcl_ar, prpos_area_1_nm, tpgrph_hg_code_nm, tpgrph_frm_code, road_side_code_nm, slope, height, dist_gi_str, dist_gong_ntwk, rate_city, rate_city_touch, dist_road_touch, rate_kyungji, rate_saengtae, rate_gongjuck, dist_gongjuck, rate_jdgarea, rate_nongup, rate_limsangdo, rate_bojunmount, dist_kyungji, record_slope, record_height, record_dist_gi_str, record_dist_gong_ntwk, record_rate_city, record_rate_city_touch, record_dist_road, record_rate_kyungji, record_rate_saengtae, record_rate_gongjuck, record_dist_gongjuck, record_rate_jdgarea, record_rate_nongup, record_rate_limsangdo, record_rate_bojunmount, record_dist_kyungji, value_develop, value_conserv, value_comp };
     });
     updateComboBox(names);
