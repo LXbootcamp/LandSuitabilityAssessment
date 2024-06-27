@@ -21,14 +21,14 @@ body {
 }
 
 #header {
-  height: 60px;
+  height: 45px;
   background: #fff;
   border-bottom: 1px solid #d4d4d4;
 }
 
 #contents {
   position: absolute;
-  top: 81px;
+  top: 46px;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -72,11 +72,11 @@ body {
 }
 
 /* 헤더 부분 스타일 설정 */
-.topDecal {
+/* .topDecal {
   background: #175381;
   height: 15px;
   width: 100%;
-}
+} */
 
 /* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
 ul.emdList,

@@ -18,8 +18,8 @@
   <div class="container">
     <div id="header">
       <div class="topDecal"></div>
-      <h1> <img style="width: 65px;" src="./lxLogo.png" alt="로고" style="vertical-align: middle; margin-right: 10px;">
-        무안군 토지적성평가 프로그램</h1>
+      <a href=""><img style="height: 40px;" src="./lxLogo2.png" onclick="location.reload();" alt="로고" style="vertical-align: middle; margin-right: 10px;">
+      </a>
     </div> <!-- header 닫힘 -->
     <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
     <div id="contents">
@@ -71,7 +71,7 @@
                 <span id="aaa04" class="height-span"></span>
               </td>
               <td style="text-align: center;">
-                <input style="width:40px; height:17px; font-size: 14.5px; " type="text" id="aaaa01" value="" required><br>
+                <input style="width:40px; height:17px; font-size: 14.5px; " type="text" id="aaaa01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa02"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa03"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa04">
@@ -80,22 +80,22 @@
             <tr>
               <th width="80"> 선택지표 </th>
               <td width="200" style="font-size: 14.5px;">
+                <input type="checkbox" class="dev-checkbox" id="checkbox_bbb01">
                 <label for="bbb01">도지용지비율(%)</label><br>
-                <label for="bbb02">용도전용비율(%)</label><br>
-                <label for="bbb03">도시용지인접비율(%)</label><br>
-                <label for="bbb04">도로와의거리(m)</label>
+                <input type="checkbox" class="dev-checkbox" id="checkbox_bbb02">
+                <label for="bbb02">도시용지인접비율(%)</label><br>
+                <input type="checkbox" class="dev-checkbox" id="checkbox_bbb03">
+                <label for="bbb03">도로와의거리(m)</label>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center; font-size: 14.5px;">
                 <span id="bbb01" class="height-span"></span><br>
                 <span id="bbb02" class="height-span"></span><br>
-                <span id="bbb03" class="height-span"></span><br>
-                <span id="bbb04" class="height-span"></span>
+                <span id="bbb03" class="height-span"></span>
               </td>
               <td style="text-align: center;">
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb02"><br>
-                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb03"><br>
-                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb04">
+                <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb03">
               </td>
             </tr>
             <tr>
@@ -120,7 +120,7 @@
                 <label for="ccc03">공적규제지역면적비율(%)</label><br>
                 <label for="ccc04">공적규제지역과의거리(km)</label>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center; font-size: 14.5px;">
                 <span id="ccc01" class="height-span"></span><br>
                 <span id="ccc02" class="height-span"></span><br>
                 <span id="ccc03" class="height-span"></span><br>
@@ -136,13 +136,18 @@
             <tr>
               <th width="80">선택지표</th>
               <td width="220" style="font-size: 14.5px;">
+                <input type="checkbox" class="con-checkbox" id="checkbox_ddd01">
                 <label for="ddd01">전답과수원면적비율(%)</label><br>
+                <input type="checkbox" class="con-checkbox" id="checkbox_ddd02">
                 <label for="ddd02">농업진흥지역비율(%)</label><br>
+                <input type="checkbox" class="con-checkbox" id="checkbox_ddd03">
                 <label for="ddd03">임상도상위등급비율(%)</label><br>
+                <input type="checkbox" class="con-checkbox" id="checkbox_ddd04">
                 <label for="ddd04">보전산지비율(%)</label><br>
-                <label for="ddd05">경지정리지역과의거리(m)</label><br>
+                <input type="checkbox" class="con-checkbox" id="checkbox_ddd05">
+                <label for="ddd05">경지정리지역과의거리(m)</label>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center; font-size: 14.5px;">
                 <span id="ddd01" class="height-span"></span><br>
                 <span id="ddd02" class="height-span"></span><br>
                 <span id="ddd03" class="height-span"></span><br>
@@ -165,11 +170,7 @@
               </td>
             </tr>
           </table>
-          <div class="center-btn">
-            <button style="width: 100px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및
-              수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
-              style="width: 100px; font-size: 15px;" id="deleteData" onclick="sendData();">삭제</button>
-          </div>
+
 
         </div>
         <a href="" id="fetchData_link" target="_blank">
@@ -194,14 +195,16 @@
                 </tr>
             </table>
             <div class="center-btn">
-              <button style="width: 120px; font-size: 15px; " id="insertResultData" onclick="sendData();">결과 입력 및
-                수정</button>
-              <button style="width: 100px; font-size: 15px; " id="deleteResultData" onclick="sendData();">결과 삭제</button>
+              <button style="width: 100px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및
+                수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
+                style="width: 100px; font-size: 15px;" id="deleteData">삭제</button>
             </div>
             <br>
             <div class="center-btn">
-              <button style="width: 120px; font-size: 15px;" id="notyet" onclick="sendData();">지도로 결과 보기</button>
+              <button style="width: 120px; font-size: 15px;" id="showOnMap">지도로 결과 보기</button>
+              <button id="generateHWPX" style="width: 120px; font-size: 15px;">HWPX로 저장</button>
             </div>
+            
 
           </div>
         </div>

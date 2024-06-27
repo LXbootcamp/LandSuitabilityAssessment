@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm start
+    environment:
+      - NODE_ENV=development
+    networks:
+      mynet:
+        ipv4_address: 172.31.0.8
+    depends_on:
+      - postgres
+
+  postgres:
+    image: ubuntu/postgres:latest
+    environment:
+      POSTGRES_USER: scott
+      POSTGRES_PASSWORD: tiger
+      POSTGRES_DB: camp
+      TZ: Asia/Seoul
+    ports:
+      - "43432:5432"
+    volumes:
+      - 8ed06a21478fc28a4fb58fb86ef305e9f8ca407657550f4ab4f0bfc3e3560ca5-cloned:/var/lib/postgresql/data
+    networks:
+      mynet:
+        ipv4_address: 172.31.0.7
+
+  tomcat:
+    image: tomcat:9.0
+    environment:
+      TZ: Asia/Seoul
+    ports:
+      - "42888:8080"
+      - "42022:22"
+    volumes:
+      - ./webapps:/usr/local/tomcat/webapps
+    networks:
+      mynet:
+        ipv4_address: 172.31.0.6
+
+volumes:
+  8ed06a21478fc28a4fb58fb86ef305e9f8ca407657550f4ab4f0bfc3e3560ca5-cloned:
+    external: true
+
+networks:
+  mynet:
+    driver: bridge
+    name: lsa2_mynet
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16

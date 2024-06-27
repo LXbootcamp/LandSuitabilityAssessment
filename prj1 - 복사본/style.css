@@ -1,0 +1,273 @@
+@import "node_modules/ol/ol.css";
+
+/* 전역적 스타일 정의 */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans KR";
+}
+ 
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+/* 주요 레이아웃 정의 */
+.container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#header {
+  height: 60px;
+  background: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+#contents {
+  position: absolute;
+  top: 81px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+}
+
+/* DIV영역 여러개를 나란히 놓으려면, float 속성을 이용 */
+#menu1 { 
+  width: 160px;
+  height: 100%;
+  float: left;
+  border-right: 1px solid #d4d4d4;
+  padding: 5px;
+  transform: translateX(0);
+  transition: transform 0.5s;
+}
+
+#menu2 {
+  width: 400px;
+  height: 100%;
+  float: left;
+  border-right: 1px solid #d4d4d4;
+  padding: 5px;
+  transform: translateX(0);
+  transition: transform 0.5s;
+  overflow-y: auto;
+}
+
+#mapArea {
+  position: absolute;
+  height: 100%;
+  left: 170px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: left 0.5s;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 헤더 부분 스타일 설정 */
+.topDecal {
+  background: #175381;
+  height: 15px;
+  width: 100%;
+}
+
+/* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
+ul.emdList,
+table.dataTable, table.dataTable2, table.dataTable3 {
+  background: #efefef;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+ul.emdList li {
+  list-style: none;
+  border-top: 1px solid #fff;
+  padding: 1px 20px;
+  cursor: pointer;
+}
+
+ul.emdList li:first-child {
+  border-top: none;
+}
+
+ul.emdList li:hover {
+  background: #0f3a63;
+  color: #fff;
+}
+
+ul.emdList li:hover:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+ul.emdList li:hover:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+table.dataTable {
+  width: 100%;
+}
+
+table.dataTable td,
+table.dataTable th {
+  border-top: 1px solid #fff;
+  padding: 4px 5px;
+}
+
+table.dataTable tr:first-child td,
+table.dataTable tr:first-child th {
+  border-top: none;
+}
+
+table.dataTable th {
+  font-weight: bold;
+}
+
+table.dataTable2 {
+  width: 100%;
+}
+
+table.dataTable2 td,
+table.dataTable2 th {
+  border-top: 1px solid #fff;
+  padding: 4px 5px;
+}
+
+table.dataTable2 tr:first-child td,
+table.dataTable2 tr:first-child th {
+  border-top: none;
+}
+
+table.dataTable2 th {
+  font-weight: bold;
+}
+
+table.dataTable3 {
+  width: 100%;
+}
+
+table.dataTable3 td,
+table.dataTable3 th {
+  border-top: 1px solid #fff;
+  padding: 4px 5px;
+}
+
+table.dataTable3 tr:first-child td,
+table.dataTable3 tr:first-child th {
+  border-top: none;
+}
+
+table.dataTable3 th {
+  font-weight: bold;
+}
+
+.slide-out {
+  animation: slideOut 0.5s forwards;
+}
+
+@keyframes slideOut {
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.menu2-slide-in {
+  animation: menu2SlideIn 0.5s forwards;
+}
+
+@keyframes menu2SlideIn {
+  100% {
+    transform: translateX(-160px);
+  }
+}
+
+.map-expand {
+  animation: mapExpand 0.5s forwards;
+}
+
+@keyframes mapExpand {
+  100% {
+    left: 420px; /* 'menu2'의 원래 위치에서 'menu1'의 폭을 더한 값 */
+  }
+}
+
+.menu2-slide-out {
+  animation: menu2SlideOut 0.5s forwards;
+}
+
+@keyframes menu2SlideOut {
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.menu1-slide-in {
+  animation: menu1SlideIn 0.5s forwards;
+}
+
+@keyframes menu1SlideIn {
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.map-contract {
+  animation: mapContract 0.5s forwards;
+}
+
+@keyframes mapContract {
+  100% {
+    left: 170px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.center-btn{
+	text-align: center;
+}
+.center-btn1{
+	display :inline-block;
+}
+
+#info {
+  position: absolute;
+  display: inline-block;
+  height: auto;
+  width: auto;
+  z-index: 100;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  left: 50%;
+  transform: translateX(3%);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#popup 
+{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  border: 3px solid gray;
+  border-radius: 5px;
+  background-color: white;  
+}
+.height-span {
+  display: inline-block;
+  height: 23px;  /* 원하는 높이 설정 */
+}
