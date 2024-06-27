@@ -56561,7 +56561,7 @@ function makeFilter1(method) {
   return filter1;
 }
 var vectorSource2 = new ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  url: "http://localhost:42888/geoserver/campWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campWS:muan_emd&outputFormat=application/json",
+  url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
   format: new ol_format_GeoJSON_js__WEBPACK_IMPORTED_MODULE_2__["default"]()
 });
 var vectorLayer2 = new ol_layer_Vector_js__WEBPACK_IMPORTED_MODULE_3__["default"]({
@@ -56585,7 +56585,7 @@ function makeFilter(clickedFeatureJibun) {
 }
 function makeWFSSource2(clickedFeatureJibun) {
   vectorSource3 = new ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
-    url: encodeURI("http://localhost:42888/geoserver/campWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campWS:muan_all2&outputFormat=application/json&CQL_FILTER=" + makeFilter(clickedFeatureJibun)),
+    url: encodeURI("http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" + makeFilter(clickedFeatureJibun)),
     format: new ol_format_GeoJSON_js__WEBPACK_IMPORTED_MODULE_2__["default"]()
   });
   if (null != selectLayer) {
@@ -56612,7 +56612,7 @@ selectLayer = new ol_layer_Vector_js__WEBPACK_IMPORTED_MODULE_3__["default"]({
 
 function makeWFSSource(method) {
   vectorSource = new ol_source_Vector_js__WEBPACK_IMPORTED_MODULE_1__["default"]({
-    url: encodeURI("http://localhost:42888/geoserver/campWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=campWS:muan_all2&outputFormat=application/json&CQL_FILTER=" + makeFilter1(method)),
+    url: encodeURI("http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" + makeFilter1(method)),
     format: new ol_format_GeoJSON_js__WEBPACK_IMPORTED_MODULE_2__["default"]()
   });
   if (null != vectorLayer) {
@@ -56783,6 +56783,9 @@ draw.on("drawstart", function () {
 });
 document.addEventListener("DOMContentLoaded", function () {
   var aaa01 = document.getElementById("aaa01");
+  var aaa02 = document.getElementById("aaa02");
+  var aaa03 = document.getElementById("aaa03");
+  var aaa04 = document.getElementById("aaa04");
   var comboBox = document.getElementById("selectedRegions");
   var selectedValueDisplay = document.getElementById("selectedValueDisplay");
   var selectedValueDisplay2 = document.getElementById("selectedValueDisplay2");
@@ -56796,7 +56799,14 @@ document.addEventListener("DOMContentLoaded", function () {
   var clickedFeatureA14 = null; // 용도지역
   var clickedFeatureA22 = null; // 토지형태
   var clickedFeatureA24 = null; // 도로인접여부
+  var clickedFeatureslope = null; // 경사도
+  var clickedFeatureheight = null; // 표고
+  var clickedFeature_dist_gi_str = null; // 기개발지와의 거리
+  var clickedFeature_dist_gong_ntwk = null; // 공공편익시설과의 거리(네트워크)
+  var clickedFeature_record_slope = null; // 경사도 점수
+
   var insertedA20 = {};
+  var inserted_record_slope = {};
   selectedFeatures.on(["add", "remove"], function () {
     var names = selectedFeatures.getArray().map(function (feature) {
       var jibun = feature.get("jibun") || "필지 선택";
@@ -56807,6 +56817,12 @@ document.addEventListener("DOMContentLoaded", function () {
       var a20 = feature.get("a20") || ""; // a20 값을 가져옴
       var a22 = feature.get("a22") || ""; // a22 값을 가져옴
       var a24 = feature.get("a24") || ""; // a24 값을 가져옴
+      var slope = feature.get("slope") || ""; // slope 값을 가져옴
+      var height = feature.get("height") || "";
+      var dist_gi_str = feature.get("dist_gi_str") || "";
+      var dist_gong_ntwk = feature.get("dist_gong_ntwk") || "";
+      var record_slope = feature.get("record_slope") || "";
+      // console.log("slope:" + slope);
       return {
         jibun: jibun,
         a1: a1,
@@ -56815,7 +56831,12 @@ document.addEventListener("DOMContentLoaded", function () {
         a14: a14,
         a20: a20,
         a22: a22,
-        a24: a24
+        a24: a24,
+        slope: slope,
+        height: height,
+        dist_gi_str: dist_gi_str,
+        dist_gong_ntwk: dist_gong_ntwk,
+        record_slope: record_slope
       };
     });
     updateComboBox(names);
@@ -56827,13 +56848,18 @@ document.addEventListener("DOMContentLoaded", function () {
         var option = document.createElement("option");
         option.value = feature.jibun;
         option.text = feature.jibun;
-        option.setAttribute("a1", feature.a1); // a1 값을 데이터 속성으로 추가
-        option.setAttribute("a11", feature.a11); // a11 값을 데이터 속성으로 추가
-        option.setAttribute("a12", feature.a12); // a12 값을 데이터 속성으로 추가
-        option.setAttribute("a14", feature.a14); // a14 값을 데이터 속성으로 추가
-        option.setAttribute("a20", feature.a20); // a20 값을 데이터 속성으로 추가
-        option.setAttribute("a22", feature.a22); // a22 값을 데이터 속성으로 추가
-        option.setAttribute("a24", feature.a24); // a24 값을 데이터 속성으로 추가
+        option.setAttribute("a1", feature.a1); // a1 데이터 속성으로 추가
+        option.setAttribute("a11", feature.a11); // a11 데이터 속성으로 추가
+        option.setAttribute("a12", feature.a12); // a12 데이터 속성으로 추가
+        option.setAttribute("a14", feature.a14); // a14 데이터 속성으로 추가
+        option.setAttribute("a20", feature.a20); // a20 데이터 속성으로 추가
+        option.setAttribute("a22", feature.a22); // a22 데이터 속성으로 추가
+        option.setAttribute("a24", feature.a24); // a24 데이터 속성으로 추가
+        option.setAttribute("slope", feature.slope); // 경사도 데이터 속성으로 추가
+        option.setAttribute("height", feature.height); // 표고 데이터 속성으로 추가
+        option.setAttribute("dist_gi_str", feature.dist_gi_str);
+        option.setAttribute("dist_gong_ntwk", feature.dist_gong_ntwk);
+        option.setAttribute("record_slope", feature.record_slope); // 경사도 점수 데이터 속성으로 추가
         comboBox.appendChild(option);
       }
     });
@@ -56852,27 +56878,47 @@ document.addEventListener("DOMContentLoaded", function () {
     clickedFeatureA14 = selectedOption.getAttribute("a14"); // 용도지역
     clickedFeatureA22 = selectedOption.getAttribute("a22"); // 토지형태
     clickedFeatureA24 = selectedOption.getAttribute("a24"); // 도로인접여부
-    console.log("clickedFeatureA14:" + clickedFeatureA14);
+    clickedFeatureslope = selectedOption.getAttribute("slope"); // 경사도
+    clickedFeatureheight = selectedOption.getAttribute("height"); // 표고
+    clickedFeature_dist_gi_str = selectedOption.getAttribute("dist_gi_str");
+    clickedFeature_dist_gong_ntwk = selectedOption.getAttribute("dist_gong_ntwk");
+    clickedFeature_record_slope = selectedOption.getAttribute("record_slope"); // 경사도 점수
     document.getElementById("fetchData_link").href = "./fetchData.jsp?selectedA1='" + clickedFeatureA1 + "'";
 
     // 필드 값 비우기
     document.getElementById("aaa01").value = "";
+    document.getElementById("aaa02").value = "";
+    document.getElementById("aaa03").value = "";
+    document.getElementById("aaa04").value = "";
+    document.getElementById("aaaa01").value = "";
 
     // selectLayer 업데이트 및 표시
     makeWFSSource2(clickedFeatureJibun);
-    return clickedFeatureA1, clickedFeatureA20, clickedFeatureA11, clickedFeatureA12, clickedFeatureA14, clickedFeatureA22, clickedFeatureA24, clickedFeatureJibun;
+    return clickedFeatureA1, clickedFeatureA20, clickedFeatureA11, clickedFeatureA12, clickedFeatureA14, clickedFeatureA22, clickedFeatureA24, clickedFeatureslope, clickedFeatureJibun, clickedFeatureheight, clickedFeature_record_slope;
   });
 
   // 조회 버튼 클릭시 db에 저장된 지표값 표시
   document.getElementById("searchData").onclick = function () {
-    if (insertedA20[clickedFeatureA1] === undefined) {
+    // if (insertedA20[clickedFeatureA1] === undefined) {
+    if (inserted_record_slope[clickedFeatureA1] === undefined) {
       console.log("insertedA20 is null for current A1");
-      // document.getElementById("aaa01").value = clickedFeatureA20;
-      aaa01.innerText = clickedFeatureA20; // aaa01에 값 설정
+      aaa01.innerText = clickedFeatureslope; // span, div, p -> innerText
+      aaa02.innerText = clickedFeatureheight; // span, div, p -> innerText
+      aaa03.innerText = clickedFeature_dist_gi_str; // span, div, p -> innerText
+      aaa04.innerText = clickedFeature_dist_gong_ntwk; // span, div, p -> innerText
+      console.log("clickedFeatureslope:" + clickedFeatureslope);
+      console.log("clickedFeatureheight:" + clickedFeatureheight);
+      console.log("clickedFeature_dist_gi_str:" + clickedFeature_dist_gi_str);
+      console.log("clickedFeature_dist_gong_ntwk:" + clickedFeature_dist_gong_ntwk);
+      document.getElementById("aaaa01").value = clickedFeature_record_slope; // input, textarea, select -> value
     } else {
       console.log("insertedA20 is not null for current A1");
-      // document.getElementById("aaa01").value = insertedA20[clickedFeatureA1];
-      aaa01.innerText = insertedA20[clickedFeatureA1]; // aaa01에 값 설정
+      aaa01.innerText = clickedFeatureslope;
+      aaa02.innerText = clickedFeatureheight;
+      aaa03.innerText = clickedFeature_dist_gi_str; // span, div, p -> innerText
+      aaa04.innerText = clickedFeature_dist_gong_ntwk; // span, div, p -> innerText
+
+      document.getElementById("aaaa01").value = inserted_record_slope[clickedFeatureA1];
     }
     // 팝업 표시
     var selectedFeature = vectorSource.getFeatures().find(function (feature) {
@@ -56893,68 +56939,69 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   };
+
+  // 입력 버튼 클릭시 작성한 지표값 db에 저장
+  document.getElementById("insertData").onclick = function () {
+    var aaaa01_value = document.getElementById("aaaa01").value;
+    inserted_record_slope[clickedFeatureA1] = aaaa01_value;
+
+    // 선택된 지번과 레이어 정보 저장
+    localStorage.setItem("clickedFeatureA1", clickedFeatureA1);
+    localStorage.setItem("insertedA20", JSON.stringify(insertedA20));
+    localStorage.setItem("inserted_record_slope", JSON.stringify(inserted_record_slope));
+    sendData(clickedFeatureA1, aaaa01_value);
+  };
+
+  // 서버로 데이터 전송
+  function sendData(clickedFeatureA1, inserted_record_slope) {
+    var url = "./fetchData.jsp?selectedA1=".concat(encodeURIComponent(clickedFeatureA1), "&inserted_record_slope=").concat(encodeURIComponent(inserted_record_slope));
+    fetch(url, {
+      method: "POST" // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
+    }).then(function (response) {
+      return response.text();
+    }).then(function (data) {
+      console.log("Response from server:", data);
+      // 서버로부터의 응답을 처리합니다
+    })["catch"](function (error) {
+      console.error("Error:", error);
+    });
+  }
+  document.getElementById("backButton").onclick = function () {
+    // 슬라이드 애니메이션을 위해 기존 클래스 제거
+    document.getElementById("menu1").classList.remove("slide-out", "slide-in");
+    document.getElementById("menu2").classList.remove("menu2-slide-in", "menu2-slide-out");
+    document.getElementById("mapArea").classList.remove("map-expand", "map-contract");
+
+    // 초기 상태로 되돌리기 위해 새로운 클래스 추가
+    document.getElementById("menu1").classList.add("slide-in");
+    document.getElementById("menu2").classList.add("menu2-slide-out");
+    document.getElementById("mapArea").classList.add("map-contract");
+
+    // 평가 지표 입력 메뉴 숨기기
+    document.getElementById("menu2").classList.add("hidden");
+
+    // 지도 중심과 확대 수준을 초기 상태로 되돌림
+    var view = map.getView();
+    view.animate({
+      center: initialCenter,
+      zoom: initialZoom,
+      duration: 1000 // 1초 동안 애니메이션
+    });
+
+    // 선택된 피처 해제
+    selectedFeatures.clear();
+    SelectionsSource.clear();
+    vectorLayer.setVisible(false);
+    SelectionsVector.setVisible(false);
+    DrawVector.setVisible(false);
+    selectLayer.setVisible(false);
+
+    // 팝업 창 숨기기
+    overlay.setPosition(undefined);
+    var popup = document.getElementById("popup");
+    popup.style.display = "none";
+  };
 });
-
-// 입력 버튼 클릭시 작성한 지표값 db에 저장
-document.getElementById("insertData").onclick = function () {
-  var value = document.getElementById("aaa01").value;
-  insertedA20[clickedFeatureA1] = value;
-
-  // 선택된 지번과 레이어 정보 저장
-  localStorage.setItem("clickedFeatureA1", clickedFeatureA1);
-  localStorage.setItem("insertedA20", JSON.stringify(insertedA20));
-  sendData(clickedFeatureA1, value);
-};
-
-// 서버로 데이터 전송
-function sendData(clickedFeatureA1, insertedA20) {
-  var url = "./fetchData.jsp?selectedA1=" + encodeURIComponent(clickedFeatureA1) + "&insertedA20=" + encodeURIComponent(insertedA20);
-  fetch(url, {
-    method: "POST" // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
-  }).then(function (response) {
-    return response.text();
-  }).then(function (data) {
-    console.log("Response from server:", data);
-    // 서버로부터의 응답을 처리합니다
-  })["catch"](function (error) {
-    console.error("Error:", error);
-  });
-}
-document.getElementById("backButton").onclick = function () {
-  // 슬라이드 애니메이션을 위해 기존 클래스 제거
-  document.getElementById("menu1").classList.remove("slide-out", "slide-in");
-  document.getElementById("menu2").classList.remove("menu2-slide-in", "menu2-slide-out");
-  document.getElementById("mapArea").classList.remove("map-expand", "map-contract");
-
-  // 초기 상태로 되돌리기 위해 새로운 클래스 추가
-  document.getElementById("menu1").classList.add("slide-in");
-  document.getElementById("menu2").classList.add("menu2-slide-out");
-  document.getElementById("mapArea").classList.add("map-contract");
-
-  // 평가 지표 입력 메뉴 숨기기
-  document.getElementById("menu2").classList.add("hidden");
-
-  // 지도 중심과 확대 수준을 초기 상태로 되돌림
-  var view = map.getView();
-  view.animate({
-    center: initialCenter,
-    zoom: initialZoom,
-    duration: 1000 // 1초 동안 애니메이션
-  });
-
-  // 선택된 피처 해제
-  selectedFeatures.clear();
-  SelectionsSource.clear();
-  vectorLayer.setVisible(false);
-  SelectionsVector.setVisible(false);
-  DrawVector.setVisible(false);
-  selectLayer.setVisible(false);
-
-  // 팝업 창 숨기기
-  overlay.setPosition(undefined);
-  var popup = document.getElementById("popup");
-  popup.style.display = "none";
-};
 var _loop = function _loop() {
   var id = i < 10 ? "0" + i : i.toString();
   document.getElementById("emd" + id).onclick = function () {
@@ -56989,7 +57036,7 @@ function calculateDevVal() {
   var aaaaValues = ["aaaa01", "aaaa02", "aaaa03", "aaaa04"].map(function (id) {
     return parseFloat(document.getElementById(id).value) || 0;
   });
-  var bbbbValues = ["bbbb01", "bbbb02", "bbbb03", "bbbb04", "bbbb05"].map(function (id) {
+  var bbbbValues = ["bbbb01", "bbbb02", "bbbb03", "bbbb04"].map(function (id) {
     return parseFloat(document.getElementById(id).value) || 0;
   });
   var devVal = aaaaValues.concat(bbbbValues).reduce(function (acc, val) {
@@ -57028,7 +57075,7 @@ function calculateResultVal() {
 ["aaaa01", "aaaa02", "aaaa03", "aaaa04"].forEach(function (id) {
   document.getElementById(id).addEventListener("input", calculateDevVal);
 });
-["bbbb01", "bbbb02", "bbbb03", "bbbb04", "bbbb05"].forEach(function (id) {
+["bbbb01", "bbbb02", "bbbb03", "bbbb04"].forEach(function (id) {
   document.getElementById(id).addEventListener("input", calculateDevVal);
 });
 ["cccc01", "cccc02", "cccc03", "cccc04"].forEach(function (id) {
@@ -57045,4 +57092,4 @@ calculateConVal();
 
 /******/ })()
 ;
-//# sourceMappingURL=main_1c26ea12aa5d900eac93.js.map
+//# sourceMappingURL=main_9f3c5815c5cb3a66538d.js.map

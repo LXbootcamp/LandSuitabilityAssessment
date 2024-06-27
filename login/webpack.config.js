@@ -36,12 +36,14 @@ module.exports = {
       filename: "index.html",
       inject: "body",
       scriptLoading: "module", // 모듈 타입으로 스크립트 로드
+      publicPath: "/dist/", // dist 폴더를 경로로 추가
     }),
     new HtmlWebpackPlugin({
       template: "./public/login.html",
       filename: "login.html",
       inject: "body",
       scriptLoading: "module", // 모듈 타입으로 스크립트 로드
+      publicPath: "/dist/", // dist 폴더를 경로로 추가
     }),
     new MiniCssExtractPlugin({
       filename: "style_[contenthash].css", // CSS 파일명에 해시 추가
