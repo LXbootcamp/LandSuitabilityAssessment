@@ -93,7 +93,7 @@ function makeFilter(click_F_Jibun) {
 function makeWFSSource2(click_F_Jibun) {
   vectorSource3 = new VectorSource({
     url: encodeURI(
-      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan2&outputFormat=application/json&CQL_FILTER=" +
+      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
       makeFilter(click_F_Jibun)
     ),
     format: new GeoJSON(),
@@ -121,7 +121,7 @@ selectLayer = new VectorLayer({
 function makeWFSSource(method) {
   vectorSource = new VectorSource({
     url: encodeURI(
-      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan2&outputFormat=application/json&CQL_FILTER=" +
+      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
       makeFilter1(method)
     ),
     format: new GeoJSON(),
