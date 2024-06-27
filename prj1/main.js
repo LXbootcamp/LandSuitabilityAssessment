@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let inserted_record_dist_road = {};
   let inserted_record_rate_kyungji = {};
   let inserted_record_rate_saengtae = {};
-  let inserted_record_rate_gongjuck = {};
+  let inserted_record_rate_gongjuck = {}; 
   let inserted_record_dist_gongjuck = {};
   let inserted_record_rate_jdgarea = {};
   let inserted_record_rate_nongup = {};
