@@ -271,3 +271,31 @@ table.dataTable3 th {
   display: inline-block;
   height: 23px;  /* 원하는 높이 설정 */
 }
+
+/* 사이드바 스타일 */
+.sidebar {
+  position: absolute;
+  right: -100px; /* 처음에 화면에 보이지 않도록 */
+  top: 46px;
+  width: 100px;
+  height: calc(100% - 46px); /* 헤더 높이를 뺀 나머지 높이 */
+  background-color: #f1f1f1;
+  transition: right 0.5s;
+  z-index: 1000;
+}
+
+.sidebar.show {
+  right: 0; /* 보이도록 */
+}
+
+.sidebar button {
+  position: absolute;
+  left: -25px;
+  top: 20px;
+  background-color: #3a3a3a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+}

@@ -28,6 +28,7 @@ String inserted_record_height = request.getParameter("inserted_record_height");
 String inserted_record_dist_gi_str = request.getParameter("inserted_record_dist_gi_str");
 String inserted_record_dist_gong_ntwk = request.getParameter("inserted_record_dist_gong_ntwk");
 String inserted_record_rate_city = request.getParameter("inserted_record_rate_city");
+String inserted_record_rate_city_1 = request.getParameter("inserted_record_rate_city_1");
 String inserted_record_rate_city_touch = request.getParameter("inserted_record_rate_city_touch");
 String inserted_record_dist_road = request.getParameter("inserted_record_dist_road");
 String inserted_record_rate_kyungji = request.getParameter("inserted_record_rate_kyungji");
@@ -77,6 +78,7 @@ try
     "record_dist_gi_str = '" 		+ inserted_record_dist_gi_str 		+ "', " +
     "record_dist_gong_ntwk = '" 	+ inserted_record_dist_gong_ntwk 		+ "', " +
     "record_rate_city = '" 			+ inserted_record_rate_city 		+ "', " +
+    "record_rate_city_1 = '" 			+ inserted_record_rate_city_1 		+ "', " +
     "record_rate_city_touch = '" 	+ inserted_record_rate_city_touch 	+ "', " +
     "record_dist_road = '" 			+ inserted_record_dist_road 		+ "', " +
     "record_rate_kyungji = '" 		+ inserted_record_rate_kyungji 	+ "', " +
@@ -108,6 +110,7 @@ try
 		String record_dist_gi_str = rs2.getString("record_dist_gi_str"); record_dist_gi_str = checkNull(record_dist_gi_str);
 		String record_dist_gong_ntwk = rs2.getString("record_dist_gong_ntwk"); record_dist_gong_ntwk = checkNull(record_dist_gong_ntwk);
 		String record_rate_city = rs2.getString("record_rate_city"); record_rate_city = checkNull(record_rate_city);
+		String record_rate_city_1 = rs2.getString("record_rate_city_1"); record_rate_city_1 = checkNull(record_rate_city_1);
 		String record_rate_city_touch = rs2.getString("record_rate_city_touch"); record_rate_city_touch = checkNull(record_rate_city_touch);
 		String record_dist_road = rs2.getString("record_dist_road"); record_dist_road = checkNull(record_dist_road);
 		String record_rate_kyungji = rs2.getString("record_rate_kyungji"); record_rate_kyungji = checkNull(record_rate_kyungji);
@@ -127,6 +130,7 @@ try
 		out.println("<br>record_dist_gi_str = " +record_dist_gi_str);
 		out.println("<br>record_dist_gong_ntwk = " +record_dist_gong_ntwk);
 		out.println("<br>record_rate_city = " +record_rate_city);
+		out.println("<br>record_rate_city_1 = " +record_rate_city_1);
 		out.println("<br>record_rate_city_touch = " +record_rate_city_touch);
 		out.println("<br>record_dist_road = " +record_dist_road);
 		out.println("<br>record_rate_kyungji = " +record_rate_kyungji);

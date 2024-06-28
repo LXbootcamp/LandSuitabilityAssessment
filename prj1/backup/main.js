@@ -6,6 +6,7 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Map, Overlay, View } from "ol";
 import Tile from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import XYZ from "ol/source/XYZ";
 import { Select, Draw } from "ol/interaction.js";
 import Feature from "ol/Feature.js";
 
@@ -66,7 +67,7 @@ function makeFilter1(method) {
 }
 
 const vectorSource2 = new VectorSource({
-  url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
+  url: "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
   format: new GeoJSON(),
 });
 
@@ -74,11 +75,11 @@ const vectorLayer2 = new VectorLayer({
   source: vectorSource2,
   style: new Style({
     fill: new Fill({
-      color: "rgba(255, 255, 255, 0.5)",
+      color: "rgba(255, 255, 255, 0.3)",
     }),
     stroke: new Stroke({
-      color: "rgba(100, 100, 100, 1.0)",
-      width: 2,
+      color: "rgba(0, 0, 0, 1)",
+      width: 1,
     }),
   }),
 });
@@ -93,7 +94,7 @@ function makeFilter(click_F_Jibun) {
 function makeWFSSource2(click_F_Jibun) {
   vectorSource3 = new VectorSource({
     url: encodeURI(
-      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan2&outputFormat=application/json&CQL_FILTER=" +
+      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
       makeFilter(click_F_Jibun)
     ),
     format: new GeoJSON(),
@@ -113,7 +114,7 @@ selectLayer = new VectorLayer({
     }),
     stroke: new Stroke({
       color: "rgba(76, 0, 153, 1)",
-      width: 2,
+      width: 1,
     }),
   }),
 });
@@ -121,7 +122,7 @@ selectLayer = new VectorLayer({
 function makeWFSSource(method) {
   vectorSource = new VectorSource({
     url: encodeURI(
-      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan2&outputFormat=application/json&CQL_FILTER=" +
+      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
       makeFilter1(method)
     ),
     format: new GeoJSON(),
@@ -144,13 +145,13 @@ function makeWFSSource(method) {
 function styleFunction(feature) {
   var value = feature.get('value_comp');
   var color;
-  if (value < -180) {
+  if (value < -360) {
     color = "rgba(0, 78, 0, 1.0)";
-  } else if (value < -60) {
+  } else if (value < -120) {
     color = "rgba(0, 200, 0, 1.0)";
-  } else if (value < 60) {
+  } else if (value < 120) {
     color = "rgba(255, 211, 0, 1.0)";
-  } else if (value < 180) {
+  } else if (value < 360) {
     color = "rgba(255, 75, 0, 1.0)";
   } else {
     color = "rgba(180, 0, 0, 1.0)";
@@ -161,7 +162,7 @@ function styleFunction(feature) {
     }),
     stroke: new Stroke({
       color: 'black',
-      width: 1
+      width: 0.3
     })
   });
 }
@@ -171,15 +172,24 @@ vectorLayer = new VectorLayer({ // 필지별 지적도 레이어
   visible: false, // 초기에는 보이지 않도록 설정
   style: new Style({
     stroke: new Stroke({
-      color: "rgba(0, 153, 051, 1.0)",
-      width: 2,
+      color: "rgba(0, 153, 051, 0.5)",
+      width: 0.5,
     }),
   }),
 });
 
-const raster = new Tile({ // 배경 지도 레이어
-  source: new OSM({}),
+// // 위성지도 레이어
+// const satelliteLayer = new Tile({
+//   source: new XYZ({
+//       url: 'https://www.google.com/maps/vt?lyrs=s&x={x}&y={y}&z={z}&hl=ko&gl=US&key=AIzaSyB5IFWyH-vY37Dm7gV5OO6CXWN3084dwnQ'
+//   })
+// });
+
+// 일반지도 레이어
+const osmLayer = new Tile({
+  source: new OSM()
 });
+
 
 const DrawSource = new VectorSource({ wrapX: false });
 
@@ -187,11 +197,11 @@ const DrawVector = new VectorLayer({ // 그린 영역 레이어
   source: DrawSource,
   style: new Style({
     fill: new Fill({
-      color: "rgba(255, 255, 255, 0)",
+      color: "rgba(212, 194, 92, 0.2)",
     }),
     stroke: new Stroke({
       color: "#ffcc33",
-      width: 2,
+      width: 0.5,
     }),
     image: new Circle({
       radius: 7,
@@ -222,7 +232,6 @@ const displayFeatureInfo = function (pixel, target) {
       return feature;
     });
   if (feature) {
-    console.log("feature:" + feature);
     info.style.left = pixel[0] + "px";
     info.style.top = pixel[1] + "px";
     if (feature !== currentFeature) {
@@ -249,7 +258,7 @@ overlay = new Overlay({
 
 const map = new Map({
   layers: [
-    raster,
+    osmLayer,
     vectorLayer2,
     vectorLayer,
     selectLayer,
@@ -267,11 +276,11 @@ const map = new Map({
 
 const selectedStyle = new Style({
   fill: new Fill({
-    color: "rgba(153, 51, 0, 0.6)",
+    color: "rgba(153, 51, 0, 0.9)",
   }),
   stroke: new Stroke({
-    color: "rgba(153, 51, 0, 0.6)",
-    width: 2,
+    color: "rgba(153, 51, 0, 0.9)",
+    width: 0.3,
   }),
 });
 
@@ -330,12 +339,22 @@ draw.on("drawstart", function () {
   selectedFeatures.clear();
 });
 
+// // 지도 전환 버튼 이벤트 리스너 추가
+// document.getElementById("switch-to-osm").addEventListener("click", function() {
+//   map.getLayers().setAt(0, osmLayer);
+// });
+
+// document.getElementById("switch-to-satellite").addEventListener("click", function() {
+//   map.getLayers().setAt(0, satelliteLayer);
+// });
+
 document.addEventListener("DOMContentLoaded", function () {
   const aaa01 = document.getElementById("aaa01");
   const aaa02 = document.getElementById("aaa02");
   const aaa03 = document.getElementById("aaa03");
   const aaa04 = document.getElementById("aaa04");
   const bbb01 = document.getElementById("bbb01");
+  const bbb04 = document.getElementById("bbb04");
   const bbb02 = document.getElementById("bbb02");
   const bbb03 = document.getElementById("bbb03");
   const ccc01 = document.getElementById("ccc01");
@@ -378,6 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let click_F_rate_limsangdo = null; // 임상도상위등급비율
   let click_F_rate_bojunmount = null; // 보전지역산지비율
   let click_F_dist_kyungji = null; // 경지정리지역와의거리
+  let click_F_rate_city_1 = null; // 선택영역 도시용지비율
 
 
   let click_F_record_slope = null; // 경사도 점수
@@ -396,6 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let click_F_record_rate_limsangdo = null;
   let click_F_record_rate_bojunmount = null;
   let click_F_record_dist_kyungji = null;
+  let click_F_record_rate_city_1 = null;
 
   let click_F_value_develop = null; // 개발적성값 점수
   let click_F_value_conserv = null; // 보전적성값 점수
@@ -418,15 +439,19 @@ document.addEventListener("DOMContentLoaded", function () {
   let inserted_record_rate_limsangdo = {};
   let inserted_record_rate_bojunmount = {};
   let inserted_record_dist_kyungji = {};
+  let inserted_record_rate_city_1 = {};
+
 
   let inserted_value_develop = {};
   let inserted_value_conserv = {};
   let inserted_value_comp = {};
 
+
   // 버튼 클릭 시 SelectionsVector 레이어를 보이도록 설정
   document.getElementById("showOnMap").addEventListener("click", function () {
     SelectionsVector.setVisible(true);
     selectedFeatures.clear();
+
   });
   selectedFeatures.on(["add", "remove"], function () {
     const names = selectedFeatures.getArray().map(function (feature) {
@@ -454,6 +479,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const rate_limsangdo = feature.get("rate_limsangdo") || "";
       const rate_bojunmount = feature.get("rate_bojunmount") || "";
       const dist_kyungji = feature.get("dist_kyungji") || "";
+      const rate_city_1 = feature.get("rate_city_1") || "";
 
 
       const record_slope = feature.get("record_slope") || "";
@@ -475,13 +501,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const value_develop = feature.get("value_develop") || "";
       const value_conserv = feature.get("value_conserv") || "";
       const value_comp = feature.get("value_comp") || "";
-      console.log("record_slope:" + record_slope);
-      console.log("<br>record_height:" + record_height);
-      return { jibun, pnu, lndcgr_code_nm, lndpcl_ar, prpos_area_1_nm, tpgrph_hg_code_nm, tpgrph_frm_code, road_side_code_nm, slope, height, dist_gi_str, dist_gong_ntwk, rate_city, rate_city_touch, dist_road_touch, rate_kyungji, rate_saengtae, rate_gongjuck, dist_gongjuck, rate_jdgarea, rate_nongup, rate_limsangdo, rate_bojunmount, dist_kyungji, record_slope, record_height, record_dist_gi_str, record_dist_gong_ntwk, record_rate_city, record_rate_city_touch, record_dist_road, record_rate_kyungji, record_rate_saengtae, record_rate_gongjuck, record_dist_gongjuck, record_rate_jdgarea, record_rate_nongup, record_rate_limsangdo, record_rate_bojunmount, record_dist_kyungji, value_develop, value_conserv, value_comp };
+      const record_rate_city_1 = feature.get("record_rate_city_1") || "";
+      return { jibun, pnu, lndcgr_code_nm, lndpcl_ar, prpos_area_1_nm, tpgrph_hg_code_nm, tpgrph_frm_code, road_side_code_nm, slope, height, dist_gi_str, dist_gong_ntwk, rate_city, rate_city_touch, dist_road_touch, rate_kyungji, rate_saengtae, rate_gongjuck, dist_gongjuck, rate_jdgarea, rate_nongup, rate_limsangdo, rate_bojunmount, dist_kyungji, record_slope, record_height, record_dist_gi_str, record_dist_gong_ntwk, record_rate_city, record_rate_city_touch, record_dist_road, record_rate_kyungji, record_rate_saengtae, record_rate_gongjuck, record_dist_gongjuck, record_rate_jdgarea, record_rate_nongup, record_rate_limsangdo, record_rate_bojunmount, record_dist_kyungji, value_develop, value_conserv, value_comp, rate_city_1, record_rate_city_1 };
     });
     updateComboBox(names);
   });
 
+  // rate_city1 속성의 총 합을 계산하는 함수
+  function calculateRateCity_1Sum(features) {
+    let total = 0;
+    features.forEach(function (feature) {
+      const rate_city_1 = feature.get('rate_city_1');
+      if (rate_city_1) {
+        total += parseFloat(rate_city_1);
+      }
+    });
+    return total;
+  }
   function updateComboBox(features) {
     comboBox.innerHTML = "";
     features.forEach(function (feature) {
@@ -512,6 +548,7 @@ document.addEventListener("DOMContentLoaded", function () {
         option.setAttribute("rate_limsangdo", feature.rate_limsangdo);
         option.setAttribute("rate_bojunmount", feature.rate_bojunmount);
         option.setAttribute("dist_kyungji", feature.dist_kyungji);
+        option.setAttribute("rate_city_1", feature.rate_city_1);
 
         ////////// 점수 데이터 추가 //////////
         option.setAttribute("record_slope", feature.record_slope);
@@ -530,6 +567,7 @@ document.addEventListener("DOMContentLoaded", function () {
         option.setAttribute("record_rate_limsangdo", feature.record_rate_limsangdo);
         option.setAttribute("record_rate_bojunmount", feature.record_rate_bojunmount);
         option.setAttribute("record_dist_kyungji", feature.record_dist_kyungji);
+        option.setAttribute("record_rate_city_1", feature.record_rate_city_1);
         option.setAttribute("value_develop", feature.value_develop);
         option.setAttribute("value_conserv", feature.value_conserv);
         option.setAttribute("value_comp", feature.value_comp);
@@ -567,6 +605,7 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_rate_limsangdo = selectedOption.getAttribute("rate_limsangdo");
     click_F_rate_bojunmount = selectedOption.getAttribute("rate_bojunmount");
     click_F_dist_kyungji = selectedOption.getAttribute("dist_kyungji");
+    click_F_rate_city_1 = selectedOption.getAttribute("rate_city_1");
 
     ////////// 점수 데이터 추가 //////////
     click_F_record_slope = selectedOption.getAttribute("record_slope"); // 경사도 점수
@@ -585,6 +624,8 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_record_rate_limsangdo = selectedOption.getAttribute("record_rate_limsangdo");
     click_F_record_rate_bojunmount = selectedOption.getAttribute("record_rate_bojunmount");
     click_F_record_dist_kyungji = selectedOption.getAttribute("record_dist_kyungji");
+    click_F_record_rate_city_1 = selectedOption.getAttribute("record_rate_city_1");
+
     click_F_value_develop = selectedOption.getAttribute("value_develop");
     click_F_value_conserv = selectedOption.getAttribute("value_conserv");
     click_F_value_comp = selectedOption.getAttribute("value_comp");
@@ -597,6 +638,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("aaa03").value = "";
     document.getElementById("aaa04").value = "";
     document.getElementById("bbb01").value = "";
+    document.getElementById("bbb04").value = "";
     document.getElementById("bbb02").value = "";
     document.getElementById("bbb03").value = "";
     document.getElementById("ccc01").value = "";
@@ -643,9 +685,12 @@ document.addEventListener("DOMContentLoaded", function () {
       aaa02.innerText = click_F_height; // span, div, p -> innerText
       aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
       aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
-      bbb01.innerText = click_F_rate_city; // span, div, p -> innerText
-      bbb02.innerText = click_F_rate_city_touch; // span, div, p -> innerText
-      bbb03.innerText = click_F_dist_road_touch; // span, div, p -> innerText
+      bbb01.innerText = Math.round(click_F_rate_city); // span, div, p -> innerText
+      const selectSum = selectedFeatures.getLength()-1
+      bbb04.innerText = Math.round(((calculateRateCity_1Sum(selectedFeatures))/(selectSum))*100); // span, div, p -> innerText
+      
+      bbb02.innerText = Math.round(click_F_rate_city_touch); // span, div, p -> innerText
+      bbb03.innerText = Math.round(click_F_dist_road_touch); // span, div, p -> innerText
       ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
       ccc02.innerText = click_F_rate_saengtae; // span, div, p -> innerText
       ccc03.innerText = click_F_rate_gongjuck; // span, div, p -> innerText
@@ -661,6 +706,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("aaaa03").value = click_F_record_dist_gi_str;
       document.getElementById("aaaa04").value = click_F_record_dist_gong_ntwk;
       document.getElementById("bbbb01").value = click_F_record_rate_city;
+      document.getElementById("bbbb04").value = click_F_record_rate_city_1;
       document.getElementById("bbbb02").value = click_F_record_rate_city_touch;
       document.getElementById("bbbb03").value = click_F_record_dist_road;
       document.getElementById("cccc01").value = click_F_record_rate_kyungji;
@@ -683,6 +729,7 @@ document.addEventListener("DOMContentLoaded", function () {
       aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
       aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
       bbb01.innerText = click_F_rate_city; // span, div, p -> innerText
+      bbb04.innerText = click_F_rate_city_1; // span, div, p -> innerText
       bbb02.innerText = click_F_rate_city_touch; // span, div, p -> innerText
       bbb03.innerText = click_F_dist_road_touch; // span, div, p -> innerText
       ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
@@ -700,6 +747,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("aaaa03").value = inserted_record_dist_gi_str[click_F_pnu];
       document.getElementById("aaaa04").value = inserted_record_dist_gong_ntwk[click_F_pnu];
       document.getElementById("bbbb01").value = inserted_record_rate_city[click_F_pnu];
+      document.getElementById("bbbb04").value = inserted_record_rate_city_1[click_F_pnu];
       document.getElementById("bbbb02").value = inserted_record_rate_city_touch[click_F_pnu];
       document.getElementById("bbbb03").value = inserted_record_dist_road[click_F_pnu];
       document.getElementById("cccc01").value = inserted_record_rate_kyungji[click_F_pnu];
@@ -750,11 +798,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 입력 버튼 클릭시 작성한 지표값 db에 저장
   document.getElementById("insertData").onclick = () => {
+
+    // 개발적성 선택지표와 보전적성 선택지표 각각의 선택 개수 세기
+    const selectedDevIndicators = document.querySelectorAll(".dev-checkbox:checked").length;
+    const selectedConIndicators = document.querySelectorAll(".con-checkbox:checked").length;
+
+    if (selectedDevIndicators < 2 || selectedConIndicators < 2) {
+      // 개발적성 또는 보전적성 선택지표가 2개 미만인 경우 경고창 표시
+      alert("개발적성 및 보전적성의 선택지표를 각각 두 개 선택해야 합니다.");
+      return; // 진행 중단
+    }
+
     const aaaa01_value = document.getElementById("aaaa01").value;
     const aaaa02_value = document.getElementById("aaaa02").value;
     const aaaa03_value = document.getElementById("aaaa03").value;
     const aaaa04_value = document.getElementById("aaaa04").value;
     const bbbb01_value = document.getElementById("bbbb01").value;
+    const bbbb04_value = document.getElementById("bbbb04").value;
     const bbbb02_value = document.getElementById("bbbb02").value;
     const bbbb03_value = document.getElementById("bbbb03").value;
     const cccc01_value = document.getElementById("cccc01").value;
@@ -775,6 +835,7 @@ document.addEventListener("DOMContentLoaded", function () {
     inserted_record_dist_gi_str[click_F_pnu] = aaaa03_value;
     inserted_record_dist_gong_ntwk[click_F_pnu] = aaaa04_value;
     inserted_record_rate_city[click_F_pnu] = bbbb01_value;
+    inserted_record_rate_city_1[click_F_pnu] = bbbb04_value;
     inserted_record_rate_city_touch[click_F_pnu] = bbbb02_value;
     inserted_record_dist_road[click_F_pnu] = bbbb03_value;
     inserted_record_rate_kyungji[click_F_pnu] = cccc01_value;
@@ -799,6 +860,7 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("inserted_record_dist_gi_str", JSON.stringify(inserted_record_dist_gi_str));
     localStorage.setItem("inserted_record_dist_gong_ntwk", JSON.stringify(inserted_record_dist_gong_ntwk));
     localStorage.setItem("inserted_record_rate_city", JSON.stringify(inserted_record_rate_city));
+    localStorage.setItem("inserted_record_rate_city_1", JSON.stringify(inserted_record_rate_city_1));
     localStorage.setItem("inserted_record_rate_city_touch", JSON.stringify(inserted_record_rate_city_touch));
     localStorage.setItem("inserted_record_dist_road", JSON.stringify(inserted_record_dist_road));
     localStorage.setItem("inserted_record_rate_kyungji", JSON.stringify(inserted_record_rate_kyungji));
@@ -814,13 +876,13 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("inserted_value_conserv", JSON.stringify(inserted_value_conserv));
     localStorage.setItem("inserted_value_comp", JSON.stringify(inserted_value_comp));
 
-    sendData(click_F_pnu, aaaa01_value, aaaa02_value, aaaa03_value, aaaa04_value, bbbb01_value, bbbb02_value, bbbb03_value, cccc01_value, cccc02_value, cccc03_value, cccc04_value, dddd01_value, dddd02_value, dddd03_value, dddd04_value, dddd05_value, input2_value, input3_value, input4_value);
+    sendData(click_F_pnu, aaaa01_value, aaaa02_value, aaaa03_value, aaaa04_value, bbbb01_value, bbbb04_value, bbbb02_value, bbbb03_value, cccc01_value, cccc02_value, cccc03_value, cccc04_value, dddd01_value, dddd02_value, dddd03_value, dddd04_value, dddd05_value, input2_value, input3_value, input4_value);
   };
 
   // 서버로 데이터 전송
-  function sendData(click_F_pnu, inserted_record_slope, inserted_record_height, inserted_record_dist_gi_str, inserted_record_dist_gong_ntwk, inserted_record_rate_city, inserted_record_rate_city_touch, inserted_record_dist_road, inserted_record_rate_kyungji, inserted_record_rate_saengtae, inserted_record_rate_gongjuck, inserted_record_dist_gongjuck, inserted_record_rate_jdgarea, inserted_record_rate_nongup, inserted_record_rate_limsangdo, inserted_record_rate_bojunmount, inserted_record_dist_kyungji, inserted_value_develop, inserted_value_conserv, inserted_value_comp) {
+  function sendData(click_F_pnu, inserted_record_slope, inserted_record_height, inserted_record_dist_gi_str, inserted_record_dist_gong_ntwk, inserted_record_rate_city, inserted_record_rate_city_1, inserted_record_rate_city_touch, inserted_record_dist_road, inserted_record_rate_kyungji, inserted_record_rate_saengtae, inserted_record_rate_gongjuck, inserted_record_dist_gongjuck, inserted_record_rate_jdgarea, inserted_record_rate_nongup, inserted_record_rate_limsangdo, inserted_record_rate_bojunmount, inserted_record_dist_kyungji, inserted_value_develop, inserted_value_conserv, inserted_value_comp) {
     var url =
-      `./fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
+      `./fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_1=${encodeURIComponent(inserted_record_rate_city_1)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
     fetch(url, {
       method: "POST", // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
     })
@@ -938,7 +1000,7 @@ document.addEventListener("DOMContentLoaded", function () {
   ["aaaa01", "aaaa02", "aaaa03", "aaaa04"].forEach((id) => {
     document.getElementById(id).addEventListener("input", calculateDevVal);
   });
-  ["bbbb01", "bbbb02", "bbbb03"].forEach((id) => {
+  ["bbbb01", "bbbb04", "bbbb02", "bbbb03"].forEach((id) => {
     document.getElementById(id).addEventListener("input", calculateDevVal);
   });
   ["cccc01", "cccc02", "cccc03", "cccc04"].forEach((id) => {
@@ -1000,6 +1062,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("bbbb01").value = zero;
         document.getElementById("bbbb02").value = zero;
         document.getElementById("bbbb03").value = zero;
+        document.getElementById("bbbb04").value = zero;
         document.getElementById("cccc01").value = zero;
         document.getElementById("cccc02").value = zero;
         document.getElementById("cccc03").value = zero;
@@ -1109,6 +1172,16 @@ for (let i = 0; i <= 9; i++) {
     popup.style.display = "block";
   };
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleSidebarButton = document.getElementById("toggleSidebar");
+  const sidebar = document.getElementById("sidebar");
+
+  toggleSidebarButton.addEventListener("click", function () {
+    sidebar.classList.toggle("show");
+    toggleSidebarButton.textContent = sidebar.classList.contains("show") ? "▶" : "◀";
+  });
+});
 
 // // aaaa01 ~ aaaa04, bbbb01 ~ bbbb05의 값을 합산하여 devVal에 설정하는 함수
 // function calculateDevVal() {
