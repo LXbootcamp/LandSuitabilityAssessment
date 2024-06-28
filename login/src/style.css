@@ -21,14 +21,14 @@ body {
 }
 
 #header {
-  height: 60px;
+  height: 45px;
   background: #fff;
   border-bottom: 1px solid #d4d4d4;
 }
 
 #contents {
   position: absolute;
-  top: 81px;
+  top: 46px;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -72,11 +72,11 @@ body {
 }
 
 /* 헤더 부분 스타일 설정 */
-.topDecal {
+/* .topDecal {
   background: #175381;
   height: 15px;
   width: 100%;
-}
+} */
 
 /* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
 ul.emdList,
@@ -267,4 +267,15 @@ table.dataTable3 th {
   border: 3px solid gray;
   border-radius: 5px;
   background-color: white;
+}
+.height-span {
+  display: inline-block;
+  height: 23px; /* 원하는 높이 설정 */
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
 }

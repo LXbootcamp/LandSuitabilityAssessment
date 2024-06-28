@@ -13,7 +13,7 @@ const app = express();
 const pool = new Pool({
   user: "scott", // 데이터베이스 사용자 이름
   host: "postgres", // 데이터베이스 호스트명
-  database: "camp", // 데이터베이스 이름
+  database: "boot", // 데이터베이스 이름
   password: "tiger", // 데이터베이스 비밀번호
   port: 5432, // 데이터베이스 포트
 });
@@ -86,17 +86,17 @@ app.use((req, res, next) => {
 });
 
 // 정적 파일 서빙
-// app.use(express.static(path.join(__dirname, "dist")));
-
-// 주의: src 폴더를 정적 파일 서빙에서 제외
 app.use("/dist", express.static(path.join(__dirname, "dist")));
-
-// 기타 정적 파일 서빙 설정
 app.use("/static", express.static(path.join(__dirname, "static")));
 
 // JSP 파일 서빙 설정
 app.get("/fetchData.jsp", (req, res) => {
   res.sendFile(path.join(__dirname, "static", "fetchData.jsp"));
+});
+
+// Grid 페이지 서빙 설정
+app.get("/grid.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "grid.html"));
 });
 
 // 비밀번호 해싱 함수 (bcrypt 사용)
@@ -132,6 +132,13 @@ app.post("/login", async (req, res) => {
         req.session.user = username; // 세션에 사용자 정보 저장
         console.log("Login successful for user:", username);
         console.log("Session after login:", req.session); // 세션 정보 출력
+
+        // 로그인 시간을 user_activity_log 테이블에 기록
+        await pool.query(
+          "INSERT INTO user_activity_log (username, login_time) VALUES ($1, NOW())",
+          [username]
+        );
+
         res.json({ success: true });
       } else {
         console.log("Password mismatch for user:", username);
@@ -147,12 +154,42 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// 로그아웃 처리 엔드포인트
+app.post("/logout", async (req, res) => {
+  try {
+    const username = req.session.user;
+
+    // 세션 파괴
+    req.session.destroy(async (err) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Logout failed" });
+      }
+      res.clearCookie("connect.sid");
+
+      // 로그아웃 시간을 user_activity_log 테이블에 기록
+      if (username) {
+        await pool.query(
+          "UPDATE user_activity_log SET logout_time = NOW() WHERE username = $1 AND logout_time IS NULL",
+          [username]
+        );
+      }
+
+      res.json({ success: true });
+    });
+  } catch (err) {
+    console.error("Error during logout:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 // 로그인 상태 확인 엔드포인트
 app.get("/checkLogin", (req, res) => {
   console.log("Session on checkLogin:", req.session);
   if (req.session.user) {
     console.log("User is logged in:", req.session.user);
-    res.json({ loggedIn: true });
+    res.json({ loggedIn: true, user: req.session.user });
   } else {
     console.log("No user is logged in");
     res.json({ loggedIn: false });
@@ -165,11 +202,19 @@ app.post("/signup", async (req, res) => {
   const hashedPassword = await hashPassword(password); // 비밀번호 해싱
 
   try {
+    // 프로필 테이블에 사용자 정보 삽입
     await pool.query(
       "INSERT INTO profile (username, password, name, phone) VALUES ($1, $2, $3, $4)",
       [username, hashedPassword, name, phone]
     );
     console.log("User inserted successfully");
+
+    // 회원가입 시간을 user_activity_log 테이블에 기록
+    await pool.query(
+      "INSERT INTO user_activity_log (username, signup_time) VALUES ($1, NOW())",
+      [username]
+    );
+
     res.json({ success: true });
   } catch (err) {
     console.error("Error inserting user:", err);

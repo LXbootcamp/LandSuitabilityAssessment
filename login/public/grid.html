@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>무안군 토지적성평가 프로그램</title>
+  <title>무안군 토지적성평가 프로그램2</title>
   <link rel="stylesheet" href="node_modules/ol/ol.css">
   <!-- 구글 링크 붙여넣기 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,18 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.css[0] %>">
   <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
+
 </head>
 
 <body>
   <div class="container">
     <div id="header">
       <div class="topDecal"></div>
-      <a href=""><img style="height: 40px;" src="./lxLogo2.png" onclick="location.reload();" alt="로고"
+      <a href=""><img style="height: 40px;" src="/static/lxLogo.png" onclick="location.reload();" alt="로고"
           style="vertical-align: middle; margin-right: 10px;">
       </a>
-      <div id="user-info" style="float: right; margin-right: 20px;">
-        <span id="username"></span> <span id="welcome-text">회원님 반갑습니다.</span> <a href="#" id="logout">로그아웃</a>
-      </div>
     </div> <!-- header 닫힘 -->
     <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
     <div id="contents">
@@ -231,49 +229,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
   <script type="module" src="<%= htmlWebpackPlugin.files.js[0] %>"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      try {
-        // /checkLogin 엔드포인트로 로그인 상태를 확인하는 요청을 보냄
-        const response = await fetch('/checkLogin', { credentials: 'include' });
-        const data = await response.json();
-
-        // 전체 응답 데이터를 콘솔에 출력
-        console.log('Login status:', data);
-
-        // 로그인이 되어 있는 경우
-        if (data.loggedIn) {
-          // 사용자 이름을 표시
-          document.getElementById('username').textContent = data.user;
-          // 환영 메시지와 로그아웃 링크를 표시
-          document.getElementById('welcome-text').style.display = 'inline';
-          document.getElementById('logout').style.display = 'inline';
-        } else {
-          // 로그인이 되어 있지 않은 경우 환영 메시지와 로그아웃 링크를 숨김
-          document.getElementById('welcome-text').style.display = 'none';
-          document.getElementById('logout').style.display = 'none';
-        }
-
-        // 로그아웃 링크에 클릭 이벤트 리스너 추가
-        document.getElementById('logout').addEventListener('click', async function () {
-          // /logout 엔드포인트로 로그아웃 요청을 보냄
-          const response = await fetch('/logout', { method: 'POST', credentials: 'include' });
-          const data = await response.json();
-
-          // 로그아웃이 성공한 경우 로그인 페이지로 이동
-          if (data.success) {
-            window.location.href = '/login.html';
-          } else {
-            // 로그아웃이 실패한 경우 경고 메시지 표시
-            alert('Logout failed');
-          }
-        });
-      } catch (error) {
-        // 로그인 상태를 확인하는 동안 오류가 발생한 경우 콘솔에 오류 메시지 출력
-        console.error('Error fetching login status:', error);
-      }
-    });
-  </script>
 </body>
 
 </html>

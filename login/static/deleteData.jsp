@@ -22,31 +22,6 @@ String checkNull(String data){
 <%
 // 파라미터 값 가져오기
 String selected_pnu = request.getParameter("selected_pnu");
-String inserted_tpgrph_hg_code_nm = request.getParameter("inserted_tpgrph_hg_code_nm");
-String inserted_record_slope = request.getParameter("inserted_record_slope");
-String inserted_record_height = request.getParameter("inserted_record_height");
-String inserted_record_dist_gi_str = request.getParameter("inserted_record_dist_gi_str");
-String inserted_record_dist_gong_ntwk = request.getParameter("inserted_record_dist_gong_ntwk");
-String inserted_record_rate_city = request.getParameter("inserted_record_rate_city");
-String inserted_record_rate_city_touch = request.getParameter("inserted_record_rate_city_touch");
-String inserted_record_dist_road = request.getParameter("inserted_record_dist_road");
-String inserted_record_rate_kyungji = request.getParameter("inserted_record_rate_kyungji");
-String inserted_record_rate_saengtae = request.getParameter("inserted_record_rate_saengtae");
-String inserted_record_rate_gongjuck = request.getParameter("inserted_record_rate_gongjuck");
-String inserted_record_dist_gongjuck = request.getParameter("inserted_record_dist_gongjuck");
-String inserted_record_rate_jdgarea = request.getParameter("inserted_record_rate_jdgarea");
-String inserted_record_rate_nongup = request.getParameter("inserted_record_rate_nongup");
-String inserted_record_rate_limsangdo = request.getParameter("inserted_record_rate_limsangdo");
-String inserted_record_rate_bojunmount = request.getParameter("inserted_record_rate_bojunmount");
-String inserted_record_dist_kyungji = request.getParameter("inserted_record_dist_kyungji");
-String inserted_value_develop = request.getParameter("inserted_value_develop");
-String inserted_value_conserv = request.getParameter("inserted_value_conserv");
-String inserted_value_comp = request.getParameter("inserted_value_comp");
-
-out.println("selected_pnu : " + selected_pnu);
-out.println("<br><br>inserted_tpgrph_hg_code_nm : " + inserted_tpgrph_hg_code_nm);
-out.println("<br><br>inserted_record_slope : " + inserted_record_slope);
-out.println("<br><br>inserted_record_height : " + inserted_record_height);
 %>
 
 <%
@@ -72,25 +47,25 @@ try
 	stmt = con.createStatement();
 	// insert 쿼리문
 	String query = "update combined_muan set " +
-    "record_slope = '" 				+ inserted_record_slope 			+ "', " +
-    "record_height = '" 			+ inserted_record_height 			+ "', " +
-    "record_dist_gi_str = '" 		+ inserted_record_dist_gi_str 		+ "', " +
-    "record_dist_gong_ntwk = '" 	+ inserted_record_dist_gong_ntwk 		+ "', " +
-    "record_rate_city = '" 			+ inserted_record_rate_city 		+ "', " +
-    "record_rate_city_touch = '" 	+ inserted_record_rate_city_touch 	+ "', " +
-    "record_dist_road = '" 			+ inserted_record_dist_road 		+ "', " +
-    "record_rate_kyungji = '" 		+ inserted_record_rate_kyungji 	+ "', " +
-    "record_rate_saengtae = '" 		+ inserted_record_rate_saengtae 	+ "', " +
-    "record_rate_gongjuck = '" 		+ inserted_record_rate_gongjuck 	+ "', " +
-    "record_dist_gongjuck = '" 		+ inserted_record_dist_gongjuck 	+ "', " +
-    "record_rate_jdgarea = '" 		+ inserted_record_rate_jdgarea 		+ "', " +
-    "record_rate_nongup = '" 		+ inserted_record_rate_nongup 		+ "', " +
-    "record_rate_limsangdo = '" 	+ inserted_record_rate_limsangdo 	+ "', " +
-    "record_rate_bojunmount = '" 	+ inserted_record_rate_bojunmount 	+ "', " +
-    "record_dist_kyungji = '" 		+ inserted_record_dist_kyungji 	+ "', " +
-	"value_develop = '" 			+ inserted_value_develop 			+ "', " +
-	"value_conserv = '" 			+ inserted_value_conserv 			+ "', " +
-	"value_comp = '" 				+ inserted_value_comp 				+ "' " +
+    "record_slope = "+ 0 + ", " +
+    "record_height = "+ 0 + ", " +
+    "record_dist_gi_str = "+ 0 + ", " +
+    "record_dist_gong_ntwk = "+ 0 + ", " +
+    "record_rate_city = "+ 0 + ", " +
+    "record_rate_city_touch = "+ 0 + ", " +
+    "record_dist_road = "+ 0 + ", " +
+    "record_rate_kyungji = "+ 0 + ", " +
+    "record_rate_saengtae = "+ 0 + ", " +
+    "record_rate_gongjuck = "+ 0 + ", " +
+    "record_dist_gongjuck = "+ 0 + ", " +
+    "record_rate_jdgarea = "+ 0 + ", " +
+    "record_rate_nongup = "+ 0 + ", " +
+    "record_rate_limsangdo = "+ 0 + ", " +
+    "record_rate_bojunmount = "+ 0 + ", " +
+    "record_dist_kyungji = "+ 0 + ", " +
+	"value_develop = "+ 0 + ", " +
+	"value_conserv = "+ 0 + ", " +
+	"value_comp = "+ 0 + " " +
     "where pnu = '" + selected_pnu + "'";
 
 	out.println("<br><br>query = " + query + "<br><br>");
