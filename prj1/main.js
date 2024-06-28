@@ -6,6 +6,7 @@ import GeoJSON from "ol/format/GeoJSON.js";
 import { Map, Overlay, View } from "ol";
 import Tile from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import XYZ from "ol/source/XYZ";
 import { Select, Draw } from "ol/interaction.js";
 import Feature from "ol/Feature.js";
 
@@ -66,7 +67,7 @@ function makeFilter1(method) {
 }
 
 const vectorSource2 = new VectorSource({
-  url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
+  url: "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
   format: new GeoJSON(),
 });
 
@@ -177,9 +178,18 @@ vectorLayer = new VectorLayer({ // 필지별 지적도 레이어
   }),
 });
 
-const raster = new Tile({ // 배경 지도 레이어
-  source: new OSM({}),
+// // 위성지도 레이어
+// const satelliteLayer = new Tile({
+//   source: new XYZ({
+//       url: 'https://www.google.com/maps/vt?lyrs=s&x={x}&y={y}&z={z}&hl=ko&gl=US&key=AIzaSyB5IFWyH-vY37Dm7gV5OO6CXWN3084dwnQ'
+//   })
+// });
+
+// 일반지도 레이어
+const osmLayer = new Tile({
+  source: new OSM()
 });
+
 
 const DrawSource = new VectorSource({ wrapX: false });
 
@@ -249,7 +259,7 @@ overlay = new Overlay({
 
 const map = new Map({
   layers: [
-    raster,
+    osmLayer,
     vectorLayer2,
     vectorLayer,
     selectLayer,
@@ -329,6 +339,15 @@ function polyIntersectsPoly(polygeomA, polygeomB) {
 draw.on("drawstart", function () {
   selectedFeatures.clear();
 });
+
+// // 지도 전환 버튼 이벤트 리스너 추가
+// document.getElementById("switch-to-osm").addEventListener("click", function() {
+//   map.getLayers().setAt(0, osmLayer);
+// });
+
+// document.getElementById("switch-to-satellite").addEventListener("click", function() {
+//   map.getLayers().setAt(0, satelliteLayer);
+// });
 
 document.addEventListener("DOMContentLoaded", function () {
   const aaa01 = document.getElementById("aaa01");
@@ -750,6 +769,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 입력 버튼 클릭시 작성한 지표값 db에 저장
   document.getElementById("insertData").onclick = () => {
+
+    // 개발적성 선택지표와 보전적성 선택지표 각각의 선택 개수 세기
+    const selectedDevIndicators = document.querySelectorAll(".dev-checkbox:checked").length;
+    const selectedConIndicators = document.querySelectorAll(".con-checkbox:checked").length;
+    
+    if (selectedDevIndicators < 2 || selectedConIndicators < 2) {
+        // 개발적성 또는 보전적성 선택지표가 2개 미만인 경우 경고창 표시
+        alert("개발적성 및 보전적성의 선택지표를 각각 두 개 선택해야 합니다.");
+        return; // 진행 중단
+    }
+
     const aaaa01_value = document.getElementById("aaaa01").value;
     const aaaa02_value = document.getElementById("aaaa02").value;
     const aaaa03_value = document.getElementById("aaaa03").value;
