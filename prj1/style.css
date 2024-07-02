@@ -267,6 +267,17 @@ table.dataTable3 th {
   border-radius: 5px;
   background-color: white;  
 }
+
+#polygonPopup 
+{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  border: 3px solid gray;
+  border-radius: 5px;
+  background-color: white;  
+}
+
 .height-span {
   display: inline-block;
   height: 23px;  /* 원하는 높이 설정 */
@@ -275,9 +286,9 @@ table.dataTable3 th {
 /* 사이드바 스타일 */
 .sidebar {
   position: absolute;
-  right: -100px; /* 처음에 화면에 보이지 않도록 */
+  right: -250px; /* 처음에 화면에 보이지 않도록 */
   top: 46px;
-  width: 100px;
+  width: 250px;
   height: calc(100% - 46px); /* 헤더 높이를 뺀 나머지 높이 */
   background-color: #f1f1f1;
   transition: right 0.5s;
@@ -298,4 +309,107 @@ table.dataTable3 th {
   cursor: pointer;
   padding: 5px;
   font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+/* 한글파일 부분 */
+/* Font Definitions */
+/* @font-face {
+  font-family: 'Batang';
+  src: url('fonts/Batang.woff2') format('woff2'),
+       url('fonts/Batang.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Gulim';
+  src: url('fonts/Gulim.woff2') format('woff2'),
+       url('fonts/Gulim.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Cambria Math';
+  src: url('fonts/CambriaMath.woff2') format('woff2'),
+       url('fonts/CambriaMath.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Arial Unicode MS';
+  src: url('fonts/ArialUnicodeMS.woff2') format('woff2'),
+       url('fonts/ArialUnicodeMS.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Malgun Gothic';
+  src: url('assets/fonts/MalgunGothic.woff2') format('woff2'),
+       url('assets/fonts/MalgunGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Malgun Gothic', sans-serif;
+}
+
+@font-face {
+  font-family: 'DotumChe';
+  src: url('fonts/DotumChe.woff2') format('woff2'),
+       url('fonts/DotumChe.woff') format('woff');
+}
+
+body {
+font-family: "Malgun Gothic", sans-serif;
+} */
+
+.WordSection1 {
+page: WordSection1;
+}
+
+p.section-title, li.section-title, div.section-title {
+margin-top: 5.65pt;
+margin-right: 0in;
+margin-bottom: 5.65pt;
+margin-left: 23.2pt;
+text-align: justify;
+text-justify: inter-ideograph;
+text-indent: -23.2pt;
+line-height: 116%;
+word-break: break-all;
+font-size: 12.0pt;
+font-family: "HYSinMyeongJo-Medium", serif;
+color: black;
+letter-spacing: -.3pt;
+}
+
+p.text-content, li.text-content, div.text-content {
+margin: 0in;
+text-align: justify;
+text-justify: inter-ideograph;
+word-break: break-all;
+font-size: 10.0pt;
+font-family: "HYSinMyeongJo-Medium", serif;
+color: black;
+letter-spacing: -.25pt;
+}
+
+p.table-content, li.table-content, div.table-content {
+margin: 0in;
+text-align: justify;
+text-justify: inter-ideograph;
+word-break: break-all;
+font-size: 10.0pt;
+font-family: "HYSinMyeongJo-Medium", serif;
+color: black;
+letter-spacing: -.25pt;
+}
+
+.MsoNormalTable {
+border-collapse: collapse;
+border: none;
 }

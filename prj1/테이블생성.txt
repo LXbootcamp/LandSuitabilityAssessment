@@ -1,0 +1,9 @@
+create table polygon_data (
+	id int generated always as identity primary key,
+	area int,
+	round int,
+	developValue int,
+	conserveValue int,
+	compreValue int,
+	geom public.geometry(MultiPolygon,3857)
+);
