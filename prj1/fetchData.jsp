@@ -43,11 +43,13 @@ String inserted_record_dist_kyungji = request.getParameter("inserted_record_dist
 String inserted_value_develop = request.getParameter("inserted_value_develop");
 String inserted_value_conserv = request.getParameter("inserted_value_conserv");
 String inserted_value_comp = request.getParameter("inserted_value_comp");
+String selectedItems = request.getParameter("selectedItems");
 
 out.println("selected_pnu : " + selected_pnu);
 out.println("<br><br>inserted_tpgrph_hg_code_nm : " + inserted_tpgrph_hg_code_nm);
 out.println("<br><br>inserted_record_slope : " + inserted_record_slope);
 out.println("<br><br>inserted_record_height : " + inserted_record_height);
+out.println("selectedItems : " + selectedItems);
 %>
 
 <%

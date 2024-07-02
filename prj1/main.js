@@ -338,6 +338,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let round = null;
   let drawnFeature = null;
 
+  const tooltip = document.getElementById('tooltip');
+
   draw.on("drawend", function (e) {
     DrawSource.clear();
     SelectionsSource.clear();
@@ -354,6 +356,29 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedFeatures.push(aa);
       }
     });
+  });
+
+  // DrawVector 레이어에 커서 대면 말풍선 표시
+  map.on('pointermove', function (event) {
+    const hit = map.hasFeatureAtPixel(event.pixel, {
+      layerFilter: function (layer) {
+        return layer === DrawVector;
+      }
+    });
+    if (hit) {
+      const pixel = event.pixel;
+      const mapRect = map.getTargetElement().getBoundingClientRect();
+      tooltip.style.display = 'block';
+      tooltip.style.left = `${pixel[0] + mapRect.left}px`;
+      tooltip.style.top = `${pixel[1] + mapRect.top-30}px`;
+    } else {
+      tooltip.style.display = 'none';
+    }
+  });
+
+  // 마우스가 DrawVector 레이어를 벗어났을 때 말풍선 숨기기
+  map.on('pointerout', function () {
+    tooltip.style.display = 'none';
   });
 
   // Ctrl+클릭 이벤트 핸들러 추가
@@ -518,29 +543,45 @@ document.getElementById("switch-to-satellite").addEventListener("click", functio
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const aaa01 = document.getElementById("aaa01");
-  const aaa02 = document.getElementById("aaa02");
-  const aaa03 = document.getElementById("aaa03");
-  const aaa04 = document.getElementById("aaa04");
-  const bbb01 = document.getElementById("bbb01");
-  const bbb04 = document.getElementById("bbb04");
-  const bbb02 = document.getElementById("bbb02");
-  const bbb03 = document.getElementById("bbb03");
-  const ccc01 = document.getElementById("ccc01");
-  const ccc02 = document.getElementById("ccc02");
-  const ccc03 = document.getElementById("ccc03");
-  const ccc04 = document.getElementById("ccc04");
-  const ddd01 = document.getElementById("ddd01");
-  const ddd02 = document.getElementById("ddd02");
-  const ddd03 = document.getElementById("ddd03");
-  const ddd04 = document.getElementById("ddd04");
-  const ddd05 = document.getElementById("ddd05");
+  const elementIds = [
+    "aaa01", "aaa02", "aaa03", "aaa04",
+    "bbb01", "bbb04", "bbb02", "bbb03",
+    "ccc01", "ccc02", "ccc03", "ccc04",
+    "ddd01", "ddd02", "ddd03", "ddd04", "ddd05"
+  ];
+  const elements = {};
+  elementIds.forEach(id => {
+    elements[id] = document.getElementById(id);
+  });
 
   const comboBox = document.getElementById("selectedRegions");
   const selectedValueDisplay = document.getElementById("selectedValueDisplay");
   const selectedValueDisplay2 = document.getElementById("selectedValueDisplay2");
 
   let ld_cpsgemd_nm = "";
+  let ji_bun = "";
+  let area = "";
+  let value_develop = "";
+  let value_conserv = "";
+  let value_comp = "";
+  let slope = ""; let record_slope = "";
+  let height = ""; let record_height = "";
+  let dist_gi_str = ""; let record_dist_gi_str = "";
+  let dist_gong_ntwk = ""; let record_dist_gong_ntwk = "";
+  let rate_city = ""; let record_rate_city = "";
+  let rate_city_touch = ""; let record_rate_city_touch = "";
+  let dist_road_touch = ""; let record_dist_road = "";
+  let rate_kyungji = ""; let record_rate_kyungji = "";
+  let rate_saengtae = ""; let record_rate_saengtae = "";
+  let rate_gongjuck = ""; let record_rate_gongjuck = "";
+  let dist_gongjuck = ""; let record_dist_gongjuck = "";
+  let rate_jdgarea = ""; let record_rate_jdgarea = "";
+  let rate_nongup = ""; let record_rate_nongup = "";
+  let rate_limsangdo = ""; let record_rate_limsangdo = "";
+  let rate_bojunmount = ""; let record_rate_bojunmount = "";
+  let dist_kyungji = ""; let record_dist_kyungji = "";
+  let rate_city_1 = ""; let record_rate_city_1 = "";
+
 
   // 콤보박스 값 변경 시 선택된 값을 표시 및 변수에 저장
   let click_F_Jibun = null;
@@ -627,53 +668,55 @@ document.addEventListener("DOMContentLoaded", function () {
   selectedFeatures.on(["add", "remove"], function () {
     const names = selectedFeatures.getArray().map(function (feature) {
       const jibun = feature.get("jibun") || "필지 선택";
-      const pnu = feature.get("pnu") || ""; // pnu 값을 가져옴
-      ld_cpsgemd_nm = feature.get("ld_cpsgemd_nm") || ""; // 시도 시군구 읍면리 값을 가져옴
-      const lndcgr_code_nm = feature.get("lndcgr_code_nm") || ""; // lndcgr_code_nm 값을 가져옴
-      const lndpcl_ar = feature.get("lndpcl_ar") || ""; // lndpcl_ar 값을 가져옴
-      const prpos_area_1_nm = feature.get("prpos_area_1_nm") || ""; // prpos_area_1_nm 값을 가져옴
-      const tpgrph_hg_code_nm = feature.get("tpgrph_hg_code_nm") || ""; // tpgrph_hg_code_nm 값을 가져옴
-      const land_shape = feature.get("land_shape") || ""; // land_shape 값을 가져옴
-      const road_side_code_nm = feature.get("road_side_code_nm") || ""; // road_side_code_nm 값을 가져옴
-      const slope = feature.get("slope") || ""; // slope 값을 가져옴
-      const height = feature.get("height") || "";
-      const dist_gi_str = feature.get("dist_gi_str") || "";
-      const dist_gong_ntwk = feature.get("dist_gong_ntwk") || "";
-      const rate_city = feature.get("rate_city") || "";
-      const rate_city_touch = feature.get("rate_city_touch") || "";
-      const dist_road_touch = feature.get("dist_road_touch") || "";
-      const rate_kyungji = feature.get("rate_kyungji") || "";
-      const rate_saengtae = feature.get("rate_saengtae") || "";
-      const rate_gongjuck = feature.get("rate_gongjuck") || "";
-      const dist_gongjuck = feature.get("dist_gongjuck") || "";
-      const rate_jdgarea = feature.get("rate_jdgarea") || "";
-      const rate_nongup = feature.get("rate_nongup") || "";
-      const rate_limsangdo = feature.get("rate_limsangdo") || "";
-      const rate_bojunmount = feature.get("rate_bojunmount") || "";
-      const dist_kyungji = feature.get("dist_kyungji") || "";
-      const rate_city_1 = feature.get("rate_city_1") || "";
+      const pnu = feature.get("pnu") || ""; // pnu
+      ld_cpsgemd_nm = feature.get("ld_cpsgemd_nm") || ""; // 시도 시군구 읍면리
+      ji_bun = feature.get("ji_bun") || ""; // 지번
+      area = feature.get("lndpcl_ar") || ""; // 면적
+      const lndcgr_code_nm = feature.get("lndcgr_code_nm") || "";
+      const lndpcl_ar = feature.get("lndpcl_ar") || "";
+      const prpos_area_1_nm = feature.get("prpos_area_1_nm") || "";
+      const tpgrph_hg_code_nm = feature.get("tpgrph_hg_code_nm") || "";
+      const land_shape = feature.get("land_shape") || "";
+      const road_side_code_nm = feature.get("road_side_code_nm") || "";
+      slope = feature.get("slope") || "";
+      height = feature.get("height") || "";
+      dist_gi_str = feature.get("dist_gi_str") || "";
+      dist_gong_ntwk = feature.get("dist_gong_ntwk") || "";
+      rate_city = feature.get("rate_city") || "";
+      rate_city_touch = feature.get("rate_city_touch") || "";
+      dist_road_touch = feature.get("dist_road_touch") || "";
+      rate_kyungji = feature.get("rate_kyungji") || "";
+      rate_saengtae = feature.get("rate_saengtae") || "";
+      rate_gongjuck = feature.get("rate_gongjuck") || "";
+      dist_gongjuck = feature.get("dist_gongjuck") || "";
+      rate_jdgarea = feature.get("rate_jdgarea") || "";
+      rate_nongup = feature.get("rate_nongup") || "";
+      rate_limsangdo = feature.get("rate_limsangdo") || "";
+      rate_bojunmount = feature.get("rate_bojunmount") || "";
+      dist_kyungji = feature.get("dist_kyungji") || "";
+      rate_city_1 = feature.get("rate_city_1") || "";
 
 
-      const record_slope = feature.get("record_slope") || "";
-      const record_height = feature.get("record_height") || "";
-      const record_dist_gi_str = feature.get("record_dist_gi_str") || "";
-      const record_dist_gong_ntwk = feature.get("record_dist_gong_ntwk") || "";
-      const record_rate_city = feature.get("record_rate_city") || "";
-      const record_rate_city_touch = feature.get("record_rate_city_touch") || "";
-      const record_dist_road = feature.get("record_dist_road") || "";
-      const record_rate_kyungji = feature.get("record_rate_kyungji") || "";
-      const record_rate_saengtae = feature.get("record_rate_saengtae") || "";
-      const record_rate_gongjuck = feature.get("record_rate_gongjuck") || "";
-      const record_dist_gongjuck = feature.get("record_dist_gongjuck") || "";
-      const record_rate_jdgarea = feature.get("record_rate_jdgarea") || "";
-      const record_rate_nongup = feature.get("record_rate_nongup") || "";
-      const record_rate_limsangdo = feature.get("record_rate_limsangdo") || "";
-      const record_rate_bojunmount = feature.get("record_rate_bojunmount") || "";
-      const record_dist_kyungji = feature.get("record_dist_kyungji") || "";
-      const value_develop = feature.get("value_develop") || "";
-      const value_conserv = feature.get("value_conserv") || "";
-      const value_comp = feature.get("value_comp") || "";
-      const record_rate_city_1 = feature.get("record_rate_city_1") || "";
+      record_slope = feature.get("record_slope") || "";
+      record_height = feature.get("record_height") || "";
+      record_dist_gi_str = feature.get("record_dist_gi_str") || "";
+      record_dist_gong_ntwk = feature.get("record_dist_gong_ntwk") || "";
+      record_rate_city = feature.get("record_rate_city") || "";
+      record_rate_city_touch = feature.get("record_rate_city_touch") || "";
+      record_dist_road = feature.get("record_dist_road") || "";
+      record_rate_kyungji = feature.get("record_rate_kyungji") || "";
+      record_rate_saengtae = feature.get("record_rate_saengtae") || "";
+      record_rate_gongjuck = feature.get("record_rate_gongjuck") || "";
+      record_dist_gongjuck = feature.get("record_dist_gongjuck") || "";
+      record_rate_jdgarea = feature.get("record_rate_jdgarea") || "";
+      record_rate_nongup = feature.get("record_rate_nongup") || "";
+      record_rate_limsangdo = feature.get("record_rate_limsangdo") || "";
+      record_rate_bojunmount = feature.get("record_rate_bojunmount") || "";
+      record_dist_kyungji = feature.get("record_dist_kyungji") || "";
+      value_develop = feature.get("value_develop") || "";
+      value_conserv = feature.get("value_conserv") || "";
+      value_comp = feature.get("value_comp") || "";
+      record_rate_city_1 = feature.get("record_rate_city_1") || "";
       return { jibun, pnu, ld_cpsgemd_nm, lndcgr_code_nm, lndpcl_ar, prpos_area_1_nm, tpgrph_hg_code_nm, land_shape, road_side_code_nm, slope, height, dist_gi_str, dist_gong_ntwk, rate_city, rate_city_touch, dist_road_touch, rate_kyungji, rate_saengtae, rate_gongjuck, dist_gongjuck, rate_jdgarea, rate_nongup, rate_limsangdo, rate_bojunmount, dist_kyungji, record_slope, record_height, record_dist_gi_str, record_dist_gong_ntwk, record_rate_city, record_rate_city_touch, record_dist_road, record_rate_kyungji, record_rate_saengtae, record_rate_gongjuck, record_dist_gongjuck, record_rate_jdgarea, record_rate_nongup, record_rate_limsangdo, record_rate_bojunmount, record_dist_kyungji, value_develop, value_conserv, value_comp, rate_city_1, record_rate_city_1 };
     });
     updateComboBox(names);
@@ -756,7 +799,7 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_Jibun = comboBox.value;
     const selectedOption = comboBox.options[comboBox.selectedIndex];
     click_F_pnu = selectedOption.getAttribute("pnu"); // pnu
-    click_F_ld_cpsgemd_nm = selectedOption.getAttribute("ld_cpsgemd_nm"); // 시도 시군구 읍면리
+    click_F_ld_cpsgemd_nm = selectedOption.getAttribute("ld_cpsgemd_nm"); // 시도 시군구 읍면리 필요한지 체크
     click_F_tpgrph_hg_code_nm = selectedOption.getAttribute("tpgrph_hg_code_nm"); // 경사도
     click_F_lndcgr_code_nm = selectedOption.getAttribute("lndcgr_code_nm"); // 지목
     click_F_lndpcl_ar = selectedOption.getAttribute("lndpcl_ar"); // 면적
@@ -807,42 +850,22 @@ document.addEventListener("DOMContentLoaded", function () {
       "./fetchData.jsp?selected_pnu='" + click_F_pnu + "'";
 
     // 필드 값 비우기
-    document.getElementById("aaa01").value = "";
-    document.getElementById("aaa02").value = "";
-    document.getElementById("aaa03").value = "";
-    document.getElementById("aaa04").value = "";
-    document.getElementById("bbb01").value = "";
-    document.getElementById("bbb04").value = "";
-    document.getElementById("bbb02").value = "";
-    document.getElementById("bbb03").value = "";
-    document.getElementById("ccc01").value = "";
-    document.getElementById("ccc02").value = "";
-    document.getElementById("ccc03").value = "";
-    document.getElementById("ccc04").value = "";
-    document.getElementById("ddd01").value = "";
-    document.getElementById("ddd02").value = "";
-    document.getElementById("ddd03").value = "";
-    document.getElementById("ddd04").value = "";
-    document.getElementById("ddd05").value = "";
-    document.getElementById("aaaa01").value = "";
-    document.getElementById("aaaa02").value = "";
-    document.getElementById("aaaa03").value = "";
-    document.getElementById("aaaa04").value = "";
-    document.getElementById("bbbb01").value = "";
-    document.getElementById("bbbb02").value = "";
-    document.getElementById("bbbb03").value = "";
-    document.getElementById("cccc01").value = "";
-    document.getElementById("cccc02").value = "";
-    document.getElementById("cccc03").value = "";
-    document.getElementById("cccc04").value = "";
-    document.getElementById("dddd01").value = "";
-    document.getElementById("dddd02").value = "";
-    document.getElementById("dddd03").value = "";
-    document.getElementById("dddd04").value = "";
-    document.getElementById("dddd05").value = "";
-    document.getElementById("input2").value = "";
-    document.getElementById("input3").value = "";
-    document.getElementById("input4").value = "";
+    const elementIds = [
+      "aaa01", "aaa02", "aaa03", "aaa04",
+      "bbb01", "bbb04", "bbb02", "bbb03",
+      "ccc01", "ccc02", "ccc03", "ccc04",
+      "ddd01", "ddd02", "ddd03", "ddd04", "ddd05",
+      "aaaa01", "aaaa02", "aaaa03", "aaaa04",
+      "bbbb01", "bbbb02", "bbbb03",
+      "cccc01", "cccc02", "cccc03", "cccc04",
+      "dddd01", "dddd02", "dddd03", "dddd04", "dddd05",
+      "input2", "input3", "input4"
+    ];
+
+    // 각 요소의 값을 빈 문자열로 설정
+    elementIds.forEach(id => {
+      document.getElementById(id).value = "";
+    });
 
     // selectLayer 업데이트 및 표시
     makeWFSSource2(click_F_Jibun);
@@ -855,28 +878,29 @@ document.addEventListener("DOMContentLoaded", function () {
     // document.getElementById("searchData").onclick = () => {
     if (inserted_record_slope[click_F_pnu] === undefined) { // 수정값이 없는 경우 - 즉, 처음 조회하는 경우
       console.log("inserted_tpgrph_hg_code_nm is null for current pnu");
-      aaa01.innerText = click_F_slope; // span, div, p -> innerText
-      aaa02.innerText = click_F_height; // span, div, p -> innerText
-      aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
-      aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
-      bbb01.innerText = Math.round(click_F_rate_city); // span, div, p -> innerText
+      elements.aaa01.innerText = click_F_slope; // span, div, p -> innerText
+      elements.aaa02.innerText = click_F_height; // span, div, p -> innerText
+      elements.aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
+      elements.aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
+      elements.bbb01.innerText = Math.round(click_F_rate_city); // span, div, p -> innerText
       const selectSum = selectedFeatures.getLength() - 1
-      bbb04.innerText = Math.round(((calculateRateCity_1Sum(selectedFeatures)) / (selectSum)) * 100); // span, div, p -> innerText
+      elements.bbb04.innerText = Math.round(((calculateRateCity_1Sum(selectedFeatures)) / (selectSum)) * 100); // span, div, p -> innerText
 
-      bbb02.innerText = Math.round(click_F_rate_city_touch); // span, div, p -> innerText
-      bbb03.innerText = Math.round(click_F_dist_road_touch); // span, div, p -> innerText
-      ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
-      ccc02.innerText = click_F_rate_saengtae; // span, div, p -> innerText
-      ccc03.innerText = click_F_rate_gongjuck; // span, div, p -> innerText
-      ccc04.innerText = click_F_dist_gongjuck; // span, div, p -> innerText
-      ddd01.innerText = click_F_rate_jdgarea; // span, div, p -> innerText
-      ddd02.innerText = click_F_rate_nongup; // span, div, p -> innerText
-      ddd03.innerText = click_F_rate_limsangdo; // span, div, p -> innerText
-      ddd04.innerText = click_F_rate_bojunmount; // span, div, p -> innerText
-      ddd05.innerText = click_F_dist_kyungji; // span, div, p -> innerText
+      elements.bbb02.innerText = Math.round(click_F_rate_city_touch); // span, div, p -> innerText
+      elements.bbb03.innerText = Math.round(click_F_dist_road_touch); // span, div, p -> innerText
+      elements.ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
+      elements.ccc02.innerText = click_F_rate_saengtae; // span, div, p -> innerText
+      elements.ccc03.innerText = click_F_rate_gongjuck; // span, div, p -> innerText
+      elements.ccc04.innerText = click_F_dist_gongjuck; // span, div, p -> innerText
+      elements.ddd01.innerText = click_F_rate_jdgarea; // span, div, p -> innerText
+      elements.ddd02.innerText = click_F_rate_nongup; // span, div, p -> innerText
+      elements.ddd03.innerText = click_F_rate_limsangdo; // span, div, p -> innerText
+      elements.ddd04.innerText = click_F_rate_bojunmount; // span, div, p -> innerText
+      elements.ddd05.innerText = click_F_dist_kyungji; // span, div, p -> innerText
 
-      document.getElementById("aaaa01").value = click_F_record_slope; // input, textarea, select -> value
-      document.getElementById("aaaa02").value = click_F_record_height; // input, textarea, select -> value
+      // input, textarea, select -> value
+      document.getElementById("aaaa01").value = click_F_record_slope;
+      document.getElementById("aaaa02").value = click_F_record_height;
       document.getElementById("aaaa03").value = click_F_record_dist_gi_str;
       document.getElementById("aaaa04").value = click_F_record_dist_gong_ntwk;
       document.getElementById("bbbb01").value = click_F_record_rate_city;
@@ -897,24 +921,23 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("input4").value = click_F_value_comp;
 
     } else { // insertData로 수정한 값이 있는 경우
-      console.log("inserted_tpgrph_hg_code_nm is not null for current pnu");
+      // span, div, p -> innerText
       aaa01.innerText = click_F_slope;
       aaa02.innerText = click_F_height;
-      aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
-      aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
-      bbb01.innerText = click_F_rate_city; // span, div, p -> innerText
-      bbb04.innerText = click_F_rate_city_1; // span, div, p -> innerText
-      bbb02.innerText = click_F_rate_city_touch; // span, div, p -> innerText
-      bbb03.innerText = click_F_dist_road_touch; // span, div, p -> innerText
-      ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
-      ccc02.innerText = click_F_rate_saengtae; // span, div, p -> innerText
-      ccc03.innerText = click_F_rate_gongjuck; // span, div, p -> innerText
-      ccc04.innerText = click_F_dist_gongjuck; // span, div, p -> innerText
-      ddd01.innerText = click_F_rate_jdgarea; // span, div, p -> innerText
-      ddd02.innerText = click_F_rate_nongup; // span, div, p -> innerText
-      ddd03.innerText = click_F_rate_limsangdo; // span, div, p -> innerText
-      ddd04.innerText = click_F_rate_bojunmount; // span, div, p -> innerText
-      ddd05.innerText = click_F_dist_kyungji; // span, div, p -> innerText
+      aaa03.innerText = click_F_dist_gi_str;
+      aaa04.innerText = click_F_dist_gong_ntwk;
+      bbb01.innerText = click_F_rate_city;
+      bbb04.innerText = click_F_rate_city_1;
+      bbb02.innerText = click_F_rate_city_touch;
+      bbb03.innerText = click_F_dist_road_touch;
+      ccc01.innerText = click_F_rate_kyungji;
+      ccc03.innerText = click_F_rate_gongjuck;
+      ccc04.innerText = click_F_dist_gongjuck;
+      ddd01.innerText = click_F_rate_jdgarea;
+      ddd02.innerText = click_F_rate_nongup;
+      ddd03.innerText = click_F_rate_limsangdo;
+      ddd04.innerText = click_F_rate_bojunmount;
+      ddd05.innerText = click_F_dist_kyungji;
 
       document.getElementById("aaaa01").value = inserted_record_slope[click_F_pnu];
       document.getElementById("aaaa02").value = inserted_record_height[click_F_pnu];
@@ -984,47 +1007,40 @@ document.addEventListener("DOMContentLoaded", function () {
       return; // 진행 중단
     }
 
-    const aaaa01_value = document.getElementById("aaaa01").value;
-    const aaaa02_value = document.getElementById("aaaa02").value;
-    const aaaa03_value = document.getElementById("aaaa03").value;
-    const aaaa04_value = document.getElementById("aaaa04").value;
-    const bbbb01_value = document.getElementById("bbbb01").value;
-    const bbbb04_value = document.getElementById("bbbb04").value;
-    const bbbb02_value = document.getElementById("bbbb02").value;
-    const bbbb03_value = document.getElementById("bbbb03").value;
-    const cccc01_value = document.getElementById("cccc01").value;
-    const cccc02_value = document.getElementById("cccc02").value;
-    const cccc03_value = document.getElementById("cccc03").value;
-    const cccc04_value = document.getElementById("cccc04").value;
-    const dddd01_value = document.getElementById("dddd01").value;
-    const dddd02_value = document.getElementById("dddd02").value;
-    const dddd03_value = document.getElementById("dddd03").value;
-    const dddd04_value = document.getElementById("dddd04").value;
-    const dddd05_value = document.getElementById("dddd05").value;
-    const input2_value = document.getElementById("input2").value;
-    const input3_value = document.getElementById("input3").value;
-    const input4_value = document.getElementById("input4").value;
+    const elementIds = [
+      "aaaa01", "aaaa02", "aaaa03", "aaaa04",
+      "bbbb01", "bbbb04", "bbbb02", "bbbb03",
+      "cccc01", "cccc02", "cccc03", "cccc04",
+      "dddd01", "dddd02", "dddd03", "dddd04", "dddd05",
+      "input2", "input3", "input4"
+    ];
 
-    inserted_record_slope[click_F_pnu] = aaaa01_value;
-    inserted_record_height[click_F_pnu] = aaaa02_value;
-    inserted_record_dist_gi_str[click_F_pnu] = aaaa03_value;
-    inserted_record_dist_gong_ntwk[click_F_pnu] = aaaa04_value;
-    inserted_record_rate_city[click_F_pnu] = bbbb01_value;
-    inserted_record_rate_city_1[click_F_pnu] = bbbb04_value;
-    inserted_record_rate_city_touch[click_F_pnu] = bbbb02_value;
-    inserted_record_dist_road[click_F_pnu] = bbbb03_value;
-    inserted_record_rate_kyungji[click_F_pnu] = cccc01_value;
-    inserted_record_rate_saengtae[click_F_pnu] = cccc02_value;
-    inserted_record_rate_gongjuck[click_F_pnu] = cccc03_value;
-    inserted_record_dist_gongjuck[click_F_pnu] = cccc04_value;
-    inserted_record_rate_jdgarea[click_F_pnu] = dddd01_value;
-    inserted_record_rate_nongup[click_F_pnu] = dddd02_value;
-    inserted_record_rate_limsangdo[click_F_pnu] = dddd03_value;
-    inserted_record_rate_bojunmount[click_F_pnu] = dddd04_value;
-    inserted_record_dist_kyungji[click_F_pnu] = dddd05_value;
-    inserted_value_develop[click_F_pnu] = input2_value;
-    inserted_value_conserv[click_F_pnu] = input3_value;
-    inserted_value_comp[click_F_pnu] = input4_value;
+    // 각 요소의 값을 객체에 저장
+    const values = {};
+    elementIds.forEach(id => {
+      values[id] = document.getElementById(id).value;
+    });
+
+    inserted_record_slope[click_F_pnu] = values.aaaa01;
+    inserted_record_height[click_F_pnu] = values.aaaa02;
+    inserted_record_dist_gi_str[click_F_pnu] = values.aaaa03;
+    inserted_record_dist_gong_ntwk[click_F_pnu] = values.aaaa04;
+    inserted_record_rate_city[click_F_pnu] = values.bbbb01;
+    inserted_record_rate_city_1[click_F_pnu] = values.bbbb04;
+    inserted_record_rate_city_touch[click_F_pnu] = values.bbbb02;
+    inserted_record_dist_road[click_F_pnu] = values.bbbb03;
+    inserted_record_rate_kyungji[click_F_pnu] = values.cccc01;
+    inserted_record_rate_saengtae[click_F_pnu] = values.cccc02;
+    inserted_record_rate_gongjuck[click_F_pnu] = values.cccc03;
+    inserted_record_dist_gongjuck[click_F_pnu] = values.cccc04;
+    inserted_record_rate_jdgarea[click_F_pnu] = values.dddd01;
+    inserted_record_rate_nongup[click_F_pnu] = values.dddd02;
+    inserted_record_rate_limsangdo[click_F_pnu] = values.dddd03;
+    inserted_record_rate_bojunmount[click_F_pnu] = values.dddd04;
+    inserted_record_dist_kyungji[click_F_pnu] = values.dddd05;
+    inserted_value_develop[click_F_pnu] = values.input2;
+    inserted_value_conserv[click_F_pnu] = values.input3;
+    inserted_value_comp[click_F_pnu] = values.input4;
 
 
     // 선택된 지번과 레이어 정보 저장
@@ -1051,11 +1067,12 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("inserted_value_conserv", JSON.stringify(inserted_value_conserv));
     localStorage.setItem("inserted_value_comp", JSON.stringify(inserted_value_comp));
 
-    sendData(click_F_pnu, aaaa01_value, aaaa02_value, aaaa03_value, aaaa04_value, bbbb01_value, bbbb04_value, bbbb02_value, bbbb03_value, cccc01_value, cccc02_value, cccc03_value, cccc04_value, dddd01_value, dddd02_value, dddd03_value, dddd04_value, dddd05_value, input2_value, input3_value, input4_value);
+    sendData(click_F_pnu, values.aaaa01, values.aaaa02, values.aaaa03, values.aaaa04, values.bbbb01, values.bbbb04, values.bbbb02, values.bbbb03, values.cccc01, values.cccc02, values.cccc03, values.cccc04, values.dddd01, values.dddd02, values.dddd03, values.dddd04, values.dddd05, values.input2, values.input3, values.input4);
   };
 
   // 서버로 데이터 전송
   function sendData(click_F_pnu, inserted_record_slope, inserted_record_height, inserted_record_dist_gi_str, inserted_record_dist_gong_ntwk, inserted_record_rate_city, inserted_record_rate_city_1, inserted_record_rate_city_touch, inserted_record_dist_road, inserted_record_rate_kyungji, inserted_record_rate_saengtae, inserted_record_rate_gongjuck, inserted_record_dist_gongjuck, inserted_record_rate_jdgarea, inserted_record_rate_nongup, inserted_record_rate_limsangdo, inserted_record_rate_bojunmount, inserted_record_dist_kyungji, inserted_value_develop, inserted_value_conserv, inserted_value_comp) {
+    
     var url =
       `./fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_1=${encodeURIComponent(inserted_record_rate_city_1)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
     fetch(url, {
@@ -1208,6 +1225,7 @@ document.addEventListener("DOMContentLoaded", function () {
       deleteData(click_F_pnu);
     }
   });
+
   function deleteData(click_F_pnu) {
     console.log("점수 삭제 완료");
     var url =
@@ -1219,23 +1237,15 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         console.log("Response from server:", data);
         const zero = 0;
-        document.getElementById("aaaa01").value = zero;
-        document.getElementById("aaaa02").value = zero;
-        document.getElementById("aaaa03").value = zero;
-        document.getElementById("aaaa04").value = zero;
-        document.getElementById("bbbb01").value = zero;
-        document.getElementById("bbbb02").value = zero;
-        document.getElementById("bbbb03").value = zero;
-        document.getElementById("bbbb04").value = zero;
-        document.getElementById("cccc01").value = zero;
-        document.getElementById("cccc02").value = zero;
-        document.getElementById("cccc03").value = zero;
-        document.getElementById("cccc04").value = zero;
-        document.getElementById("dddd01").value = zero;
-        document.getElementById("dddd02").value = zero;
-        document.getElementById("dddd03").value = zero;
-        document.getElementById("dddd04").value = zero;
-        document.getElementById("dddd05").value = zero;
+        const elementIds = [
+          "aaaa01", "aaaa02", "aaaa03", "aaaa04",
+          "bbbb01", "bbbb02", "bbbb03", "bbbb04",
+          "cccc01", "cccc02", "cccc03", "cccc04",
+          "dddd01", "dddd02", "dddd03", "dddd04", "dddd05"
+        ];
+        elementIds.forEach(id => {
+          document.getElementById(id).value = zero;
+        });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -1268,10 +1278,46 @@ document.addEventListener("DOMContentLoaded", function () {
     return template
       .replace("{{jibun}}", data.jibun)
       .replace("{{ld_cpsgemd_nm}}", data.ld_cpsgemd_nm)
-      .replace("{{developValue}}", data.devVal)
-      .replace("{{conserveValue}}", data.conservVal)
-      .replace("{{compValue}}", data.compVal)
-      .replace("{{area}}", data.area);
+      .replace("{{value_develop}}", data.value_develop)
+      .replace("{{value_conserv}}", data.value_conserv)
+      .replace("{{value_comp}}", data.value_comp)
+      .replace("{{ji_bun}}", data.ji_bun)
+      .replace("{{area}}", data.area)
+      .replace("{{slope}}", data.slope)
+      .replace("{{height}}", data.height)
+      .replace("{{dist_gi_str}}", data.dist_gi_str)
+      .replace("{{dist_gong_ntwk}}", data.dist_gong_ntwk)
+      .replace("{{rate_city}}", data.rate_city)
+      .replace("{{rate_city_touch}}", data.rate_city_touch)
+      .replace("{{dist_road_touch}}", data.dist_road_touch)
+      .replace("{{rate_kyungji}}", data.rate_kyungji)
+      .replace("{{rate_saengtae}}", data.rate_saengtae)
+      .replace("{{rate_gongjuck}}", data.rate_gongjuck)
+      .replace("{{dist_gongjuck}}", data.dist_gongjuck)
+      .replace("{{rate_jdgarea}}", data.rate_jdgarea)
+      .replace("{{rate_nongup}}", data.rate_nongup)
+      .replace("{{rate_limsangdo}}", data.rate_limsangdo)
+      .replace("{{rate_bojunmount}}", data.rate_bojunmount)
+      .replace("{{dist_kyungji}}", data.dist_kyungji)
+      .replace("{{rate_city_1}}", data.rate_city_1)
+      .replace("{{record_slope}}", data.record_slope)
+      .replace("{{record_height}}", data.record_height)
+      .replace("{{record_dist_gi_str}}", data.record_dist_gi_str)
+      .replace("{{record_dist_gong_ntwk}}", data.record_dist_gong_ntwk)
+      .replace("{{record_rate_city}}", data.record_rate_city)
+      .replace("{{record_rate_city_touch}}", data.record_rate_city_touch)
+      .replace("{{record_dist_road}}", data.record_dist_road)
+      .replace("{{record_rate_kyungji}}", data.record_rate_kyungji)
+      .replace("{{record_rate_saengtae}}", data.record_rate_saengtae)
+      .replace("{{record_rate_gongjuck}}", data.record_rate_gongjuck)
+      .replace("{{record_dist_gongjuck}}", data.record_dist_gongjuck)
+      .replace("{{record_rate_jdgarea}}", data.record_rate_jdgarea)
+      .replace("{{record_rate_nongup}}", data.record_rate_nongup)
+      .replace("{{record_rate_limsangdo}}", data.record_rate_limsangdo)
+      .replace("{{record_rate_bojunmount}}", data.record_rate_bojunmount)
+      .replace("{{record_dist_kyungji}}", data.record_dist_kyungji)
+      .replace("{{record_rate_city_1}}", data.record_rate_city_1)
+      ;
   }
 
   // 데이터를 수집하는 함수
@@ -1279,12 +1325,48 @@ document.addEventListener("DOMContentLoaded", function () {
     const data = {
       jibun: document.getElementById('selectedValueDisplay2').textContent,
       ld_cpsgemd_nm: ld_cpsgemd_nm,
-      devVal: document.getElementById('input2').value,
-      conservVal: document.getElementById('input3').value,
-      compVal: document.getElementById('input4').value,
-      area: document.getElementById('polyinfo01').textContent
+      value_develop: document.getElementById('input2').value,
+      value_conserv: document.getElementById('input3').value,
+      value_comp: document.getElementById('input4').value,
+      area: document.getElementById('polyinfo01').textContent,
+      ji_bun: ji_bun,
+      slope: slope,
+      area: area,
+      height: height,
+      dist_gi_str: dist_gi_str,
+      dist_gong_ntwk: dist_gong_ntwk,
+      rate_city: rate_city,
+      rate_city_touch: rate_city_touch,
+      dist_road_touch: dist_road_touch,
+      rate_kyungji: rate_kyungji,
+      rate_saengtae: rate_saengtae,
+      rate_gongjuck: rate_gongjuck,
+      dist_gongjuck: dist_gongjuck,
+      rate_jdgarea: rate_jdgarea,
+      rate_nongup: rate_nongup,
+      rate_limsangdo: rate_limsangdo,
+      rate_bojunmount: rate_bojunmount,
+      dist_kyungji: dist_kyungji,
+      rate_city_1: rate_city_1,
+      record_slope: record_slope,
+      record_height: record_height,
+      record_dist_gi_str: record_dist_gi_str,
+      record_dist_gong_ntwk: record_dist_gong_ntwk,
+      record_rate_city: record_rate_city,
+      record_rate_city_touch: record_rate_city_touch,
+      record_dist_road: record_dist_road,
+      record_rate_kyungji: record_rate_kyungji,
+      record_rate_saengtae: record_rate_saengtae,
+      record_rate_gongjuck: record_rate_gongjuck,
+      record_dist_gongjuck: record_dist_gongjuck,
+      record_rate_jdgarea: record_rate_jdgarea,
+      record_rate_nongup: record_rate_nongup,
+      record_rate_limsangdo: record_rate_limsangdo,
+      record_rate_bojunmount: record_rate_bojunmount,
+      record_dist_kyungji: record_dist_kyungji,
+      record_rate_city_1: record_rate_city_1,
     };
-   
+
     return data;
   }
 
