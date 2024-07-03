@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #registerStatus {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        #registerStatus h2 {
+            margin-bottom: 20px;
+        }
+
+        #registerStatus form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #registerStatus input[type="text"],
+        #registerStatus input[type="password"],
+        #registerStatus input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #registerStatus input[type="submit"] {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .icon {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+        }
+
+        .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #registerStatus button[type="button"] {
+            background-color: white;
+            color: #007bff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        #registerStatus button[type="button"]:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="registerStatus">
+        <h2 id="registerTitle">회원가입</h2>
+        <div class="icon">
+            <img src="./lxLogo.png" alt="Logo">
+        </div>
+        <form action="./register.jsp" method="post">
+            <label for="username">사용자 이름:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" required><br>
+            <label for="name">이름:</label>
+            <input type="text" id="name" name="name" required><br>
+            <label for="phone">핸드폰 번호:</label>
+            <input type="text" id="phone" name="phone" required><br>
+            <input type="submit" value="가입">
+            <button type="button" onclick="location.href='login.html'">뒤로가기</button>
+        </form>
+    </div>
+</body>
+
+</html>

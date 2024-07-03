@@ -177,3 +177,37 @@ var url =
 //         e.printStackTrace(out);
 //     }
 // }
+
+
+for (let i = 0; i <= 9; i++) {
+  const id = i < 10 ? "0" + i : i.toString();
+  document.getElementById("emd" + id).onclick = () => {
+    emdid = "emd" + id;
+    console.log(emdid + " clicked");
+    makeWFSSource("emd" + id);
+  };
+}
+
+let ld_cpsgemd_nm = "";
+  let ji_bun = "";
+  let area = "";
+  let value_develop = "";
+  let value_conserv = "";
+  let value_comp = "";
+  let slope = "";let record_slope = "";
+  let height = "";let record_height = "";
+  let dist_gi_str = "";let record_dist_gi_str = "";
+  let dist_gong_ntwk = "";let record_dist_gong_ntwk = "";
+  let rate_city = "";let record_rate_city = "";
+  let rate_city_touch = "";let record_rate_city_touch = "";
+  let dist_road_touch = "";let record_dist_road = "";
+  let rate_kyungji = "";let record_rate_kyungji = "";
+  let rate_saengtae = "";let record_rate_saengtae = "";
+  let rate_gongjuck = "";let record_rate_gongjuck = "";
+  let dist_gongjuck = "";let record_dist_gongjuck = "";
+  let rate_jdgarea = "";let record_rate_jdgarea = "";
+  let rate_nongup = "";let record_rate_nongup = "";
+  let rate_limsangdo = "";let record_rate_limsangdo = "";
+  let rate_bojunmount = "";let record_rate_bojunmount = "";
+  let dist_kyungji = "";let record_dist_kyungji = "";
+  let rate_city_1 = "";let record_rate_city_1 = "";

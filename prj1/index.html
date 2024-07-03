@@ -5,6 +5,23 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <meta charset="UTF-8">
   <title>무안군 토지적성평가 프로그램</title>
+  <script type="text/javascript">
+    // 페이지 로드 시 세션 확인
+    window.onload = function () {
+      // 세션 확인을 위한 요청을 보냄
+      fetch('check_session.jsp')
+        .then(response => response.text())
+        .then(data => {
+          if (data.trim() !== 'loggedIn') {
+            window.location.href = 'login.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          window.location.href = 'login.html'; // 오류 발생 시 로그인 페이지로 이동
+        });
+    };
+  </script>
   <link rel="stylesheet" href="node_modules/ol/ol.css">
   <!-- 구글 링크 붙여넣기 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +42,14 @@
       <a href=""><img style="height: 40px;" src="./lxLogo2.png" onclick="location.reload();" alt="로고"
           style="vertical-align: middle; margin-right: 10px;">
       </a>
+      <div id="user-info" style="float: right; margin-right: 20px;">
+        <span id="username"></span> <span id="welcome-text">회원님 반갑습니다.</span> <a href="./login.html"
+          id="logout">로그아웃</a>
+        <button id="help-btn"
+          style="height: 40px; vertical-align: middle; border: none; background: none; cursor: pointer; margin-left: 10px;">
+          <img src="https://img.icons8.com/ios-filled/50/000000/help.png" alt="Help" style="width: 20px; height: 20px;">
+        </button>
+      </div>
     </div> <!-- header 닫힘 -->
     <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
     <div id="contents">
@@ -32,17 +57,18 @@
         <h3> 읍면동 선택</h3>
         <ul class="emdList">
           <!-- &middot;은 글자 중간에 가운데 점을 찍는 html 특수문자  -->
-          <li> <span id="emd00">전체 선택</span></li>
-          <li> <span id="emd01">망운면</span></li>
-          <li> <span id="emd02">몽탄면</span></li>
-          <li> <span id="emd03">무안읍</span></li>
-          <li> <span id="emd04">삼향읍</span></li>
-          <li> <span id="emd05">운남면</span></li>
-          <li> <span id="emd06">일로읍</span></li>
-          <li> <span id="emd07">청계면</span></li>
-          <li> <span id="emd08">해제면</span></li>
-          <li> <span id="emd09">현경면</span></li>
+          <li id="emd00-item"> <span id="emd00">전체 선택</span></li>
+          <li id="emd01-item"> <span id="emd01">망운면</span></li>
+          <li id="emd02-item"> <span id="emd02">몽탄면</span></li>
+          <li id="emd03-item"> <span id="emd03">무안읍</span></li>
+          <li id="emd04-item"> <span id="emd04">삼향읍</span></li>
+          <li id="emd05-item"> <span id="emd05">운남면</span></li>
+          <li id="emd06-item"> <span id="emd06">일로읍</span></li>
+          <li id="emd07-item"> <span id="emd07">청계면</span></li>
+          <li id="emd08-item"> <span id="emd08">해제면</span></li>
+          <li id="emd09-item"> <span id="emd09">현경면</span></li>
         </ul>
+        <button id="confirmSelection" style="width: 100px; height: 25px; font-size: 15px;">확인</button>
       </div> <!-- menu1 닫힘 -->
       <div id="menu2" class="hidden">
         <div class="contents1">
@@ -210,7 +236,8 @@
             </div>
             <br>
             <div class="center-btn">
-              <button style="width: 120px; font-size: 15px;" id="showOnMap">지도로 결과 보기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button style="width: 120px; font-size: 15px;" id="showOnMap">지도로 결과
+                보기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <button id="generateHWPX" style="width: 120px; font-size: 15px;">비밀</button>
             </div>
 
@@ -224,42 +251,153 @@
         </div>
         <!-- 지도 유형 전환 버튼 추가 -->
         <div id="map-switcher" style="position: absolute; bottom: 30px; right: 30px; z-index: 1000;">
-          <button style="width: 100px; font-size: 17px;" id="switch-to-osm" >일반지도</button>
+          <button style="width: 100px; font-size: 17px;" id="switch-to-osm">일반지도</button>
           <button style="width: 100px; font-size: 17px;" id="switch-to-satellite">위성지도</button>
+        </div>
+        <!-- 추가 레이어 버튼 -->
+        <div id="trigger-area">Layer</div>
+        <div style="text-align: center;" class="menu3-container">
+          <div id="menu3-1-label" class="menu3-label" data-layer="bu_1km">도시개발_1km</div>
+          <div id="menu3-2-label" class="menu3-label" data-layer="bu_2km">도시개발_2km</div>
+          <div id="menu3-3-label" class="menu3-label" data-layer="bu_3km">도시개발_3km</div>
+          <div id="menu3-4-label" class="menu3-label" data-layer="city_development_region">도시개발지역</div>
+          <div id="menu3-5-label" class="menu3-label" data-layer="commerce_region">상업지역</div>
+          <div id="menu3-6-label" class="menu3-label" data-layer="dwelling_region">주거지역</div>
+          <div id="menu3-7-label" class="menu3-label" data-layer="industry_complex">산업단지</div>
+          <div id="menu3-8-label" class="menu3-label" data-layer="industry_region">공업지역</div>
+          <div id="menu3-9-label" class="menu3-label" data-layer="residential_area">택지예정지구</div>
+        </div>
+        <div id="legend"> <!-- 범례 -->
+          <div><span class="legend-color" style="background-color: rgba(0, 78, 0, 1.0);"></span><span>-360 이하</span>
+          </div>
+          <div><span class="legend-color" style="background-color: rgba(0, 200, 0, 1.0);"></span><span>-360 ~
+              -120</span></div>
+          <div><span class="legend-color" style="background-color: rgba(255, 211, 0, 1.0);"></span><span>-120 ~
+              120</span></div>
+          <div><span class="legend-color" style="background-color: rgba(255, 75, 0, 1.0);"></span><span>120 ~ 360</span>
+          </div>
+          <div><span class="legend-color" style="background-color: rgba(180, 0, 0, 1.0);"></span><span>360 이상</span>
+          </div>
         </div>
       </div> <!-- mapArea 닫힘 -->
     </div> <!-- contents 닫힘 -->
   </div> <!-- container 닫힘 -->
-  <div id="polygonPopup"> <!-- 팝업 모양 정의 -->
+  <div id="polygonPopup">
     <h3 id="polygon-info">폴리곤 정보</h3>
-    <table>
-      <tr>
-        <td><span id="polyinfo01"></span></td>
-      </tr>
-      <tr>
-        <td><span id="polyinfo02"></span></td>
-      </tr>
-      <tr>
-        <td><span id="polyinfo03"></span></td>
-        <td><input style="width: 30px;" type="text" id="polydata03"></td>
-      </tr>
-      <tr>
-        <td><span id="polyinfo04"></span></td>
-        <td><input style="width: 30px;" type="text" id="polydata04"></td>
-      </tr>
-      <tr>
-        <td><span id="polyinfo05"></span></td>
-        <td><input style="width: 30px;" type="text" id="polydata05"></td>
-      </tr>
-    </table>
-    <div class="center-btn">
-      <button style="width: 50px; font-size: 15px;" id="insertPoly" >입력</button>
-      <button style="width: 50px; font-size: 15px;" id="updatePoly" >수정</button>
+    <p><span id="polyinfo01"></span></p>
+    <p><span id="polyinfo02"></span></p>
+    <div class="table-container">
+      <table class="info-table">
+        <tr>
+          <th colspan="2">개발적성</th>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyDevinfo01"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata01"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyDevinfo02"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata02"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyDevinfo03"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata03"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyDevinfo04"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata04"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="dev-checkbox2" id="check_polyDevdata05"><span class="info-span"
+              id="polyDevinfo05"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata05"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="dev-checkbox2" id="check_polyDevdata06"><span class="info-span"
+              id="polyDevinfo06"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata06"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="dev-checkbox2" id="check_polyDevdata07"><span class="info-span"
+              id="polyDevinfo07"></span></td>
+          <td><input class="info-input" type="text" id="polyDevdata07"></td>
+        </tr>
+      </table><br>
+      <table class="info-table">
+        <tr>
+          <th colspan="2">보전적성</th>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyConvinfo01"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata01"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyConvinfo02"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata02"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyConvinfo03"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata03"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyConvinfo04"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata04"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="con-checkbox2" id="check_polyConvdata05"><span class="info-span"
+              id="polyConvinfo05"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata05"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="con-checkbox2" id="check_polyConvdata06"><span class="info-span"
+              id="polyConvinfo06"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata06"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="con-checkbox2" id="check_polyConvdata07"><span class="info-span"
+              id="polyConvinfo07"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata07"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="con-checkbox2" id="check_polyConvdata08"><span class="info-span"
+              id="polyConvinfo08"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata08"></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" class="con-checkbox2" id="check_polyConvdata09"><span class="info-span"
+              id="polyConvinfo09"></span></td>
+          <td><input class="info-input" type="text" id="polyConvdata09"></td>
+        </tr>
+      </table><br>
+      <table class="info-table">
+        <tr>
+          <th colspan="2">총점</th>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyinfo03"></span></td>
+          <td><input class="info-input" type="text" id="polydata03"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyinfo04"></span></td>
+          <td><input class="info-input" type="text" id="polydata04"></td>
+        </tr>
+        <tr>
+          <td><span class="info-span" id="polyinfo05"></span></td>
+          <td><input class="info-input" type="text" id="polydata05"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="center-btn fixed-buttons">
+      <button style="width: 50px; font-size: 15px;" id="insertPoly">입력</button>
+      <button style="width: 50px; font-size: 15px;" id="updatePoly">수정</button>
       <button style="width: 50px; font-size: 15px;" id="deletePoly">삭제</button>
-
     </div>
   </div>
-
+  <div id="help-popup">
+    <span class="close-btn" id="close-help-popup">&times;</span>
+    <h3>도움말</h3>
+    <p>여기에 도움말 내용을 작성하세요.</p>
+  </div>
   <div id="popup"> <!-- 팝업 모양 정의 -->
     <h3 id="info-title"></h3><br>
     <li> <span id="info01"></span></li>
@@ -268,10 +406,28 @@
     <li> <span id="info04"></span></li>
     <li> <span id="info05"></span></li>
   </div>
-  <div id="tooltip" class="tooltip">ctrl+클릭하세요</div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.6.1/jsts.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
+  <script>
+    // 도움말 버튼 클릭 이벤트
+    document.getElementById('help-btn').onclick = function (event) {
+      var helpPopup = document.getElementById('help-popup');
+      // 팝업의 디스플레이를 설정해 실제 너비를 계산
+      helpPopup.style.display = 'block';
+      var rect = event.target.getBoundingClientRect();
+      helpPopup.style.top = rect.bottom + 'px';
+      helpPopup.style.left = (rect.right - helpPopup.offsetWidth) + 'px';
+    };
+
+    // 도움말 팝업 닫기 이벤트
+    document.getElementById('close-help-popup').onclick = function () {
+      document.getElementById('help-popup').style.display = 'none';
+    };
+
+
+  </script>
   <script type="module" src="main.js"></script>
 </body>
 

@@ -22,19 +22,29 @@ String checkNull(String data){
 <%
 // 파라미터 값 가져오기
 String index = request.getParameter("index"); // 1 : insert, 2 : update, 3 : delete
-out.println("index : " + index); 
 String area = request.getParameter("area");
-out.println("area : " + area);
 String round = request.getParameter("round");
-out.println("round : " + round);
 String developValue = request.getParameter("developValue");
-out.println("developValue : " + developValue);
 String conserveValue = request.getParameter("conserveValue");
-out.println("conserveValue : " + conserveValue);
 String compreValue = request.getParameter("compreValue");
-out.println("compreValue : " + compreValue);
 String geom = request.getParameter("geom");
-out.println("geom : " + geom);
+String slope_poly = request.getParameter("slope_poly");
+String height_poly = request.getParameter("height_poly");
+String dist_gi_str_poly = request.getParameter("dist_gi_str_poly");
+String dist_gong_ntwk_poly = request.getParameter("dist_gong_ntwk_poly");
+String rate_city_poly = request.getParameter("rate_city_poly");
+String rate_city_touch_poly = request.getParameter("rate_city_touch_poly");
+String dist_road_touch_poly = request.getParameter("dist_road_touch_poly");
+String rate_kyungji_poly = request.getParameter("rate_kyungji_poly");
+String rate_saengtae_poly = request.getParameter("rate_saengtae_poly");
+String rate_gongjuck_poly = request.getParameter("rate_gongjuck_poly");
+String dist_gongjuck_poly = request.getParameter("dist_gongjuck_poly");
+String rate_jdgarea_poly = request.getParameter("rate_jdgarea_poly");
+String rate_nongup_poly = request.getParameter("rate_nongup_poly");
+String rate_limsangdo_poly = request.getParameter("rate_limsangdo_poly");
+String rate_bojunmount_poly = request.getParameter("rate_bojunmount_poly");
+String dist_kyungji_poly = request.getParameter("dist_kyungji_poly");
+out.print("dist_kyungji_poly: " + dist_kyungji_poly);
 %>
 
 <%
@@ -59,12 +69,12 @@ try{
     if ("1".equals(index)) {
         
         // insert 쿼리문
-        String query = "insert into polygon_data (area, round, develop_value, conserve_value, value_comp, geom) values ('"+ area +"', '"+ round +"', '"+ developValue +"', '"+ conserveValue +"', '"+ compreValue +"', '"+ geom +"');";
+        String query = "insert into polygon_data (area, round, develop_value, conserve_value, value_comp, geom, slope_poly, height_poly, dist_gi_str_poly, dist_gong_ntwk_poly, rate_city_poly, rate_city_touch_poly, dist_road_touch_poly, rate_kyungji_poly, rate_saengtae_poly, rate_gongjuck_poly, dist_gongjuck_poly, rate_jdgarea_poly, rate_nongup_poly, rate_limsangdo_poly, rate_bojunmount_poly, dist_kyungji_poly) values ('"+ area +"', '"+ round +"', '"+ developValue +"', '"+ conserveValue +"', '"+ compreValue +"', '"+ geom +"', '"+ slope_poly +"', '"+ height_poly +"', '"+ dist_gi_str_poly +"', '"+ dist_gong_ntwk_poly +"', '"+ rate_city_poly +"', '"+ rate_city_touch_poly +"', '"+ dist_road_touch_poly +"', '"+ rate_kyungji_poly +"', '"+ rate_saengtae_poly +"', '"+ rate_gongjuck_poly +"', '"+ dist_gongjuck_poly +"', '"+ rate_jdgarea_poly +"', '"+ rate_nongup_poly +"', '"+ rate_limsangdo_poly +"', '"+ rate_bojunmount_poly +"', '"+ dist_kyungji_poly +"');";
         out.print("<br><br>query = " + query + "<br><br>");
         int rs = stmt.executeUpdate(query);
     } else if ("2".equals(index)) {
         // update 쿼리문
-        String query = "update polygon_data set develop_value = '"+ developValue +"', conserve_value = '"+ conserveValue +"', value_comp = '"+ compreValue +
+        String query = "update polygon_data set round = '"+ round +"', develop_value = '"+ developValue +"', conserve_value = '"+ conserveValue +"', value_comp = '"+ compreValue +"', geom = '"+ geom +"', slope_poly = '"+ slope_poly +"', height_poly = '"+ height_poly +"', dist_gi_str_poly = '"+ dist_gi_str_poly +"', dist_gong_ntwk_poly = '"+ dist_gong_ntwk_poly +"', rate_city_poly = '"+ rate_city_poly +"', rate_city_touch_poly = '"+ rate_city_touch_poly +"', dist_road_touch_poly = '"+ dist_road_touch_poly +"', rate_kyungji_poly = '"+ rate_kyungji_poly +"', rate_saengtae_poly = '"+ rate_saengtae_poly +"', rate_gongjuck_poly = '"+ rate_gongjuck_poly +"', dist_gongjuck_poly = '"+ dist_gongjuck_poly +"', rate_jdgarea_poly = '"+ rate_jdgarea_poly +"', rate_nongup_poly = '"+ rate_nongup_poly +"', rate_limsangdo_poly = '"+ rate_limsangdo_poly +"', rate_bojunmount_poly = '"+ rate_bojunmount_poly +"', dist_kyungji_poly = '"+ dist_kyungji_poly +
         "' where area = '"+ area +"';";
         out.print("<br><br>query = " + query + "<br><br>");
         int rs = stmt.executeUpdate(query);

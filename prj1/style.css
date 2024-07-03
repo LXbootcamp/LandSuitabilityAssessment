@@ -258,20 +258,12 @@ table.dataTable3 th {
   pointer-events: none;
 }
 
-#popup 
-{
-  width: 200px;
-  height: 200px;
-  padding: 5px;
-  border: 3px solid gray;
-  border-radius: 5px;
-  background-color: white;  
-}
+
 
 #polygonPopup 
 {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 400px;
   padding: 5px;
   border: 3px solid gray;
   border-radius: 5px;
@@ -311,72 +303,203 @@ table.dataTable3 th {
   font-size: 16px;
 }
 
-.tooltip {
+#tooltipDraw, #tooltipVector3 {
   position: absolute;
-  display: none;
-  padding: 5px;
-  background: #333;
+  background: rgba(0, 0, 0, 0.7);
   color: #fff;
+  padding: 5px;
   border-radius: 3px;
-  font-size: 12px;
-  z-index: 1000;
+  pointer-events: none;
+  display: none;
+}
+
+.selected-emd {
+  background-color: rgb(15,58,99); /* 선택된 항목의 배경색 */
+  color: #ffffff; /* 선택된 항목의 글자색 */
+}
+
+#popup 
+{
+  width: 200px;
+  height: 200px;
+  padding: 5px;
+  border: 3px solid #09290b; /* 테두리 색상 변경 */
+  border-radius: 10px; /* 둥근 테두리 */
+  background-color: #f9f9f9; /* 배경 색상 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  overflow: hidden; 
+}
+
+#polygonPopup {
+  position: relative;
+  width: 280px;
+  height: 450px; /* 팝업 높이 조절 */
+  padding: 10px; /* 패딩을 조금 더 여유있게 */
+  border: 3px solid #09290b; /* 테두리 색상 변경 */
+  border-radius: 10px; /* 둥근 테두리 */
+  background-color: #f9f9f9; /* 배경 색상 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  overflow: hidden;
+}
+
+#polygonPopup, #popup h3 {
+  color: #09290b; /* 제목 색상 변경 */
+  text-align: center;
+}
+
+.table-container {
+  height: calc(100% - 140px); /* 테이블 높이를 버튼과 헤더를 제외한 높이로 설정 */
+  overflow-y: auto; /* 세로 스크롤 추가 */
+  position: relative;
+  white-space: nowrap; /* 줄바꿈 방지 */
+  background-color: #ffffff; /* 테이블 배경색 */
+  border-radius: 10px; /* 테이블 둥근 테두리 */
+  padding: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* 내부 그림자 추가 */
+}
+
+.info-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse; /* 테이블 셀 경계 없애기 */
+}
+
+.info-table th, .info-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* 셀 경계선 추가 */
+}
+
+.info-table th {
+  background-color: #09290b; /* 헤더 배경색 */
+  color: white; /* 헤더 글자색 */
+}
+
+.info-span {
+  display: inline-block;
+  width: 190px; /* 원하는 폭으로 설정 */
+}
+
+.info-input {
+  position: absolute;
+  right: 10px; /* 오른쪽에서 10px 떨어지도록 설정 */
+  /* bottom: 10px;  */
+  width: 40px;
+  /* vertical-align: middle; */
+}
+
+.fixed-buttons {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.fixed-buttons button {
+  width: 60px; /* 버튼 너비 조정 */
+  font-size: 14px; /* 버튼 글자 크기 조정 */
+  background-color: #09290b; /* 버튼 배경색 */
+  color: white; /* 버튼 글자색 */
+  border: none; /* 버튼 테두리 없애기 */
+  border-radius: 5px; /* 버튼 둥근 테두리 */
+  cursor: pointer; /* 커서 모양 변경 */
+  transition: background-color 0.3s; /* 배경색 전환 효과 */
+}
+
+.fixed-buttons button:hover {
+  background-color: #45a049; /* 버튼 배경색 호버 효과 */
 }
 
 
+/* menu3 */
+.menu3-container {
+  display: none; /* 기본적으로 숨김 */
+  gap: 10px; /* 요소들 사이의 간격을 조절 */
+  position: absolute;
+  top: 10px; /* 화면 상단에서의 거리 조정 */
+  right: 90px; /* 화면 오른쪽에서의 거리 조정 */
+  z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
+  flex-direction: column; /* 요소를 세로로 나열 */
+}
 
+.menu3-label {
+  background-color: #33333348; /* 배경색 */
+  color: #fff; /* 글자색 */
+  padding: 10px; /* 안쪽 여백 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  cursor: pointer; /* 커서 모양 변경 */
+  margin-bottom: 5px; /* 요소 간의 간격 */
+}
 
+/* 특정 영역에 대한 스타일 설정 */
+#trigger-area {
+  position: absolute;
+  top: 10px; /* 화면 상단에서의 거리 조정 */
+  right: 10px; /* 화면 오른쪽에서의 거리 조정 */
+  /* width: 50px;  넓이 조정 */
+  /* height: 45px;  높이 조정 */
+  background-color: rgba(0, 0, 0, 0.1); /* 반투명 배경 */
+  z-index: 999; /* 다른 요소 위에 표시되도록 설정 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  background-color: #33333348; /* 배경색 */
+  color: #fff; /* 글자색 */
+  padding: 10px; /* 안쪽 여백 */
+}
 
+#help-popup {
+  display: none;
+  position: absolute; /* 고정 위치를 상대 위치로 변경 */
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  border: 2px solid #09290b;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+#help-popup h3 {
+  margin-top: 0;
+}
+
+#help-popup .close-btn {
+  display: block;
+  text-align: right;
+  cursor: pointer;
+  color: #09290b;
+  font-weight: bold;
+}
+
+#maparea {
+  position: relative;
+}
+
+#legend {
+  display: none; /* 기본적으로 숨김 */
+  position: absolute;
+  bottom: 10px; /* maparea의 좌하단에 위치 */
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* 메뉴들보다 위에 위치하도록 설정 */
+}
+
+.legend-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
 
 
 
 
 /* 한글파일 부분 */
-/* Font Definitions */
-/* @font-face {
-  font-family: 'Batang';
-  src: url('fonts/Batang.woff2') format('woff2'),
-       url('fonts/Batang.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Gulim';
-  src: url('fonts/Gulim.woff2') format('woff2'),
-       url('fonts/Gulim.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Cambria Math';
-  src: url('fonts/CambriaMath.woff2') format('woff2'),
-       url('fonts/CambriaMath.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Arial Unicode MS';
-  src: url('fonts/ArialUnicodeMS.woff2') format('woff2'),
-       url('fonts/ArialUnicodeMS.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Malgun Gothic';
-  src: url('assets/fonts/MalgunGothic.woff2') format('woff2'),
-       url('assets/fonts/MalgunGothic.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-body {
-  font-family: 'Malgun Gothic', sans-serif;
-}
-
-@font-face {
-  font-family: 'DotumChe';
-  src: url('fonts/DotumChe.woff2') format('woff2'),
-       url('fonts/DotumChe.woff') format('woff');
-}
-
-body {
-font-family: "Malgun Gothic", sans-serif;
-} */
 
 .WordSection1 {
 page: WordSection1;

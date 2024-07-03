@@ -2,8 +2,24 @@ create table polygon_data (
 	id int generated always as identity primary key,
 	area int,
 	round int,
-	developValue int,
-	conserveValue int,
-	compreValue int,
-	geom public.geometry(MultiPolygon,3857)
+	develop_value int,
+	conserve_value int,
+	value_comp int,
+	geom public.geometry(Polygon,3857)
+);
+
+create table profile
+
+(
+
+id int generated always as identity primary key,
+
+username varchar(20) unique not null,
+
+password text not null,
+
+name varchar(20) not null,
+
+phone varchar(13) unique not null
+
 );
