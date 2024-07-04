@@ -439,7 +439,7 @@ button:hover {
 }
 
 .menu3-label {
-  background-color: #33333348; /* 배경색 */
+  background-color: #000000be; /* 배경색 */
   color: #fff; /* 글자색 */
   padding: 10px; /* 안쪽 여백 */
   border-radius: 5px; /* 모서리 둥글게 */
@@ -454,10 +454,10 @@ button:hover {
   right: 10px; /* 화면 오른쪽에서의 거리 조정 */
   /* width: 50px;  넓이 조정 */
   /* height: 45px;  높이 조정 */
-  background-color: rgba(0, 0, 0, 0.1); /* 반투명 배경 */
+  background-color: #000000be;
   z-index: 999; /* 다른 요소 위에 표시되도록 설정 */
   border-radius: 5px; /* 모서리 둥글게 */
-  background-color: #33333348; /* 배경색 */
+  background-color: #000000be; /* 배경색 */
   color: #fff; /* 글자색 */
   padding: 10px; /* 안쪽 여백 */
 }

@@ -75,7 +75,7 @@ function makeFilter1(methods) {
     else if (method === "emd08") filterValue = "해제면";
     else if (method === "emd09") filterValue = "현경면";
     // 다 더해서 쿼리 완성
-    filter1 += `"ld_cpsgemd_nm" like '%${filterValue}%'`; 
+    filter1 += `"ld_cpsgemd_nm" like '%${filterValue}%'`;
   });
   return filter1;
 }
@@ -85,7 +85,7 @@ vectorSource3 = new VectorSource({
   url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:polygon_data&outputFormat=application/json",
   format: new GeoJSON(),
 });
-vectorLayer3 = new VectorLayer({ 
+vectorLayer3 = new VectorLayer({
   source: vectorSource3,
   style: styleFunction,
 });
@@ -242,7 +242,7 @@ const osmLayer = new Tile({
 // 직접 그린 폴리곤 레이어
 const DrawSource = new VectorSource({ wrapX: false });
 
-const DrawVector = new VectorLayer({ 
+const DrawVector = new VectorLayer({
   source: DrawSource,
   style: new Style({
     fill: new Fill({
@@ -1469,47 +1469,46 @@ document.addEventListener("DOMContentLoaded", function () {
   function collectData() {
     const data = {
       jibun: document.getElementById('selectedValueDisplay2').textContent,
-      ld_cpsgemd_nm: ld_cpsgemd_nm,
-      value_develop: document.getElementById('input2').value,
-      value_conserv: document.getElementById('input3').value,
-      value_comp: document.getElementById('input4').value,
-      area: document.getElementById('polyinfo01').textContent,
-      ji_bun: ji_bun,
-      slope: slope,
-      area: area,
-      height: height,
-      dist_gi_str: dist_gi_str,
-      dist_gong_ntwk: dist_gong_ntwk,
-      rate_city: rate_city,
-      rate_city_touch: rate_city_touch,
-      dist_road_touch: dist_road_touch,
-      rate_kyungji: rate_kyungji,
-      rate_saengtae: rate_saengtae,
-      rate_gongjuck: rate_gongjuck,
-      dist_gongjuck: dist_gongjuck,
-      rate_jdgarea: rate_jdgarea,
-      rate_nongup: rate_nongup,
-      rate_limsangdo: rate_limsangdo,
-      rate_bojunmount: rate_bojunmount,
-      dist_kyungji: dist_kyungji,
-      rate_city_1: rate_city_1,
-      record_slope: record_slope,
-      record_height: record_height,
-      record_dist_gi_str: record_dist_gi_str,
-      record_dist_gong_ntwk: record_dist_gong_ntwk,
-      record_rate_city: record_rate_city,
-      record_rate_city_touch: record_rate_city_touch,
-      record_dist_road: record_dist_road,
-      record_rate_kyungji: record_rate_kyungji,
-      record_rate_saengtae: record_rate_saengtae,
-      record_rate_gongjuck: record_rate_gongjuck,
-      record_dist_gongjuck: record_dist_gongjuck,
-      record_rate_jdgarea: record_rate_jdgarea,
-      record_rate_nongup: record_rate_nongup,
-      record_rate_limsangdo: record_rate_limsangdo,
-      record_rate_bojunmount: record_rate_bojunmount,
-      record_dist_kyungji: record_dist_kyungji,
-      record_rate_city_1: record_rate_city_1,
+      ld_cpsgemd_nm: click_F_ld_cpsgemd_nm,
+      value_develop: click_F_value_develop,
+      value_conserv: click_F_value_conserv,
+      value_comp: click_F_value_comp,
+      area: click_F_lndpcl_ar,
+      ji_bun: document.getElementById('selectedValueDisplay2').textContent.substring(4),
+      slope: click_F_slope,
+      height: click_F_height,
+      dist_gi_str: click_F_dist_gi_str,
+      dist_gong_ntwk: click_F_dist_gong_ntwk,
+      rate_city: click_F_rate_city,
+      rate_city_touch: click_F_rate_city_touch,
+      dist_road_touch: click_F_dist_road_touch,
+      rate_kyungji: click_F_rate_kyungji,
+      rate_saengtae: click_F_rate_saengtae,
+      rate_gongjuck: click_F_rate_gongjuck,
+      dist_gongjuck: click_F_dist_gongjuck,
+      rate_jdgarea: click_F_rate_jdgarea,
+      rate_nongup: click_F_rate_nongup,
+      rate_limsangdo: click_F_rate_limsangdo,
+      rate_bojunmount: click_F_rate_bojunmount,
+      dist_kyungji: click_F_dist_kyungji,
+      rate_city_1: click_F_rate_city_1,
+      record_slope: click_F_record_slope,
+      record_height: click_F_record_height,
+      record_dist_gi_str: click_F_record_dist_gi_str,
+      record_dist_gong_ntwk: click_F_record_dist_gong_ntwk,
+      record_rate_city: click_F_record_rate_city,
+      record_rate_city_touch: click_F_record_rate_city_touch,
+      record_dist_road: click_F_record_dist_road,
+      record_rate_kyungji: click_F_record_rate_kyungji,
+      record_rate_saengtae: click_F_record_rate_saengtae,
+      record_rate_gongjuck: click_F_record_rate_gongjuck,
+      record_dist_gongjuck: click_F_record_dist_gongjuck,
+      record_rate_jdgarea: click_F_record_rate_jdgarea,
+      record_rate_nongup: click_F_record_rate_nongup,
+      record_rate_limsangdo: click_F_record_rate_limsangdo,
+      record_rate_bojunmount: click_F_record_rate_bojunmount,
+      record_dist_kyungji: click_F_record_dist_kyungji,
+      record_rate_city_1: click_F_record_rate_city_1,
     };
     return data;
   }
@@ -1697,6 +1696,19 @@ const layerUrls = {
 
 const mapLayers = {}; // 각 레이어 상태를 저장하기 위한 객체
 
+// 각 레이어에 대한 색상 설정
+const layerColors = {
+  bu_1km: "rgba(102, 0, 0, 0.747)",
+  bu_2km: "rgba(168, 0, 0, 0.575)",
+  bu_3km: "rgba(255, 0, 0, 0.459)",
+  city_development_region: "rgba(255, 255, 0, 0.3)",
+  commerce_region: "rgba(0, 255, 255, 0.3)",
+  dwelling_region: "rgba(255, 0, 255, 0.3)",
+  industry_complex: "rgba(128, 0, 128, 0.3)",
+  industry_region: "rgba(128, 128, 0, 0.3)",
+  residential_area: "rgba(0, 128, 128, 0.3)",
+};
+
 // 추가 레이어 토글 함수
 function toggleLayer(layerName) {
   console.log(`토글 레이어 호출됨: ${layerName}`);
@@ -1713,7 +1725,7 @@ function toggleLayer(layerName) {
       source: vectorSource,
       style: new Style({
         fill: new Fill({
-          color: "rgba(255, 0, 0, 0.3)",
+          color: layerColors[layerName] || "rgba(255, 0, 0, 0.3)",
         }),
         stroke: new Stroke({
           color: "rgba(100, 100, 100, 1.0)",
@@ -1743,7 +1755,7 @@ document.addEventListener("DOMContentLoaded", function () {
     hideTimeout = setTimeout(() => {
       menu3Container.style.display = "none";
       console.log("트리거 영역에서 마우스 벗어남");
-    }, 3000); // 3초 후에 숨김
+    }, 5000); // 5초 후에 숨김
   });
   // 이벤트 위임을 사용하여 menu3-container에 클릭 이벤트 리스너를 등록
   menu3Container.addEventListener("click", (event) => {
@@ -1753,12 +1765,11 @@ document.addEventListener("DOMContentLoaded", function () {
       toggleLayer(layerName);
     }
   });
-  // const mapArea = document.getElementById("maparea");
   const legend = document.getElementById("legend");
   const showResultsBtn = document.getElementById("showOnMap");
 
   function updateLegendPosition() {
-    // const rect = mapArea.getBoundingClientRect();
+    const legend = document.getElementById("legend");
     legend.style.bottom = '10px'; // maparea의 하단에서 10px 위
     legend.style.left = '10px';   // maparea의 좌측에서 10px 오른쪽
   }
@@ -1766,6 +1777,17 @@ document.addEventListener("DOMContentLoaded", function () {
   showResultsBtn.addEventListener("click", function () {
     legend.style.display = 'flex';
     updateLegendPosition();
+  });
+
+  // 폴리곤 클릭 이벤트 리스너 추가
+  map.on('click', function (evt) {
+    // 클릭된 폴리곤이 있는지 확인
+    map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+      if (feature.getGeometry().getType() === 'Polygon') {
+        legend.style.display = 'flex';
+        updateLegendPosition();
+      }
+    });
   });
   // 읍면동 선택 버튼 클릭 시 범례 숨기기
   backButton.addEventListener("click", function () {
