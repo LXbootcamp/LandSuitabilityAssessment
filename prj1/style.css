@@ -6,7 +6,7 @@
   padding: 0;
   font-family: "Noto Sans KR";
 }
- 
+
 html,
 body {
   margin: 0;
@@ -71,13 +71,6 @@ body {
   height: 100%;
 }
 
-/* 헤더 부분 스타일 설정 */
-/* .topDecal {
-  background: #175381;
-  height: 15px;
-  width: 100%;
-} */
-
 /* menuContents 부분 중에서 목록(ul) 부분 스타일 설정 */
 ul.emdList,
 table.dataTable, table.dataTable2, table.dataTable3 {
@@ -99,7 +92,7 @@ ul.emdList li:first-child {
 }
 
 ul.emdList li:hover {
-  background: #0f3a63;
+  background: #009881;
   color: #fff;
 }
 
@@ -258,18 +251,6 @@ table.dataTable3 th {
   pointer-events: none;
 }
 
-
-
-#polygonPopup 
-{
-  width: 300px;
-  height: 400px;
-  padding: 5px;
-  border: 3px solid gray;
-  border-radius: 5px;
-  background-color: white;  
-}
-
 .height-span {
   display: inline-block;
   height: 23px;  /* 원하는 높이 설정 */
@@ -314,7 +295,7 @@ table.dataTable3 th {
 }
 
 .selected-emd {
-  background-color: rgb(15,58,99); /* 선택된 항목의 배경색 */
+  background-color: #009881; /* 선택된 항목의 배경색 */
   color: #ffffff; /* 선택된 항목의 글자색 */
 }
 
@@ -323,19 +304,20 @@ table.dataTable3 th {
   width: 200px;
   height: 200px;
   padding: 5px;
-  border: 3px solid #09290b; /* 테두리 색상 변경 */
+  border: 3px solid #009881; /* 테두리 색상 변경 */
   border-radius: 10px; /* 둥근 테두리 */
   background-color: #f9f9f9; /* 배경 색상 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
   overflow: hidden; 
 }
 
+
 #polygonPopup {
   position: relative;
   width: 280px;
   height: 450px; /* 팝업 높이 조절 */
   padding: 10px; /* 패딩을 조금 더 여유있게 */
-  border: 3px solid #09290b; /* 테두리 색상 변경 */
+  border: 3px solid #063b33; /* 테두리 색상 변경 */
   border-radius: 10px; /* 둥근 테두리 */
   background-color: #f9f9f9; /* 배경 색상 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
@@ -343,7 +325,7 @@ table.dataTable3 th {
 }
 
 #polygonPopup, #popup h3 {
-  color: #09290b; /* 제목 색상 변경 */
+  color: #063b33; /* 제목 색상 변경 */
   text-align: center;
 }
 
@@ -371,8 +353,13 @@ table.dataTable3 th {
 }
 
 .info-table th {
-  background-color: #09290b; /* 헤더 배경색 */
+  background-color: #063b33; /* 헤더 배경색 */
   color: white; /* 헤더 글자색 */
+}
+
+.info-table td {
+  position: relative;
+  line-height: 30px;
 }
 
 .info-span {
@@ -382,10 +369,10 @@ table.dataTable3 th {
 
 .info-input {
   position: absolute;
-  right: 10px; /* 오른쪽에서 10px 떨어지도록 설정 */
-  /* bottom: 10px;  */
+  right: 10px;
   width: 40px;
-  /* vertical-align: middle; */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .fixed-buttons {
@@ -399,9 +386,10 @@ table.dataTable3 th {
 }
 
 .fixed-buttons button {
-  width: 60px; /* 버튼 너비 조정 */
-  font-size: 14px; /* 버튼 글자 크기 조정 */
-  background-color: #09290b; /* 버튼 배경색 */
+  width: 100px; /* 버튼 너비 조정 */
+  height: 35px; /* 버튼 높이 조정 */
+  font-size: 15px; /* 버튼 글자 크기 조정 */
+  background-color: #009881; /* 버튼 배경색 */
   color: white; /* 버튼 글자색 */
   border: none; /* 버튼 테두리 없애기 */
   border-radius: 5px; /* 버튼 둥근 테두리 */
@@ -410,7 +398,32 @@ table.dataTable3 th {
 }
 
 .fixed-buttons button:hover {
-  background-color: #45a049; /* 버튼 배경색 호버 효과 */
+  background-color: #0f2420; /* 버튼 배경색 호버 효과 */
+}
+#help-btn{
+  width: 30px;
+  height: 40px; 
+  vertical-align: middle; 
+  border: none; 
+  background: none; 
+  cursor: pointer; 
+  margin-left: 10px;
+}
+/* 새로운 버튼 스타일 추가 */
+button {
+  width: 100px; /* 버튼 너비 조정 */
+  height: 35px; /* 버튼 높이 조정 */
+  font-size: 15px; /* 버튼 글자 크기 조정 */
+  background-color: #009881; /* 버튼 배경색 */
+  color: white; /* 버튼 글자색 */
+  border: none; /* 버튼 테두리 없애기 */
+  border-radius: 5px; /* 버튼 둥근 테두리 */
+  cursor: pointer; /* 커서 모양 변경 */
+  transition: background-color 0.3s; /* 배경색 전환 효과 */
+}
+
+button:hover {
+  background-color: #0f2420; /* 버튼 배경색 호버 효과 */
 }
 
 
@@ -451,11 +464,12 @@ table.dataTable3 th {
 
 #help-popup {
   display: none;
-  position: absolute; /* 고정 위치를 상대 위치로 변경 */
-  width: 300px;
-  padding: 20px;
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  padding: 15px;
   background-color: #fff;
-  border: 2px solid #09290b;
+  border: 2px solid #063b33;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -466,11 +480,13 @@ table.dataTable3 th {
 }
 
 #help-popup .close-btn {
-  display: block;
-  text-align: right;
+  position: absolute;
+  top: 5px;
+  right: 10px;
   cursor: pointer;
-  color: #09290b;
+  color: #063b33;
   font-weight: bold;
+  font-size: 18px;
 }
 
 #maparea {
@@ -489,18 +505,41 @@ table.dataTable3 th {
   z-index: 1000; /* 메뉴들보다 위에 위치하도록 설정 */
 }
 
-.legend-color {
+.double-arrow {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
+  width: 20px; /* 화살표의 너비 */
+  height: 60px; /* 화살표의 높이 */
+  background: linear-gradient(to bottom, black, black) no-repeat center/2px 100%;
 }
 
+.double-arrow::before, .double-arrow::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
 
+.double-arrow::before {
+  border-bottom: 15px solid black;
+  margin-top: -7px;
 
+}
+
+.double-arrow::after {
+  border-top: 15px solid black;
+  margin-top: 47px;
+}
+
+.legend-color {
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 5px;
+}
 
 /* 한글파일 부분 */
-
 .WordSection1 {
 page: WordSection1;
 }

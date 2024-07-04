@@ -74,7 +74,27 @@ try{
         int rs = stmt.executeUpdate(query);
     } else if ("2".equals(index)) {
         // update 쿼리문
-        String query = "update polygon_data set round = '"+ round +"', develop_value = '"+ developValue +"', conserve_value = '"+ conserveValue +"', value_comp = '"+ compreValue +"', geom = '"+ geom +"', slope_poly = '"+ slope_poly +"', height_poly = '"+ height_poly +"', dist_gi_str_poly = '"+ dist_gi_str_poly +"', dist_gong_ntwk_poly = '"+ dist_gong_ntwk_poly +"', rate_city_poly = '"+ rate_city_poly +"', rate_city_touch_poly = '"+ rate_city_touch_poly +"', dist_road_touch_poly = '"+ dist_road_touch_poly +"', rate_kyungji_poly = '"+ rate_kyungji_poly +"', rate_saengtae_poly = '"+ rate_saengtae_poly +"', rate_gongjuck_poly = '"+ rate_gongjuck_poly +"', dist_gongjuck_poly = '"+ dist_gongjuck_poly +"', rate_jdgarea_poly = '"+ rate_jdgarea_poly +"', rate_nongup_poly = '"+ rate_nongup_poly +"', rate_limsangdo_poly = '"+ rate_limsangdo_poly +"', rate_bojunmount_poly = '"+ rate_bojunmount_poly +"', dist_kyungji_poly = '"+ dist_kyungji_poly +
+        String query = "update polygon_data set round = '"+ round +
+        "', develop_value = '"+ developValue +
+        "', conserve_value = '"+ conserveValue +
+        "', value_comp = '"+ compreValue +
+        "', geom = '"+ geom +
+        "', slope_poly = '"+ slope_poly +
+        "', height_poly = '"+ height_poly +
+        "', dist_gi_str_poly = '"+ dist_gi_str_poly +
+        "', dist_gong_ntwk_poly = '"+ dist_gong_ntwk_poly +
+        "', rate_city_poly = '"+ rate_city_poly +
+        "', rate_city_touch_poly = '"+ rate_city_touch_poly +
+        "', dist_road_touch_poly = '"+ dist_road_touch_poly +
+        "', rate_kyungji_poly = '"+ rate_kyungji_poly +
+        "', rate_saengtae_poly = '"+ rate_saengtae_poly +
+        "', rate_gongjuck_poly = '"+ rate_gongjuck_poly +
+        "', dist_gongjuck_poly = '"+ dist_gongjuck_poly +
+        "', rate_jdgarea_poly = '"+ rate_jdgarea_poly +
+        "', rate_nongup_poly = '"+ rate_nongup_poly +
+        "', rate_limsangdo_poly = '"+ rate_limsangdo_poly +
+        "', rate_bojunmount_poly = '"+ rate_bojunmount_poly +
+        "', dist_kyungji_poly = '"+ dist_kyungji_poly +
         "' where area = '"+ area +"';";
         out.print("<br><br>query = " + query + "<br><br>");
         int rs = stmt.executeUpdate(query);
@@ -84,17 +104,8 @@ try{
         out.print("<br><br>query = " + query + "<br><br>");
         int rs = stmt.executeUpdate(query);
     }
-
-    // String query = "insert into polygon_data (area, round, develop_value, conserve_value, value_comp, geom) values ('"+ area +"', '"+ round +"', '"+ developValue +"', '"+ conserveValue +"', '"+ compreValue +"', "+ geom +");";
-    // out.print("<br><br>query = " + query + "<br><br>");
-
-    // int rs = stmt.executeUpdate(query);
-
-
     stmt.close();
     con.close();
-
-    
 }catch(Exception ex)		// 위 try{} 에서 문제가 발생하면 이 안으로 들어온다.
 {
 	// 에러 내용을 보여준다.

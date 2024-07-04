@@ -34,21 +34,13 @@
             e.printStackTrace();
         }
     %>
-
-
     <%
-    
-    //category 파라미터 값 가져오기
     String url = "jdbc:postgresql://172.30.0.7/boot";
     String user = "scott";
     String pwd = "tiger";
     Connection con = null;
     Statement stmt = null;
     ResultSet rs = null;
-    
-
-    
-
     try{
         // JDBC 읽어오기
 	    Class.forName("org.postgresql.Driver");
@@ -56,25 +48,26 @@
 	    con = DriverManager.getConnection(url, user, pwd);
 	    // 쿼리 준비
 	    stmt = con.createStatement();    
-        String query = "select * from profile where username = '" + username + "' and password = '" + hashedPassword + "'";
-        out.print("<br><br>query = " + query + "<br><br>");
-        
+        String query = "select * from profile where username = '" + username + "' and password = '" + hashedPassword + "'";    
         rs = stmt.executeQuery(query);
 
         if (rs.next()) {
-            // HttpSession session = request.getSession(false);
-            session.setAttribute("username", username);
-            response.sendRedirect("index.html");
+            String index = rs.getString("index");
+            String name = rs.getString("name");
+            // HttpSession session = request.getSession();
+            session.setAttribute("loggedIn", true);
+            if (index.equals("0")) { // 인덱스가 0이면 로그인 불가... 관리자가 1로 바꿔줘야 함
+                out.println("<script>showAlert('관리자의 승인이 필요합니다.');</script>");
+            } else {
+                // session.setAttribute("name", name);
+                response.sendRedirect("index.html");
+            }
         } else {
-            out.println("<script>showAlert('로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인하세요.');</script>");
-
+            out.println("<script>showAlert('아이디 또는 비밀번호가 일치하지 않습니다.');</script>");
         }
-    
         stmt.close();
         con.close();
-
-    
-    }catch(Exception ex)		// 위 try{} 에서 문제가 발생하면 이 안으로 들어온다.
+    }catch(Exception ex)
     {
 	// 에러 내용을 보여준다.
 	out.print("err: " + ex.toString());

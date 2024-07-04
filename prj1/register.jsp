@@ -31,7 +31,7 @@
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
         
-        // Hash the password using SHA-256
+        // SHA-256을 사용한 비밀번호 해싱
         String hashedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -42,17 +42,12 @@
             e.printStackTrace();
         }
     %>
-
-
     <%
-    
-    //category 파라미터 값 가져오기
     String url = "jdbc:postgresql://172.30.0.7/boot";
     String user = "scott";
     String pwd = "tiger";
     Connection con = null;
     Statement stmt = null;
-
     try{
         // JDBC 읽어오기
 	    Class.forName("org.postgresql.Driver");
@@ -61,16 +56,15 @@
 	    // 쿼리 준비
 	    stmt = con.createStatement();    
         // insert 쿼리문
-        String query = "insert into profile (username, password, name, phone) values ('" + username + "', '" + hashedPassword + "', '" + name + "', '" + phone + "')";
+        String query = "insert into profile (username, password, name, phone, index) values ('" + 
+        username + "', '" + hashedPassword + "', '" + name + "', '" + phone +"', '0')";
         out.print("<br><br>query = " + query + "<br><br>");
         int rs = stmt.executeUpdate(query);
     
         stmt.close();
         con.close();
         out.println("<script>showAlert('회원가입 성공');</script>");
-
-    
-    }catch(Exception ex)		// 위 try{} 에서 문제가 발생하면 이 안으로 들어온다.
+    }catch(Exception ex)
     {
 	// 에러 내용을 보여준다.
 	out.println("<script>showAlert('회원가입 실패. 다시 시도해주세요.');</script>");

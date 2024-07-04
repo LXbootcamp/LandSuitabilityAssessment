@@ -35,7 +35,7 @@ const centers = {
   emd09: [14072457, 4169013],
 };
 
-// 팝업창 위치 설정
+// 팝업창 위치 설정... 해당 지역 우측으로
 const centers2 = {
   emd00: [14086748, 4154096],
   emd01: [14071824, 4165714],
@@ -63,7 +63,6 @@ function makeFilter1(methods) {
     if (index > 0) {
       filter1 += " or ";
     }
-
     let filterValue = "";
     if (method === "emd00") filterValue = "무안군";
     else if (method === "emd01") filterValue = "망운면";
@@ -75,22 +74,23 @@ function makeFilter1(methods) {
     else if (method === "emd07") filterValue = "청계면";
     else if (method === "emd08") filterValue = "해제면";
     else if (method === "emd09") filterValue = "현경면";
-
-    filter1 += `"ld_cpsgemd_nm" like '%${filterValue}%'`;
+    // 다 더해서 쿼리 완성
+    filter1 += `"ld_cpsgemd_nm" like '%${filterValue}%'`; 
   });
   return filter1;
 }
 
+// 직접 그린 폴리곤 레이어 부분
 vectorSource3 = new VectorSource({
   url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:polygon_data&outputFormat=application/json",
   format: new GeoJSON(),
 });
-
-vectorLayer3 = new VectorLayer({ // 직접 그린 폴리곤 레이어
+vectorLayer3 = new VectorLayer({ 
   source: vectorSource3,
   style: styleFunction,
 });
 
+// 읍면동 레이어에 대한 부분
 vectorSource2 = new VectorSource({
   url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
   format: new GeoJSON(),
@@ -109,13 +109,12 @@ vectorLayer2 = new VectorLayer({
   }),
 });
 
-// 선택 지번 레이어에 대한 부분
+// 읍면동 선택된 연속도 레이어에 대한 부분
 function makeFilter(click_F_Jibun) {
   let filter = "jibun = '";
   filter += click_F_Jibun + "'";
   return filter;
 }
-
 function makeWFSSource2(click_F_Jibun) {
   vectorSource3 = new VectorSource({
     url: encodeURI(
@@ -129,7 +128,6 @@ function makeWFSSource2(click_F_Jibun) {
     selectLayer.setVisible(true);
   }
 }
-
 selectLayer = new VectorLayer({
   source: null, // 초기에는 소스를 설정하지 않음
   visible: false, // 초기에는 보이지 않도록 설정
@@ -163,7 +161,6 @@ function updateVectorSource(methods) {
   }
 }
 
-
 function makeWFSSource(methods) {
   // methods가 배열이 아닌 경우 배열로 변환
   if (!Array.isArray(methods)) {
@@ -171,18 +168,7 @@ function makeWFSSource(methods) {
   }
   updateVectorSource(methods);
 
-  // vectorSource = new VectorSource({
-  //   url: encodeURI(
-  //     "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
-  //     makeFilter1(methods)
-  //   ),
-  //   format: new GeoJSON(),
-  // });
-  // if (null != vectorLayer) {
-  //   vectorLayer.setSource(vectorSource);
-  //   vectorLayer.setVisible(true);
-  // }
-  // 좌표들의 평균 계산
+  // 좌표들의 평균 계산... 읍면동 다중 선택시 그 중간으로 중심 이동
   let sumX = 0;
   let sumY = 0;
   methods.forEach(method => {
@@ -190,7 +176,6 @@ function makeWFSSource(methods) {
     sumX += center[0];
     sumY += center[1];
   });
-
   const avgX = sumX / methods.length;
   const avgY = sumY / methods.length;
   const avgCenter = [avgX, avgY];
@@ -254,28 +239,29 @@ const osmLayer = new Tile({
   source: new OSM()
 });
 
-
+// 직접 그린 폴리곤 레이어
 const DrawSource = new VectorSource({ wrapX: false });
 
-const DrawVector = new VectorLayer({ // 그린 영역 레이어
+const DrawVector = new VectorLayer({ 
   source: DrawSource,
   style: new Style({
     fill: new Fill({
       color: "rgba(212, 194, 92, 0.2)",
     }),
     stroke: new Stroke({
-      color: "#ffcc33",
+      color: "#8b6900",
       width: 0.5,
     }),
     image: new Circle({
       radius: 7,
       fill: new Fill({
-        color: "#ffcc33",
+        color: "#8b6900",
       }),
     }),
   }),
 });
 
+// 영역을 그려 선택된 연속도 레이어
 const SelectionsSource = new VectorSource({ wrapX: false });
 
 const SelectionsVector = new VectorLayer({
@@ -287,7 +273,6 @@ const SelectionsVector = new VectorLayer({
 
 // 팝업 부분
 const info = document.getElementById("info");
-
 let currentFeature;
 const displayFeatureInfo = function (pixel, target) {
   const feature = target.closest(".ol-control")
@@ -309,10 +294,10 @@ const displayFeatureInfo = function (pixel, target) {
     currentFeature = null; // currentFeature 초기화
   }
 };
-
 const popup = document.getElementById("popup");
 const polyPopup = document.getElementById("polygonPopup");
 
+// 그린 폴리곤에 대한 팝업
 overlay2 = new Overlay({
   element: polyPopup,
   autoPan: {
@@ -322,6 +307,7 @@ overlay2 = new Overlay({
   },
 });
 
+// 조회시 나타나는 기본 정보 팝업
 overlay = new Overlay({
   element: popup,
   autoPan: {
@@ -351,6 +337,7 @@ const map = new Map({
   }),
 });
 
+// 영역을 그려 선택된 연속도 레이어 스타일
 const selectedStyle = new Style({
   fill: new Fill({
     color: "rgba(153, 51, 0, 0.9)",
@@ -376,11 +363,9 @@ const draw = new Draw({
   source: DrawSource,
   type: "Polygon",
 });
-
 map.addInteraction(draw);
 
-/////////////////////////////////////////////////////////////
-// DrawVector 좌표를 서버로 전송하는 함수
+// DrawVector를 서버로 전송하는 파트
 document.addEventListener("DOMContentLoaded", function () {
   let geometryGeoJSON = null;
   let area = null;
@@ -408,18 +393,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // DrawVector 레이어에 커서 대면 말풍선 표시
-  // DrawVector 레이어를 위한 말풍선 창 요소 생성
+  // DrawVector 레이어에 말풍선 표시... vectorLayer3와 통합 필요
   const tooltipDraw = document.createElement('div');
   tooltipDraw.id = 'tooltipDraw';
   document.body.appendChild(tooltipDraw);
 
-  // vectorLayer3 레이어를 위한 말풍선 창 요소 생성
+  // vectorLayer3 레이어에 말풍선 표시
   const tooltipVector3 = document.createElement('div');
   tooltipVector3.id = 'tooltipVector3';
   document.body.appendChild(tooltipVector3);
 
-  // DrawVector 레이어에 대한 마우스 이동 이벤트 리스너 추가
+  // DrawVector 레이어에 대한 마우스 이동 이벤트 리스너
   map.on('pointermove', function (event) {
     const hit = map.hasFeatureAtPixel(event.pixel, {
       layerFilter: function (layer) {
@@ -438,7 +422,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // vectorLayer3 레이어에 대한 마우스 이동 이벤트 리스너 추가
+  // vectorLayer3 레이어에 대한 마우스 이동 이벤트 리스너
   map.on('pointermove', function (event) {
     const hit = map.hasFeatureAtPixel(event.pixel, {
       layerFilter: function (layer) {
@@ -462,13 +446,14 @@ document.addEventListener("DOMContentLoaded", function () {
     tooltipDraw.style.display = 'none';
     tooltipVector3.style.display = 'none';
   });
+
   // Ctrl+클릭 이벤트 핸들러 추가
   map.on('click', function (evt) {
     overlay.setPosition(undefined);
+    overlay2.setPosition(undefined);
     if (!evt.originalEvent.ctrlKey) {
       return; // Ctrl 키가 눌리지 않았으면 아무 작업도 하지 않음
     }
-
     map.forEachFeatureAtPixel(evt.pixel, function (feature) {
       if (feature.getGeometry().getType() === 'Polygon') {
         const coordinates = feature.getGeometry().getCoordinates();
@@ -480,10 +465,10 @@ document.addEventListener("DOMContentLoaded", function () {
         area = Math.round(area1);
         round = Math.round(round1);
 
+        // 폴리곤 클릭시 정보 -> 초기에는 빈 값으로 정의.. 삼항연산자 사용
         const developValue = feature.get('develop_value') !== undefined ? feature.get('develop_value') : '빈값';
         const conserveValue = feature.get('conserve_value') !== undefined ? feature.get('conserve_value') : '빈값';
         const compreValue = feature.get('value_comp') !== undefined ? feature.get('value_comp') : '빈값';
-
         const slope_poly = feature.get('slope_poly') !== undefined ? feature.get('slope_poly') : '빈값';
         const height_poly = feature.get('height_poly') !== undefined ? feature.get('height_poly') : '빈값';
         const dist_gi_str_poly = feature.get('dist_gi_str_poly') !== undefined ? feature.get('dist_gi_str_poly') : '빈값';
@@ -500,11 +485,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const rate_limsangdo_poly = feature.get('rate_limsangdo_poly') !== undefined ? feature.get('rate_limsangdo_poly') : '빈값';
         const rate_bojunmount_poly = feature.get('rate_bojunmount_poly') !== undefined ? feature.get('rate_bojunmount_poly') : '빈값';
         const dist_kyungji_poly = feature.get('dist_kyungji_poly') !== undefined ? feature.get('dist_kyungji_poly') : '빈값';
-
+        // index.html로 넘겨줄 값들
         document.getElementById("polygon-info").innerHTML = "폴리곤 정보";
         document.getElementById("polyinfo01").innerHTML = "면적: " + (area / 1000000).toFixed(2) + " ㎢";
         document.getElementById("polyinfo02").innerHTML = "둘레: " + (round / 1000).toFixed(2) + " ㎞";
-
         document.getElementById("polyDevinfo01").innerHTML = "경사도: " + slope_poly;
         document.getElementById("polyDevinfo02").innerHTML = "표고: " + height_poly;
         document.getElementById("polyDevinfo03").innerHTML = "기개발지거리: " + dist_gi_str_poly;
@@ -521,14 +505,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("polyConvinfo07").innerHTML = "임상도상위비율: " + rate_limsangdo_poly;
         document.getElementById("polyConvinfo08").innerHTML = "보전산지비율: " + rate_bojunmount_poly;
         document.getElementById("polyConvinfo09").innerHTML = "경지정리지역거리: " + dist_kyungji_poly;
-
         document.getElementById("polyinfo03").innerHTML = "개발적성값: " + developValue;
         document.getElementById("polyinfo04").innerHTML = "보전적성값: " + conserveValue;
         document.getElementById("polyinfo05").innerHTML = "종합적성값: " + compreValue;
 
-        // 오버레이 창을 띄움
+        // 팝업창을 띄움
         overlay2.setPosition(center);
-
         // 선택된 feature의 geometryGeoJSON을 업데이트
         geometryGeoJSON = new GeoJSON().writeGeometry(feature.getGeometry());
         drawnFeature = feature; // 선택된 피처를 drawnFeature로 설정
@@ -536,13 +518,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 그린 폴리곤 팝업창에 있는 값을 가져와서 서버로 전송하는 코드(입력)
+  // drawVector 팝업창에 있는 값을 가져와서 서버로 전송하는 코드(입력)
   document.getElementById("insertPoly").onclick = () => {
-    if (drawnFeature === null) {
-      alert('먼저 폴리곤을 선택하세요.');
-      return;
-    }
-
     // 체크박스가 선택되지 않은 값들을 0으로 설정
     for (let i = 5; i <= 7; i++) {
       const checkbox = document.getElementById(`check_polyDevdata0${i}`);
@@ -558,8 +535,7 @@ document.addEventListener("DOMContentLoaded", function () {
         input.value = '0';
       }
     }
-
-    const index = '1';
+    const index = '1'; // 인덱스가 1 이면 jsp에서 insert 처리
     const slope_poly = document.getElementById("polyDevdata01").value;
     const height_poly = document.getElementById("polyDevdata02").value;
     const dist_gi_str_poly = document.getElementById("polyDevdata03").value;
@@ -616,11 +592,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 그린 폴리곤 팝업창에 있는 값을 가져와서 서버로 전송하는 코드(수정)
   document.getElementById("updatePoly").onclick = () => {
-    if (drawnFeature === null) {
-      alert('먼저 폴리곤을 선택하세요.');
-      return;
-    }
-    const index = '2';
+    // 체크박스 선택된 지표만 수정되도록 수정 필요
+    const index = '2'; // 인덱스가 2 이면 jsp에서 update 처리
     const slope_poly = document.getElementById("polyDevdata01").value;
     const height_poly = document.getElementById("polyDevdata02").value;
     const dist_gi_str_poly = document.getElementById("polyDevdata03").value;
@@ -676,12 +649,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 그린 폴리곤 팝업창에 있는 값을 가져와서 서버로 전송하는 코드(삭제)
   document.getElementById("deletePoly").onclick = () => {
-    if (drawnFeature === null) {
-      alert('먼저 폴리곤을 선택하세요.');
-      return;
-    }
-
-    const index = '3';
+    const index = '3'; // 인덱스가 3 이면 jsp에서 delete 처리
     fetch(`./insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}`, {
       method: 'POST',
     })
@@ -717,7 +685,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ///////////////////////////////////////////////////////////////
 
-// 인터섹트 함수
+// 인터섹트 함수... drawVector와 vectorLayer3 간의 인터섹트 수행
 function polyIntersectsPoly(polygeomA, polygeomB) {
   const geomA = new jsts.io.GeoJSONReader().read(
     new GeoJSON().writeFeatureObject(
@@ -740,7 +708,7 @@ draw.on("drawstart", function () {
   selectedFeatures.clear();
 });
 
-// 지도 전환 버튼 이벤트 리스너 추가
+// 지도 전환 버튼 이벤트 리스너
 document.getElementById("switch-to-osm").addEventListener("click", function () {
   map.getLayers().setAt(0, osmLayer);
 });
@@ -750,6 +718,7 @@ document.getElementById("switch-to-satellite").addEventListener("click", functio
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+  // 콤보박스 파트
   const elementIds = [
     "aaa01", "aaa02", "aaa03", "aaa04",
     "bbb01", "bbb04", "bbb02", "bbb03",
@@ -817,8 +786,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let click_F_rate_bojunmount = null; // 보전지역산지비율
   let click_F_dist_kyungji = null; // 경지정리지역와의거리
   let click_F_rate_city_1 = null; // 선택영역 도시용지비율
-
-
   let click_F_record_slope = null; // 경사도 점수
   let click_F_record_height = null; // 표고 점수
   let click_F_record_dist_gi_str = null;
@@ -836,12 +803,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let click_F_record_rate_bojunmount = null;
   let click_F_record_dist_kyungji = null;
   let click_F_record_rate_city_1 = null;
-
   let click_F_value_develop = null; // 개발적성값 점수
   let click_F_value_conserv = null; // 보전적성값 점수
   let click_F_value_comp = null; // 종합적성값 점수
-
-  let inserted_tpgrph_hg_code_nm = {};
+  let inserted_tpgrph_hg_code_nm = {}; // 입력값
   let inserted_record_slope = {};
   let inserted_record_height = {};
   let inserted_record_dist_gi_str = {};
@@ -859,14 +824,12 @@ document.addEventListener("DOMContentLoaded", function () {
   let inserted_record_rate_bojunmount = {};
   let inserted_record_dist_kyungji = {};
   let inserted_record_rate_city_1 = {};
-
-
   let inserted_value_develop = {};
   let inserted_value_conserv = {};
   let inserted_value_comp = {};
 
 
-  // 버튼 클릭 시 SelectionsVector 레이어를 보이도록 설정
+  // 지도로 결과보기 버튼 클릭 시 SelectionsVector 레이어를 보이도록 설정
   document.getElementById("showOnMap").addEventListener("click", function () {
     SelectionsVector.setVisible(true);
     selectedFeatures.clear();
@@ -879,7 +842,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ld_cpsgemd_nm = feature.get("ld_cpsgemd_nm") || ""; // 시도 시군구 읍면리
       ji_bun = feature.get("ji_bun") || ""; // 지번
       area = feature.get("lndpcl_ar") || ""; // 면적
-
       const lndcgr_code_nm = feature.get("lndcgr_code_nm") || "";
       const lndpcl_ar = feature.get("lndpcl_ar") || "";
       const prpos_area_1_nm = feature.get("prpos_area_1_nm") || "";
@@ -903,8 +865,6 @@ document.addEventListener("DOMContentLoaded", function () {
       rate_bojunmount = feature.get("rate_bojunmount") || "";
       dist_kyungji = feature.get("dist_kyungji") || "";
       rate_city_1 = feature.get("rate_city_1") || "";
-
-
       record_slope = feature.get("record_slope") || "";
       record_height = feature.get("record_height") || "";
       record_dist_gi_str = feature.get("record_dist_gi_str") || "";
@@ -931,6 +891,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // rate_city1 속성의 총 합을 계산하는 함수
+  // 선택 영역에 대한 도시용지의 개수를 계산
   function calculateRateCity_1Sum(features) {
     let total = 0;
     features.forEach(function (feature) {
@@ -941,6 +902,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     return total;
   }
+  // 콤보박스 업데이트 함수
   function updateComboBox(features) {
     comboBox.innerHTML = "";
     features.forEach(function (feature) {
@@ -973,7 +935,6 @@ document.addEventListener("DOMContentLoaded", function () {
         option.setAttribute("rate_bojunmount", feature.rate_bojunmount);
         option.setAttribute("dist_kyungji", feature.dist_kyungji);
         option.setAttribute("rate_city_1", feature.rate_city_1);
-
         ////////// 점수 데이터 추가 //////////
         option.setAttribute("record_slope", feature.record_slope);
         option.setAttribute("record_height", feature.record_height);
@@ -999,8 +960,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
-
-  // 콤보박스 값 변경 시 선택된 지번을 표시
+  // 콤보박스 변경 시 선택된 지번에 대한 정보 표시
   comboBox.addEventListener("change", function () {
     selectedValueDisplay.textContent = comboBox.value;
     selectedValueDisplay2.textContent = comboBox.value.substring(4);
@@ -1031,7 +991,6 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_rate_bojunmount = selectedOption.getAttribute("rate_bojunmount");
     click_F_dist_kyungji = selectedOption.getAttribute("dist_kyungji");
     click_F_rate_city_1 = selectedOption.getAttribute("rate_city_1");
-
     ////////// 점수 데이터 //////////
     click_F_record_slope = selectedOption.getAttribute("record_slope"); // 경사도 점수
     click_F_record_height = selectedOption.getAttribute("record_height"); // 표고 점수
@@ -1050,7 +1009,6 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_record_rate_bojunmount = selectedOption.getAttribute("record_rate_bojunmount");
     click_F_record_dist_kyungji = selectedOption.getAttribute("record_dist_kyungji");
     click_F_record_rate_city_1 = selectedOption.getAttribute("record_rate_city_1");
-
     click_F_value_develop = selectedOption.getAttribute("value_develop");
     click_F_value_conserv = selectedOption.getAttribute("value_conserv");
     click_F_value_comp = selectedOption.getAttribute("value_comp");
@@ -1069,44 +1027,38 @@ document.addEventListener("DOMContentLoaded", function () {
       "dddd01", "dddd02", "dddd03", "dddd04", "dddd05",
       "input2", "input3", "input4"
     ];
-
     // 각 요소의 값을 빈 문자열로 설정
     elementIds.forEach(id => {
       document.getElementById(id).value = "";
     });
-
     // selectLayer 업데이트 및 표시
     makeWFSSource2(click_F_Jibun);
   });
-
-
 
   // 조회 버튼 클릭시 db에 저장된 지표값 표시
   function fetchDataAndDisplay() {
     // document.getElementById("searchData").onclick = () => {
     if (inserted_record_slope[click_F_pnu] === undefined) { // 수정값이 없는 경우 - 즉, 처음 조회하는 경우
       console.log("inserted_tpgrph_hg_code_nm is null for current pnu");
-      elements.aaa01.innerText = click_F_slope; // span, div, p -> innerText
-      elements.aaa02.innerText = click_F_height; // span, div, p -> innerText
-      elements.aaa03.innerText = click_F_dist_gi_str; // span, div, p -> innerText
-      elements.aaa04.innerText = click_F_dist_gong_ntwk; // span, div, p -> innerText
-      elements.bbb01.innerText = Math.round(click_F_rate_city); // span, div, p -> innerText
+      elements.aaa01.innerText = click_F_slope; // span, div, p -> innerText 사용
+      elements.aaa02.innerText = click_F_height;
+      elements.aaa03.innerText = click_F_dist_gi_str;
+      elements.aaa04.innerText = click_F_dist_gong_ntwk;
+      elements.bbb01.innerText = Math.round(click_F_rate_city);
       const selectSum = selectedFeatures.getLength() - 1
-      elements.bbb04.innerText = Math.round(((calculateRateCity_1Sum(selectedFeatures)) / (selectSum)) * 100); // span, div, p -> innerText
-
-      elements.bbb02.innerText = Math.round(click_F_rate_city_touch); // span, div, p -> innerText
-      elements.bbb03.innerText = Math.round(click_F_dist_road_touch); // span, div, p -> innerText
-      elements.ccc01.innerText = click_F_rate_kyungji; // span, div, p -> innerText
-      elements.ccc02.innerText = click_F_rate_saengtae; // span, div, p -> innerText
-      elements.ccc03.innerText = click_F_rate_gongjuck; // span, div, p -> innerText
-      elements.ccc04.innerText = click_F_dist_gongjuck; // span, div, p -> innerText
-      elements.ddd01.innerText = click_F_rate_jdgarea; // span, div, p -> innerText
-      elements.ddd02.innerText = click_F_rate_nongup; // span, div, p -> innerText
-      elements.ddd03.innerText = click_F_rate_limsangdo; // span, div, p -> innerText
-      elements.ddd04.innerText = click_F_rate_bojunmount; // span, div, p -> innerText
-      elements.ddd05.innerText = click_F_dist_kyungji; // span, div, p -> innerText
-
-      // input, textarea, select -> value
+      elements.bbb04.innerText = Math.round(((calculateRateCity_1Sum(selectedFeatures)) / (selectSum)) * 100);
+      elements.bbb02.innerText = Math.round(click_F_rate_city_touch);
+      elements.bbb03.innerText = Math.round(click_F_dist_road_touch);
+      elements.ccc01.innerText = click_F_rate_kyungji;
+      elements.ccc02.innerText = click_F_rate_saengtae;
+      elements.ccc03.innerText = click_F_rate_gongjuck;
+      elements.ccc04.innerText = click_F_dist_gongjuck;
+      elements.ddd01.innerText = click_F_rate_jdgarea;
+      elements.ddd02.innerText = click_F_rate_nongup;
+      elements.ddd03.innerText = click_F_rate_limsangdo;
+      elements.ddd04.innerText = click_F_rate_bojunmount;
+      elements.ddd05.innerText = click_F_dist_kyungji;
+      // input, textarea, select -> .value 사용
       document.getElementById("aaaa01").value = click_F_record_slope;
       document.getElementById("aaaa02").value = click_F_record_height;
       document.getElementById("aaaa03").value = click_F_record_dist_gi_str;
@@ -1128,8 +1080,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("input3").value = click_F_value_conserv;
       document.getElementById("input4").value = click_F_value_comp;
 
-    } else { // insertData로 수정한 값이 있는 경우
-      // span, div, p -> innerText
+    } else { // insertData로 입력,수정한 값이 있는 경우
       aaa01.innerText = click_F_slope;
       aaa02.innerText = click_F_height;
       aaa03.innerText = click_F_dist_gi_str;
@@ -1169,11 +1120,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("input4").value = inserted_value_comp[click_F_pnu];
     }
 
-    // // 합산 함수 호출
-    // calculateDevVal();
-    // calculateConVal();
-
-    // 팝업 표시
+    // 기본 정보 팝업
     const selectedFeature = vectorSource
       .getFeatures()
       .find((feature) => feature.get("jibun") === click_F_Jibun);
@@ -1189,24 +1136,19 @@ document.addEventListener("DOMContentLoaded", function () {
         "토지형태: " + click_F_land_shape;
       document.getElementById("info05").innerHTML =
         "도로인접면: " + click_F_road_side_code_nm;
-
-
       if (centers2[emdid]) {
         const selectedCenter = centers2[emdid];
         overlay.setPosition(selectedCenter);
-      } else {
-        // console.log("selectedCenter: ", selectedCenter);
-        console.log("Selected center not found in centers object");
       }
     }
     overlay2.setPosition(undefined);
   };
 
+  // 조회 버튼 클릭 이벤트
   document.getElementById("searchData").onclick = fetchDataAndDisplay;
 
-  // 입력 버튼 클릭시 작성한 지표값 db에 저장
+  // 입력 버튼 클릭시 이벤트... 작성한 지표값 jsp로 전송
   document.getElementById("insertData").onclick = () => {
-
     // 개발적성 선택지표와 보전적성 선택지표 각각의 선택 개수 세기
     const selectedDevIndicators = document.querySelectorAll(".dev-checkbox:checked").length;
     const selectedConIndicators = document.querySelectorAll(".con-checkbox:checked").length;
@@ -1214,7 +1156,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (selectedDevIndicators < 2 || selectedConIndicators < 2) {
       // 개발적성 또는 보전적성 선택지표가 2개 미만인 경우 경고창 표시
       alert("개발적성 및 보전적성의 선택지표를 각각 두 개 선택해야 합니다.");
-      return; // 진행 중단
+      return;
     }
 
     const elementIds = [
@@ -1252,7 +1194,6 @@ document.addEventListener("DOMContentLoaded", function () {
     inserted_value_conserv[click_F_pnu] = values.input3;
     inserted_value_comp[click_F_pnu] = values.input4;
 
-
     // 선택된 지번과 레이어 정보 저장
     localStorage.setItem("click_F_pnu", click_F_pnu);
     localStorage.setItem("inserted_tpgrph_hg_code_nm", JSON.stringify(inserted_tpgrph_hg_code_nm));
@@ -1280,24 +1221,24 @@ document.addEventListener("DOMContentLoaded", function () {
     sendData(click_F_pnu, values.aaaa01, values.aaaa02, values.aaaa03, values.aaaa04, values.bbbb01, values.bbbb04, values.bbbb02, values.bbbb03, values.cccc01, values.cccc02, values.cccc03, values.cccc04, values.dddd01, values.dddd02, values.dddd03, values.dddd04, values.dddd05, values.input2, values.input3, values.input4);
   };
 
-  // 서버로 데이터 전송
+  // jsp로 데이터 전송
   function sendData(click_F_pnu, inserted_record_slope, inserted_record_height, inserted_record_dist_gi_str, inserted_record_dist_gong_ntwk, inserted_record_rate_city, inserted_record_rate_city_1, inserted_record_rate_city_touch, inserted_record_dist_road, inserted_record_rate_kyungji, inserted_record_rate_saengtae, inserted_record_rate_gongjuck, inserted_record_dist_gongjuck, inserted_record_rate_jdgarea, inserted_record_rate_nongup, inserted_record_rate_limsangdo, inserted_record_rate_bojunmount, inserted_record_dist_kyungji, inserted_value_develop, inserted_value_conserv, inserted_value_comp) {
 
     var url =
       `./fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_1=${encodeURIComponent(inserted_record_rate_city_1)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
     fetch(url, {
-      method: "POST", // 서버와의 데이터 전송 방식을 지정합니다 (GET 또는 POST)
+      method: "POST", // 서버와의 데이터 전송 방식을 지정 (GET 또는 POST)
     })
       .then((response) => response.text())
       .then((data) => {
         console.log("Response from server:", data);
-        // 서버로부터의 응답을 처리합니다
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }
 
+  // 읍면동 선택 돌아가기 버튼 클릭 이벤트
   document.getElementById("backButton").onclick = () => {
     // 슬라이드 애니메이션을 위해 기존 클래스 제거
     document.getElementById("menu1").classList.remove("slide-out", "slide-in");
@@ -1340,8 +1281,6 @@ document.addEventListener("DOMContentLoaded", function () {
     selectedEmdids = [];
   };
 
-
-
   // aaaa01 ~ aaaa04, bbbb01 ~ bbbb05의 값을 합산하여 devVal에 설정하는 함수
   function calculateDevVal() {
     // 필수 지표 값 가져오기
@@ -1357,7 +1296,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return parseFloat(document.getElementById(valueId).value) || 0;
       }
     );
-
     const devVal = requiredDevValues
       .concat(selectedDevValues)
       .reduce((acc, val) => acc + val, 0);
@@ -1382,7 +1320,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return parseFloat(document.getElementById(valueId).value) || 0;
       }
     );
-
     const conVal = requiredConValues
       .concat(selectedConValues)
       .reduce((acc, val) => acc + val, 0);
@@ -1414,32 +1351,26 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(id).addEventListener("input", calculateConVal);
   });
 
-  // 체크박스 변경 이벤트 리스너 추가
+  // 체크박스 변경 이벤트 리스너
   document.querySelectorAll(".dev-checkbox").forEach((checkbox) => {
     checkbox.addEventListener("change", calculateDevVal);
   });
-
   document.querySelectorAll(".con-checkbox").forEach((checkbox) => {
     checkbox.addEventListener("change", calculateConVal);
   });
-
 
   // 삭제 버튼 클릭시 경고창 표시 -> 확인 취소 구분
   document.getElementById('deleteData').addEventListener('click', function () {
     const confirmation = confirm('점수를 삭제하시겠습니까?');
     if (confirmation) { // 확인 버튼 눌렀을때
-
-      console.log("inserted_tpgrph_hg_code_nm is not null for current pnu");
-
-
-
       localStorage.setItem("click_F_pnu", click_F_pnu);
       deleteData(click_F_pnu);
     }
   });
 
+  // 삭제 요청 함수
   function deleteData(click_F_pnu) {
-    console.log("점수 삭제 완료");
+    // console.log("점수 삭제 완료");
     var url =
       `./deleteData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}`;
     fetch(url, {
@@ -1456,7 +1387,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "dddd01", "dddd02", "dddd03", "dddd04", "dddd05"
         ];
         elementIds.forEach(id => {
-          document.getElementById(id).value = zero;
+          document.getElementById(id).value = zero; // 삭제 즉시 화면에 0으로 보여줌
         });
       })
       .catch((error) => {
@@ -1481,7 +1412,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 선택지표에 대한 체크박스 선택 제한
+  // 선택지표에 대한 체크박스 선택 제한.. 2개
   limitCheckboxSelection('dev-checkbox', 2);
   limitCheckboxSelection('con-checkbox', 2);
   limitCheckboxSelection('dev-checkbox2', 2);
@@ -1534,7 +1465,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ;
   }
 
-  // 데이터를 수집하는 함수
+  // 한글파일에 입력할 데이터를 수집하는 함수
   function collectData() {
     const data = {
       jibun: document.getElementById('selectedValueDisplay2').textContent,
@@ -1580,7 +1511,6 @@ document.addEventListener("DOMContentLoaded", function () {
       record_dist_kyungji: record_dist_kyungji,
       record_rate_city_1: record_rate_city_1,
     };
-
     return data;
   }
 
@@ -1593,9 +1523,9 @@ document.addEventListener("DOMContentLoaded", function () {
     link.click();
   }
 
-  // HWPX 파일 생성 버튼 클릭 이벤트 추가
+  // HWPX 파일 생성 버튼 클릭 이벤트
   document.getElementById('generateHWPX').addEventListener('click', () => {
-    fetch('template.htm')
+    fetch('template.htm') // 준비된 템플릿으로 데이터 전송
       .then(response => response.text())
       .then(template => {
         const data = collectData();
@@ -1604,6 +1534,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 
+  // 읍면동 선택 후 확인 버튼 클릭 이벤트
   document.getElementById("confirmSelection").addEventListener("click", function () {
     if (selectedEmdids.length > 0) {
       // selectedEmdids가 배열인지 확인하고 변환
@@ -1634,8 +1565,9 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("먼저 읍면동을 선택하세요.");
     }
   });
-  let selectedEmdids = [];
 
+  // 읍면동 선택 이벤트
+  let selectedEmdids = [];
   for (let i = 0; i <= 9; i++) {
     const id = i < 10 ? "0" + i : i.toString();
     const liElement = document.getElementById(`emd${id}-item`);
@@ -1657,21 +1589,20 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
+  // 폴리곤 팝업 내 체크박스 선택 제한 함수
   function validateDevCheckboxes2() {
     const devCheckboxes2 = document.querySelectorAll('.dev-checkbox2');
     const checkedCount = Array.from(devCheckboxes2).filter(checkbox => checkbox.checked).length;
     return checkedCount === 2;
   }
-
   function validateConCheckboxes2() {
     const conCheckboxes2 = document.querySelectorAll('.con-checkbox2');
     const checkedCount = Array.from(conCheckboxes2).filter(checkbox => checkbox.checked).length;
     return checkedCount === 2;
   }
-
+  // 체크박스가 있는 값 더하기
   function sumPolyDevdata() {
     let sum = 0;
-    // 체크박스가 있는 값 더하기
     for (let i = 1; i <= 7; i++) {
       const checkbox = document.getElementById(`check_polyDevdata0${i}`);
       const input = document.getElementById(`polyDevdata0${i}`);
@@ -1681,10 +1612,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById('polydata03').value = sum;
   }
-
   function sumPolyConvdata() {
     let sum = 0;
-    // 체크박스가 있는 값 더하기
     for (let i = 1; i <= 9; i++) {
       const checkbox = document.getElementById(`check_polyConvdata0${i}`);
       const input = document.getElementById(`polyConvdata0${i}`);
@@ -1694,32 +1623,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById('polydata04').value = sum;
   }
-
+  // 종합적성값 계산
   function sumTotal() {
     const polydata03 = parseFloat(document.getElementById('polydata03').value) || 0;
     const polydata04 = parseFloat(document.getElementById('polydata04').value) || 0;
     document.getElementById('polydata05').value = polydata03 + polydata04;
   }
 
+  // 두개씩 선택 안하면 입력 수정 버튼 비활성화 함수
   function validateCheckboxes2() {
     const isValidDev2 = validateDevCheckboxes2();
     const isValidCon2 = validateConCheckboxes2();
-
     document.getElementById("insertPoly").disabled = !(isValidDev2 && isValidCon2);
     document.getElementById("updatePoly").disabled = !(isValidDev2 && isValidCon2);
-
     if (isValidDev2) {
       sumPolyDevdata();
     } else {
       document.getElementById('polydata03').value = '';
     }
-
     if (isValidCon2) {
       sumPolyConvdata();
     } else {
       document.getElementById('polydata04').value = '';
     }
-
     sumTotal();
   }
 
@@ -1747,7 +1673,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// 추가된 코드
+// 추가 레이어 파트... wms, wfs 비교 필요
 const layerUrls = {
   bu_1km:
     "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_1km&outputFormat=application/json",
@@ -1771,7 +1697,7 @@ const layerUrls = {
 
 const mapLayers = {}; // 각 레이어 상태를 저장하기 위한 객체
 
-// 레이어 토글 함수
+// 추가 레이어 토글 함수
 function toggleLayer(layerName) {
   console.log(`토글 레이어 호출됨: ${layerName}`);
   if (mapLayers[layerName]) {
@@ -1802,20 +1728,16 @@ function toggleLayer(layerName) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // console.log("DOM 로드 완료");
-
   // 트리거 영역과 menu3-container 요소를 선택
   const triggerArea = document.getElementById("trigger-area");
   const menu3Container = document.querySelector(".menu3-container");
   let hideTimeout;
-
   // 마우스가 트리거 영역에 들어오면 menu3-container를 보이게 함
   triggerArea.addEventListener("mouseenter", () => {
     clearTimeout(hideTimeout);
     menu3Container.style.display = "flex";
     console.log("트리거 영역에 마우스 진입");
   });
-
   // 마우스가 트리거 영역을 벗어나면 일정 시간 후 menu3-container를 숨김
   triggerArea.addEventListener("mouseleave", () => {
     hideTimeout = setTimeout(() => {
@@ -1823,7 +1745,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("트리거 영역에서 마우스 벗어남");
     }, 3000); // 3초 후에 숨김
   });
-
   // 이벤트 위임을 사용하여 menu3-container에 클릭 이벤트 리스너를 등록
   menu3Container.addEventListener("click", (event) => {
     if (event.target.classList.contains("menu3-label")) {
@@ -1832,26 +1753,40 @@ document.addEventListener("DOMContentLoaded", function () {
       toggleLayer(layerName);
     }
   });
-  const mapArea = document.getElementById("maparea");
+  // const mapArea = document.getElementById("maparea");
   const legend = document.getElementById("legend");
   const showResultsBtn = document.getElementById("showOnMap");
 
   function updateLegendPosition() {
-    const rect = mapArea.getBoundingClientRect();
+    // const rect = mapArea.getBoundingClientRect();
     legend.style.bottom = '10px'; // maparea의 하단에서 10px 위
     legend.style.left = '10px';   // maparea의 좌측에서 10px 오른쪽
   }
-
   // 지도로 결과보기 버튼 클릭 시 범례 표시
   showResultsBtn.addEventListener("click", function () {
-    legend.style.display = 'block';
+    legend.style.display = 'flex';
     updateLegendPosition();
   });
-
+  // 읍면동 선택 버튼 클릭 시 범례 숨기기
+  backButton.addEventListener("click", function () {
+    legend.style.display = 'none';
+  });
   // 창 크기 변경 시 위치 업데이트
   window.addEventListener("resize", updateLegendPosition);
 });
 
-
+// 도움말 버튼 클릭 이벤트
+document.getElementById('help-btn').onclick = function (event) {
+  var helpPopup = document.getElementById('help-popup');
+  // 팝업의 디스플레이를 설정해 실제 너비를 계산
+  helpPopup.style.display = 'block';
+  var rect = event.target.getBoundingClientRect();
+  helpPopup.style.top = rect.bottom + 'px';
+  helpPopup.style.left = (rect.right - helpPopup.offsetWidth) + 'px';
+};
+// 도움말 팝업 닫기 이벤트
+document.getElementById('close-help-popup').onclick = function () {
+  document.getElementById('help-popup').style.display = 'none';
+};
 
 

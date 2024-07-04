@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <meta charset="UTF-8">
   <title>무안군 토지적성평가 프로그램</title>
   <script type="text/javascript">
-    // 페이지 로드 시 세션 확인
+    // 페이지 로드 시 로그인 여부 확인
     window.onload = function () {
-      // 세션 확인을 위한 요청을 보냄
       fetch('check_session.jsp')
         .then(response => response.text())
         .then(data => {
@@ -16,9 +13,9 @@
             window.location.href = 'login.html';
           }
         })
-        .catch(error => {
+        .catch(error => { // 오류 발생 시 로그인 페이지로 이동
           console.error('Error:', error);
-          window.location.href = 'login.html'; // 오류 발생 시 로그인 페이지로 이동
+          window.location.href = 'login.html'; 
         });
     };
   </script>
@@ -29,24 +26,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
-
 </head>
-
 <body>
   <div class="container">
-    <!-- <div id="sidebar" class="sidebar">
-      <button id="toggleSidebar">▶</button>
-    </div> -->
     <div id="header">
-      <div class="topDecal"></div>
+      <div class="topDecal"></div> <!-- 로고 클릭시 홈으로 가도록 -->
       <a href=""><img style="height: 40px;" src="./lxLogo2.png" onclick="location.reload();" alt="로고"
           style="vertical-align: middle; margin-right: 10px;">
       </a>
       <div id="user-info" style="float: right; margin-right: 20px;">
-        <span id="username"></span> <span id="welcome-text">회원님 반갑습니다.</span> <a href="./login.html"
-          id="logout">로그아웃</a>
-        <button id="help-btn"
-          style="height: 40px; vertical-align: middle; border: none; background: none; cursor: pointer; margin-left: 10px;">
+        <span id="name"></span> <span id="welcome-text">반갑습니다.</span> 
+        <a href="logout.jsp" id="logout">로그아웃</a>
+        <button id="help-btn"> <!-- 도움말 버튼 -->
           <img src="https://img.icons8.com/ios-filled/50/000000/help.png" alt="Help" style="width: 20px; height: 20px;">
         </button>
       </div>
@@ -56,7 +47,6 @@
       <div id="menu1" style="text-align: center;">
         <h3> 읍면동 선택</h3>
         <ul class="emdList">
-          <!-- &middot;은 글자 중간에 가운데 점을 찍는 html 특수문자  -->
           <li id="emd00-item"> <span id="emd00">전체 선택</span></li>
           <li id="emd01-item"> <span id="emd01">망운면</span></li>
           <li id="emd02-item"> <span id="emd02">몽탄면</span></li>
@@ -68,20 +58,20 @@
           <li id="emd08-item"> <span id="emd08">해제면</span></li>
           <li id="emd09-item"> <span id="emd09">현경면</span></li>
         </ul>
-        <button id="confirmSelection" style="width: 100px; height: 25px; font-size: 15px;">확인</button>
-      </div> <!-- menu1 닫힘 -->
+        <button id="confirmSelection" style="width: 100px; height: 30px; font-size: 15px;">확인</button>
+      </div> <!-- menu1 끝 -->
       <div id="menu2" class="hidden">
-        <div class="contents1">
+        <div class="contents1"> <!-- menu2 상단 부분 -->
           <h3>기본 정보 및 지표 조회</h3>
           <div>
-            <select id="selectedRegions" style="width: 200px; height: 25px;font-size: 15px;">
-            </select> <button style="width: 70px; height: 25px; font-size: 15px;" id="searchData">조회</button> <button
-              style="width: 100px; font-size: 15px;" id="backButton">읍면동 선택</button><br>
+            <select id="selectedRegions" style="width: 200px; height: 30px;font-size: 15px;">
+            </select> <button style="width: 70px; height: 30px; font-size: 15px;" id="searchData">조회</button> <button
+              style="width: 100px; height: 30px; font-size: 15px;" id="backButton">읍면동 선택</button><br>
             <div style="margin-top: 10px; font-size: 15px; color: rgb(150, 24, 24);">
               선택된 지번: <span id="selectedValueDisplay"></span>
             </div>
           </div>
-          <table class="dataTable">
+          <table class="dataTable"> <!-- menu2 지표, 점수 부분 -->
             <tr>
               <th colspan=2>개 발 적 성 </td>
               <td colspan=1 width="50" style="text-align: center;">지표값</td>
@@ -96,12 +86,13 @@
                 <label for="aaa04">공공편익시설과의거리(km)</label>
               </td>
               <td style="text-align: center; font-size: 14.5px;">
+                <!-- 조회한 지표값 출력 부분 -->
                 <span id="aaa01" class="height-span"></span><br>
                 <span id="aaa02" class="height-span"></span><br>
                 <span id="aaa03" class="height-span"></span><br>
                 <span id="aaa04" class="height-span"></span>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center;"> <!-- 점수 입력 부분 -->
                 <input style="width:40px; height:17px; font-size: 14.5px; " type="text" id="aaaa01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa02"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="aaaa03"><br>
@@ -121,12 +112,13 @@
                 <label for="bbb03">도로와의거리(m)</label>
               </td>
               <td style="text-align: center; font-size: 14.5px;">
+                <!-- 조회한 지표값 출력 부분 -->
                 <span id="bbb01" class="height-span"></span><br>
                 <span id="bbb04" class="height-span"></span><br>
                 <span id="bbb02" class="height-span"></span><br>
                 <span id="bbb03" class="height-span"></span>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center;"> <!-- 점수 입력 부분 -->
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb04"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="bbbb02"><br>
@@ -156,12 +148,13 @@
                 <label for="ccc04">공적규제지역과의거리(km)</label>
               </td>
               <td style="text-align: center; font-size: 14.5px;">
+                <!-- 조회한 지표값 출력 부분 -->
                 <span id="ccc01" class="height-span"></span><br>
                 <span id="ccc02" class="height-span"></span><br>
                 <span id="ccc03" class="height-span"></span><br>
                 <span id="ccc04" class="height-span"></span>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center;"> <!-- 점수 입력 부분 -->
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc02"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="cccc03"><br>
@@ -183,13 +176,14 @@
                 <label for="ddd05">경지정리지역과의거리(m)</label>
               </td>
               <td style="text-align: center; font-size: 14.5px;">
+                <!-- 조회한 지표값 출력 부분 -->
                 <span id="ddd01" class="height-span"></span><br>
                 <span id="ddd02" class="height-span"></span><br>
                 <span id="ddd03" class="height-span"></span><br>
                 <span id="ddd04" class="height-span"></span><br>
                 <span id="ddd05" class="height-span"></span>
               </td>
-              <td style="text-align: center;">
+              <td style="text-align: center;"> <!-- 점수 입력 부분 -->
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd01"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd02"><br>
                 <input style="width:40px; height:17px; font-size: 14.5px;" type="text" id="dddd03"><br>
@@ -205,14 +199,11 @@
               </td>
             </tr>
           </table>
-
-
         </div>
         <a href="" id="fetchData_link" target="_blank">
           <!-- <button>테스트</button> -->
         </a>
         <div>
-
           <div id="resultTable">
             <table class="dataTable3">
               <th colspan="4">토지적성평가 결과</td>
@@ -230,9 +221,9 @@
                 </tr>
             </table>
             <div class="center-btn">
-              <button style="width: 100px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및
+              <button style="width: 120px; font-size: 15px;" id="insertData" onclick="sendData();">입력 및
                 수정</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button
-                style="width: 100px; font-size: 15px;" id="deleteData">삭제</button>
+                style="width: 120px; font-size: 15px;" id="deleteData">삭제</button>
             </div>
             <br>
             <div class="center-btn">
@@ -240,8 +231,6 @@
                 보기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <button id="generateHWPX" style="width: 120px; font-size: 15px;">비밀</button>
             </div>
-
-
           </div>
         </div>
       </div> <!-- menu2 닫힘 -->
@@ -249,12 +238,12 @@
         <div id="map" class="map">
           <div id="info"></div>
         </div>
-        <!-- 지도 유형 전환 버튼 추가 -->
+        <!-- 일반, 위성지도 전환 버튼 -->
         <div id="map-switcher" style="position: absolute; bottom: 30px; right: 30px; z-index: 1000;">
           <button style="width: 100px; font-size: 17px;" id="switch-to-osm">일반지도</button>
           <button style="width: 100px; font-size: 17px;" id="switch-to-satellite">위성지도</button>
-        </div>
-        <!-- 추가 레이어 버튼 -->
+        </div><!-- 일반, 위성지도 전환 버튼 닫힘 -->
+        <!-- 우상단 레이어 목록 -->
         <div id="trigger-area">Layer</div>
         <div style="text-align: center;" class="menu3-container">
           <div id="menu3-1-label" class="menu3-label" data-layer="bu_1km">도시개발_1km</div>
@@ -266,27 +255,36 @@
           <div id="menu3-7-label" class="menu3-label" data-layer="industry_complex">산업단지</div>
           <div id="menu3-8-label" class="menu3-label" data-layer="industry_region">공업지역</div>
           <div id="menu3-9-label" class="menu3-label" data-layer="residential_area">택지예정지구</div>
-        </div>
-        <div id="legend"> <!-- 범례 -->
-          <div><span class="legend-color" style="background-color: rgba(0, 78, 0, 1.0);"></span><span>-360 이하</span>
+        </div> <!-- 우상단 레이어 목록 닫힘 -->
+        <!-- 범례 -->
+        <div id="legend" style="display: none; align-items: center;"> 
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="legend-color"
+              style="background-color: rgba(0, 78, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
+            <div class="legend-color"
+              style="background-color: rgba(0, 200, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
+            <div class="legend-color"
+              style="background-color: rgba(255, 211, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
+            <div class="legend-color"
+              style="background-color: rgba(255, 75, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
+            <div class="legend-color"
+              style="background-color: rgba(180, 0, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
           </div>
-          <div><span class="legend-color" style="background-color: rgba(0, 200, 0, 1.0);"></span><span>-360 ~
-              -120</span></div>
-          <div><span class="legend-color" style="background-color: rgba(255, 211, 0, 1.0);"></span><span>-120 ~
-              120</span></div>
-          <div><span class="legend-color" style="background-color: rgba(255, 75, 0, 1.0);"></span><span>120 ~ 360</span>
+          <div style="display: flex; flex-direction: column; align-items: center; margin-left: 10px;">
+            <div style="font-weight: bold; margin-bottom: 5px;">보전적성 강함</div>
+            <div class="double-arrow" style="margin-bottom: 5px;"></div>
+            <div style="font-weight: bold;">개발적성 강함</div>
           </div>
-          <div><span class="legend-color" style="background-color: rgba(180, 0, 0, 1.0);"></span><span>360 이상</span>
-          </div>
-        </div>
+        </div> <!-- 범례 닫힘 -->
       </div> <!-- mapArea 닫힘 -->
     </div> <!-- contents 닫힘 -->
   </div> <!-- container 닫힘 -->
+  <!-- 폴리곤 정보 나타내는 팝업 -->
   <div id="polygonPopup">
     <h3 id="polygon-info">폴리곤 정보</h3>
-    <p><span id="polyinfo01"></span></p>
-    <p><span id="polyinfo02"></span></p>
-    <div class="table-container">
+    <p><span id="polyinfo01"></span></p> <!-- 폴리곤 면적 -->
+    <p><span id="polyinfo02"></span></p> <!-- 폴리곤 둘레 -->
+    <div class="table-container"> <!-- 폴리곤 점수 입력 테이블 -->
       <table class="info-table">
         <tr>
           <th colspan="2">개발적성</th>
@@ -386,49 +384,30 @@
           <td><input class="info-input" type="text" id="polydata05"></td>
         </tr>
       </table>
-    </div>
-    <div class="center-btn fixed-buttons">
+    </div><!-- 폴리곤 점수 입력 테이블 닫힘 -->
+    <div class="center-btn fixed-buttons"> <!-- 점수 jsp 전송 버튼 -->
       <button style="width: 50px; font-size: 15px;" id="insertPoly">입력</button>
       <button style="width: 50px; font-size: 15px;" id="updatePoly">수정</button>
       <button style="width: 50px; font-size: 15px;" id="deletePoly">삭제</button>
-    </div>
-  </div>
-  <div id="help-popup">
+    </div> <!-- 점수 jsp 전송 버튼 닫힘 -->
+  </div> <!-- 폴리곤 정보 나타내는 팝업 닫힘 -->
+  <div id="help-popup"> <!-- 도움말 팝업 -->
     <span class="close-btn" id="close-help-popup">&times;</span>
-    <h3>도움말</h3>
-    <p>여기에 도움말 내용을 작성하세요.</p>
-  </div>
-  <div id="popup"> <!-- 팝업 모양 정의 -->
+    <h3>관련 페이지</h3>
+    <li><a href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%ED%86%A0%EC%A7%80%EC%9D%98%EC%A0%81%EC%84%B1%ED%8F%89%EA%B0%80%EC%97%90%EA%B4%80%ED%95%9C%EC%A7%80%EC%B9%A8" target="_blank">관계 법령</a></li>
+    <li><a href="https://lsa.lx.or.kr/standardprogram.do" target="_blank">about 표준프로그램</a></li>
+  </div> <!-- 도움말 팝업 닫힘 -->
+  <div id="popup"> <!-- 조회시 기본정보 팝업 -->
     <h3 id="info-title"></h3><br>
     <li> <span id="info01"></span></li>
     <li> <span id="info02"></span></li>
     <li> <span id="info03"></span></li>
     <li> <span id="info04"></span></li>
     <li> <span id="info05"></span></li>
-  </div>
-
+  </div> <!-- 조회시 기본정보 팝업 닫힘 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.6.1/jsts.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
-  <script>
-    // 도움말 버튼 클릭 이벤트
-    document.getElementById('help-btn').onclick = function (event) {
-      var helpPopup = document.getElementById('help-popup');
-      // 팝업의 디스플레이를 설정해 실제 너비를 계산
-      helpPopup.style.display = 'block';
-      var rect = event.target.getBoundingClientRect();
-      helpPopup.style.top = rect.bottom + 'px';
-      helpPopup.style.left = (rect.right - helpPopup.offsetWidth) + 'px';
-    };
-
-    // 도움말 팝업 닫기 이벤트
-    document.getElementById('close-help-popup').onclick = function () {
-      document.getElementById('help-popup').style.display = 'none';
-    };
-
-
-  </script>
   <script type="module" src="main.js"></script>
 </body>
-
 </html>

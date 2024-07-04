@@ -68,9 +68,7 @@ try
 	"value_conserv = "+ 0 + ", " +
 	"value_comp = "+ 0 + " " +
     "where pnu = '" + selected_pnu + "'";
-
 	out.println("<br><br>query = " + query + "<br><br>");
-	// rs = stmt.executeQuery(query);
 	int rs = stmt.executeUpdate(query);
 
 	String query2 = "select * from combined_muan where pnu = '" + selected_pnu+"'";
@@ -78,7 +76,6 @@ try
 	rs2 = stmt.executeQuery(query2);
 
 	if (rs2.next()) {
-		
 		String record_slope = rs2.getString("record_slope"); record_slope = checkNull(record_slope);
 		String record_height = rs2.getString("record_height"); record_height = checkNull(record_height);
 		String record_dist_gi_str = rs2.getString("record_dist_gi_str"); record_dist_gi_str = checkNull(record_dist_gi_str);
