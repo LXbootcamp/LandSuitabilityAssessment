@@ -4,6 +4,10 @@
 <%@ page import="java.math.BigInteger" %>
 <!DOCTYPE html>
 <html>
+<%
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html; charset=UTF-8");
+%>
 <head>
     <meta charset="UTF-8">
     <title>회원가입 처리</title>
@@ -28,8 +32,8 @@
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
         String name = request.getParameter("name");
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
+        out.print("<br><br>name = " + name + "<br><br>");
+
         
         // SHA-256을 사용한 비밀번호 해싱
         String hashedPassword = null;

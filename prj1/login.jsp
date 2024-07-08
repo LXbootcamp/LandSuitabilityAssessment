@@ -4,6 +4,10 @@
 <%@ page import="java.math.BigInteger" %>
 <!DOCTYPE html>
 <html>
+<%
+    request.setCharacterEncoding("UTF-8");
+    response.setContentType("text/html; charset=UTF-8");
+%>
 <head>
     <meta charset="UTF-8">
     <title>로그인 처리</title>
@@ -20,8 +24,6 @@
         // Get the form data
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
         
         // Hash the password using SHA-256
         String hashedPassword = null;
