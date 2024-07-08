@@ -20,15 +20,9 @@ body {
   height: 100%;
 }
 
-#header {
-  height: 45px;
-  background: #fff;
-  border-bottom: 1px solid #d4d4d4;
-}
-
 #contents {
   position: absolute;
-  top: 46px;
+  top: 65px;
   bottom: 20px;
   left: 0;
   right: 0;
@@ -538,6 +532,47 @@ button:hover {
   height: 20px;
   margin-bottom: 5px;
 }
+
+/* #header {
+  height: 45px;
+  background: #fff;
+  border-bottom: 1px solid #d4d4d4;
+} */
+
+#header {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 가운데 정렬 */
+  padding: 10px;
+  padding-right: 150px; /* user-info와 겹치지 않도록 여유 공간 추가 */
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+#user-info {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 160px; /* 우측에 고정 */
+}
+
+#user-info img {
+  width: 20px;
+  height: 20px;
+}
+
+#user-info a,
+#user-info button {
+  margin-left: 10px;
+}
+
+
+
 
 /* 한글파일 부분 */
 .WordSection1 {

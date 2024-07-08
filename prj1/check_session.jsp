@@ -2,9 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.*, javax.servlet.*" %>
 <%
+    String name = (String) session.getAttribute("name");
     session = request.getSession(false);
     if (session != null && session.getAttribute("loggedIn") != null) {
-        out.print("loggedIn");
+        out.print(name);
     } else {
         out.print("notLoggedIn");
     }

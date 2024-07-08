@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>무안군 토지적성평가 프로그램</title>
@@ -9,15 +10,18 @@
       fetch('check_session.jsp')
         .then(response => response.text())
         .then(data => {
-          if (data.trim() !== 'loggedIn') {
+          if (data.trim() === 'notLoggedIn') {
             window.location.href = 'login.html';
+          } else {
+            document.getElementById('name').innerText = data.substring(4) + '님 반갑습니다.';
           }
         })
-        .catch(error => { // 오류 발생 시 로그인 페이지로 이동
+        .catch(error => {
           console.error('Error:', error);
-          window.location.href = 'login.html'; 
+          window.location.href = 'login.html';
         });
     };
+    
   </script>
   <link rel="stylesheet" href="node_modules/ol/ol.css">
   <!-- 구글 링크 붙여넣기 -->
@@ -27,19 +31,18 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="https://lx.or.kr/images/common/favicon.ico" />
 </head>
+
 <body>
   <div class="container">
     <div id="header">
-      <div class="topDecal"></div> <!-- 로고 클릭시 홈으로 가도록 -->
-      <a href=""><img style="height: 40px;" src="./lxLogo2.png" onclick="location.reload();" alt="로고"
-          style="vertical-align: middle; margin-right: 10px;">
-      </a>
-      <div id="user-info" style="float: right; margin-right: 20px;">
-        <span id="name"></span> <span id="welcome-text">반갑습니다.</span> 
+      <div class="topDecal"> <!-- 로고 클릭시 홈으로 가도록 -->
+        <a href=""><img style="height: 40px; vertical-align: middle; margin-right: 10px;" src="./lxLogo2.png"
+            onclick="location.reload();" alt="로고"></a>
+      </div>
+      <div id="user-info">
+        <span id="name"></span>
         <a href="logout.jsp" id="logout">로그아웃</a>
-        <button id="help-btn"> <!-- 도움말 버튼 -->
-          <img src="https://img.icons8.com/ios-filled/50/000000/help.png" alt="Help" style="width: 20px; height: 20px;">
-        </button>
+        <button id="help-btn"><img src="https://img.icons8.com/ios-filled/50/000000/help.png" alt="Help"></button>
       </div>
     </div> <!-- header 닫힘 -->
     <!-- 컨텐츠 부분을 메뉴 1, 메뉴 2, 지도로 3 부분으로 나눌 예정 -->
@@ -257,7 +260,7 @@
           <div id="menu3-9-label" class="menu3-label" data-layer="residential_area">택지예정지구</div>
         </div> <!-- 우상단 레이어 목록 닫힘 -->
         <!-- 범례 -->
-        <div id="legend" style="display: none; align-items: center;"> 
+        <div id="legend" style="display: none; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="legend-color"
               style="background-color: rgba(0, 78, 0, 1.0); height: 20px; width: 20px; margin-bottom: 5px;"></div>
@@ -394,7 +397,9 @@
   <div id="help-popup"> <!-- 도움말 팝업 -->
     <span class="close-btn" id="close-help-popup">&times;</span>
     <h3>관련 페이지</h3>
-    <li><a href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%ED%86%A0%EC%A7%80%EC%9D%98%EC%A0%81%EC%84%B1%ED%8F%89%EA%B0%80%EC%97%90%EA%B4%80%ED%95%9C%EC%A7%80%EC%B9%A8" target="_blank">관계 법령</a></li>
+    <li><a
+        href="https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%ED%86%A0%EC%A7%80%EC%9D%98%EC%A0%81%EC%84%B1%ED%8F%89%EA%B0%80%EC%97%90%EA%B4%80%ED%95%9C%EC%A7%80%EC%B9%A8"
+        target="_blank">관계 법령</a></li>
     <li><a href="https://lsa.lx.or.kr/standardprogram.do" target="_blank">about 표준프로그램</a></li>
   </div> <!-- 도움말 팝업 닫힘 -->
   <div id="popup"> <!-- 조회시 기본정보 팝업 -->
@@ -410,4 +415,5 @@
   <script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
   <script type="module" src="main.js"></script>
 </body>
+
 </html>

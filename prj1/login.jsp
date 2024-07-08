@@ -55,7 +55,9 @@
             String index = rs.getString("index");
             String name = rs.getString("name");
             // HttpSession session = request.getSession();
+            session.setAttribute("name", name);
             session.setAttribute("loggedIn", true);
+            
             if (index.equals("0")) { // 인덱스가 0이면 로그인 불가... 관리자가 1로 바꿔줘야 함
                 out.println("<script>showAlert('관리자의 승인이 필요합니다.');</script>");
             } else {
