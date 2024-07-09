@@ -10,22 +10,32 @@
 %>
 <head>
     <meta charset="UTF-8">
-    <title>로그인 처리</title>
-    <script type="text/javascript">
-        function showAlert(message) {
+    <title>회원가입 처리</title>
+     <script type="text/javascript">
+        function showAlert(message, isSuccess) {
             alert(message);
-            history.back(); // 로그인 페이지로 되돌아가기
+            if(isSuccess) {
+                history.back();
+                location.href = "../login.html";
+            } else {
+                history.back();
+            }
+            
         }
     </script>
 </head>
 <body>
-    <h2>로그인 결과</h2>
+    <h2>회원가입 결과</h2>
     <%
         // Get the form data
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String phone = request.getParameter("phone");
+        String name = request.getParameter("name");
+        out.print("<br><br>name = " + name + "<br><br>");
+
         
-        // Hash the password using SHA-256
+        // SHA-256을 사용한 비밀번호 해싱
         String hashedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -42,7 +52,6 @@
     String pwd = "tiger";
     Connection con = null;
     Statement stmt = null;
-    ResultSet rs = null;
     try{
         // JDBC 읽어오기
 	    Class.forName("org.postgresql.Driver");
@@ -50,33 +59,21 @@
 	    con = DriverManager.getConnection(url, user, pwd);
 	    // 쿼리 준비
 	    stmt = con.createStatement();    
-        String query = "select * from profile where username = '" + username + "' and password = '" + hashedPassword + "'";    
-        rs = stmt.executeQuery(query);
-
-        if (rs.next()) {
-            String index = rs.getString("index");
-            String name = rs.getString("name");
-            // HttpSession session = request.getSession();
-            session.setAttribute("name", name);
-            session.setAttribute("loggedIn", true);
-            
-            if (index.equals("0")) { // 인덱스가 0이면 로그인 불가... 관리자가 1로 바꿔줘야 함
-                out.println("<script>showAlert('관리자의 승인이 필요합니다.');</script>");
-            } else {
-                // session.setAttribute("name", name);
-                response.sendRedirect("index.html");
-            }
-        } else {
-            out.println("<script>showAlert('아이디 또는 비밀번호가 일치하지 않습니다.');</script>");
-        }
+        // insert 쿼리문
+        String query = "insert into profile (username, password, name, phone, index) values ('" + 
+        username + "', '" + hashedPassword + "', '" + name + "', '" + phone +"', '0')";
+        out.print("<br><br>query = " + query + "<br><br>");
+        int rs = stmt.executeUpdate(query);
+    
         stmt.close();
         con.close();
+        out.println("<script>showAlert('회원가입 성공');</script>");
     }catch(Exception ex)
     {
 	// 에러 내용을 보여준다.
-	out.print("err: " + ex.toString());
+	out.println("<script>showAlert('회원가입 실패. 다시 시도해주세요.');</script>");
     }   
-
     %>
+
 </body>
 </html>

@@ -82,7 +82,7 @@ function makeFilter1(methods) {
 
 // 직접 그린 폴리곤 레이어 부분
 vectorSource3 = new VectorSource({
-  url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:polygon_data&outputFormat=application/json",
+  url: "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:polygon_data&outputFormat=application/json",
   format: new GeoJSON(),
 });
 vectorLayer3 = new VectorLayer({
@@ -92,7 +92,7 @@ vectorLayer3 = new VectorLayer({
 
 // 읍면동 레이어에 대한 부분
 vectorSource2 = new VectorSource({
-  url: "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
+  url: "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:muan_emd&&outputFormat=application/json",
   format: new GeoJSON(),
 });
 
@@ -118,7 +118,7 @@ function makeFilter(click_F_Jibun) {
 function makeWFSSource2(click_F_Jibun) {
   vectorSource3 = new VectorSource({
     url: encodeURI(
-      "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
+      "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
       makeFilter(click_F_Jibun)
     ),
     format: new GeoJSON(),
@@ -149,7 +149,7 @@ function updateVectorSource(methods) {
   if (methods && methods.length > 0) {
     vectorSource = new VectorSource({
       url: encodeURI(
-        "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
+        "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:combined_muan&outputFormat=application/json&CQL_FILTER=" +
         makeFilter1(methods)
       ),
       format: new GeoJSON(),
@@ -557,7 +557,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const compreValue = document.getElementById("polydata05").value;
     const geom = geometryGeoJSON;
 
-    fetch(`./insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}&round=${encodeURIComponent(round)}&slope_poly=${encodeURIComponent(slope_poly)}&height_poly=${encodeURIComponent(height_poly)}&dist_gi_str_poly=${encodeURIComponent(dist_gi_str_poly)}&dist_gong_ntwk_poly=${encodeURIComponent(dist_gong_ntwk_poly)}&rate_city_poly=${encodeURIComponent(rate_city_poly)}&rate_city_touch_poly=${encodeURIComponent(rate_city_touch_poly)}&dist_road_touch_poly=${encodeURIComponent(dist_road_touch_poly)}&rate_kyungji_poly=${encodeURIComponent(rate_kyungji_poly)}&rate_saengtae_poly=${encodeURIComponent(rate_saengtae_poly)}&rate_gongjuck_poly=${encodeURIComponent(rate_gongjuck_poly)}&dist_gongjuck_poly=${encodeURIComponent(dist_gongjuck_poly)}&rate_jdgarea_poly=${encodeURIComponent(rate_jdgarea_poly)}&rate_nongup_poly=${encodeURIComponent(rate_nongup_poly)}&rate_limsangdo_poly=${encodeURIComponent(rate_limsangdo_poly)}&rate_bojunmount_poly=${encodeURIComponent(rate_bojunmount_poly)}&dist_kyungji_poly=${encodeURIComponent(dist_kyungji_poly)}&developValue=${encodeURIComponent(developValue)}&conserveValue=${encodeURIComponent(conserveValue)}&compreValue=${encodeURIComponent(compreValue)}&geom=${encodeURIComponent(geom)}`, {
+    fetch(`./jsp/insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}&round=${encodeURIComponent(round)}&slope_poly=${encodeURIComponent(slope_poly)}&height_poly=${encodeURIComponent(height_poly)}&dist_gi_str_poly=${encodeURIComponent(dist_gi_str_poly)}&dist_gong_ntwk_poly=${encodeURIComponent(dist_gong_ntwk_poly)}&rate_city_poly=${encodeURIComponent(rate_city_poly)}&rate_city_touch_poly=${encodeURIComponent(rate_city_touch_poly)}&dist_road_touch_poly=${encodeURIComponent(dist_road_touch_poly)}&rate_kyungji_poly=${encodeURIComponent(rate_kyungji_poly)}&rate_saengtae_poly=${encodeURIComponent(rate_saengtae_poly)}&rate_gongjuck_poly=${encodeURIComponent(rate_gongjuck_poly)}&dist_gongjuck_poly=${encodeURIComponent(dist_gongjuck_poly)}&rate_jdgarea_poly=${encodeURIComponent(rate_jdgarea_poly)}&rate_nongup_poly=${encodeURIComponent(rate_nongup_poly)}&rate_limsangdo_poly=${encodeURIComponent(rate_limsangdo_poly)}&rate_bojunmount_poly=${encodeURIComponent(rate_bojunmount_poly)}&dist_kyungji_poly=${encodeURIComponent(dist_kyungji_poly)}&developValue=${encodeURIComponent(developValue)}&conserveValue=${encodeURIComponent(conserveValue)}&compreValue=${encodeURIComponent(compreValue)}&geom=${encodeURIComponent(geom)}`, {
       method: 'POST',
     })
       .then(response => response.text())
@@ -615,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const compreValue = document.getElementById("polydata05").value;
     const geom = geometryGeoJSON;
 
-    fetch(`./insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}&round=${encodeURIComponent(round)}&slope_poly=${encodeURIComponent(slope_poly)}&height_poly=${encodeURIComponent(height_poly)}&dist_gi_str_poly=${encodeURIComponent(dist_gi_str_poly)}&dist_gong_ntwk_poly=${encodeURIComponent(dist_gong_ntwk_poly)}&rate_city_poly=${encodeURIComponent(rate_city_poly)}&rate_city_touch_poly=${encodeURIComponent(rate_city_touch_poly)}&dist_road_touch_poly=${encodeURIComponent(dist_road_touch_poly)}&rate_kyungji_poly=${encodeURIComponent(rate_kyungji_poly)}&rate_saengtae_poly=${encodeURIComponent(rate_saengtae_poly)}&rate_gongjuck_poly=${encodeURIComponent(rate_gongjuck_poly)}&dist_gongjuck_poly=${encodeURIComponent(dist_gongjuck_poly)}&rate_jdgarea_poly=${encodeURIComponent(rate_jdgarea_poly)}&rate_nongup_poly=${encodeURIComponent(rate_nongup_poly)}&rate_limsangdo_poly=${encodeURIComponent(rate_limsangdo_poly)}&rate_bojunmount_poly=${encodeURIComponent(rate_bojunmount_poly)}&dist_kyungji_poly=${encodeURIComponent(dist_kyungji_poly)}&developValue=${encodeURIComponent(developValue)}&conserveValue=${encodeURIComponent(conserveValue)}&compreValue=${encodeURIComponent(compreValue)}&geom=${encodeURIComponent(geom)}`, {
+    fetch(`./jsp/insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}&round=${encodeURIComponent(round)}&slope_poly=${encodeURIComponent(slope_poly)}&height_poly=${encodeURIComponent(height_poly)}&dist_gi_str_poly=${encodeURIComponent(dist_gi_str_poly)}&dist_gong_ntwk_poly=${encodeURIComponent(dist_gong_ntwk_poly)}&rate_city_poly=${encodeURIComponent(rate_city_poly)}&rate_city_touch_poly=${encodeURIComponent(rate_city_touch_poly)}&dist_road_touch_poly=${encodeURIComponent(dist_road_touch_poly)}&rate_kyungji_poly=${encodeURIComponent(rate_kyungji_poly)}&rate_saengtae_poly=${encodeURIComponent(rate_saengtae_poly)}&rate_gongjuck_poly=${encodeURIComponent(rate_gongjuck_poly)}&dist_gongjuck_poly=${encodeURIComponent(dist_gongjuck_poly)}&rate_jdgarea_poly=${encodeURIComponent(rate_jdgarea_poly)}&rate_nongup_poly=${encodeURIComponent(rate_nongup_poly)}&rate_limsangdo_poly=${encodeURIComponent(rate_limsangdo_poly)}&rate_bojunmount_poly=${encodeURIComponent(rate_bojunmount_poly)}&dist_kyungji_poly=${encodeURIComponent(dist_kyungji_poly)}&developValue=${encodeURIComponent(developValue)}&conserveValue=${encodeURIComponent(conserveValue)}&compreValue=${encodeURIComponent(compreValue)}&geom=${encodeURIComponent(geom)}`, {
       method: 'POST',
     })
       .then(response => response.text())
@@ -650,7 +650,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 그린 폴리곤 팝업창에 있는 값을 가져와서 서버로 전송하는 코드(삭제)
   document.getElementById("deletePoly").onclick = () => {
     const index = '3'; // 인덱스가 3 이면 jsp에서 delete 처리
-    fetch(`./insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}`, {
+    fetch(`./jsp/insertPolygon.jsp?index=${encodeURIComponent(index)}&area=${encodeURIComponent(area)}`, {
       method: 'POST',
     })
       .then(response => response.text())
@@ -1013,7 +1013,7 @@ document.addEventListener("DOMContentLoaded", function () {
     click_F_value_conserv = selectedOption.getAttribute("value_conserv");
     click_F_value_comp = selectedOption.getAttribute("value_comp");
     document.getElementById("fetchData_link").href =
-      "./fetchData.jsp?selected_pnu='" + click_F_pnu + "'";
+      "./jsp/fetchData.jsp?selected_pnu='" + click_F_pnu + "'";
 
     // 필드 값 비우기 --> 콤보박스에서 지번 변경시 초기화되는 부분
     const elementIds = [
@@ -1225,7 +1225,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function sendData(click_F_pnu, inserted_record_slope, inserted_record_height, inserted_record_dist_gi_str, inserted_record_dist_gong_ntwk, inserted_record_rate_city, inserted_record_rate_city_1, inserted_record_rate_city_touch, inserted_record_dist_road, inserted_record_rate_kyungji, inserted_record_rate_saengtae, inserted_record_rate_gongjuck, inserted_record_dist_gongjuck, inserted_record_rate_jdgarea, inserted_record_rate_nongup, inserted_record_rate_limsangdo, inserted_record_rate_bojunmount, inserted_record_dist_kyungji, inserted_value_develop, inserted_value_conserv, inserted_value_comp) {
 
     var url =
-      `./fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_1=${encodeURIComponent(inserted_record_rate_city_1)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
+      `./jsp/fetchData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}&inserted_record_slope=${encodeURIComponent(inserted_record_slope)}&inserted_record_height=${encodeURIComponent(inserted_record_height)}&inserted_record_dist_gi_str=${encodeURIComponent(inserted_record_dist_gi_str)}&inserted_record_dist_gong_ntwk=${encodeURIComponent(inserted_record_dist_gong_ntwk)}&inserted_record_rate_city=${encodeURIComponent(inserted_record_rate_city)}&inserted_record_rate_city_1=${encodeURIComponent(inserted_record_rate_city_1)}&inserted_record_rate_city_touch=${encodeURIComponent(inserted_record_rate_city_touch)}&inserted_record_dist_road=${encodeURIComponent(inserted_record_dist_road)}&inserted_record_rate_kyungji=${encodeURIComponent(inserted_record_rate_kyungji)}&inserted_record_rate_saengtae=${encodeURIComponent(inserted_record_rate_saengtae)}&inserted_record_rate_gongjuck=${encodeURIComponent(inserted_record_rate_gongjuck)}&inserted_record_dist_gongjuck=${encodeURIComponent(inserted_record_dist_gongjuck)}&inserted_record_rate_jdgarea=${encodeURIComponent(inserted_record_rate_jdgarea)}&inserted_record_rate_nongup=${encodeURIComponent(inserted_record_rate_nongup)}&inserted_record_rate_limsangdo=${encodeURIComponent(inserted_record_rate_limsangdo)}&inserted_record_rate_bojunmount=${encodeURIComponent(inserted_record_rate_bojunmount)}&inserted_record_dist_kyungji=${encodeURIComponent(inserted_record_dist_kyungji)}&inserted_value_develop=${encodeURIComponent(inserted_value_develop)}&inserted_value_conserv=${encodeURIComponent(inserted_value_conserv)}&inserted_value_comp=${encodeURIComponent(inserted_value_comp)}`;
     fetch(url, {
       method: "POST", // 서버와의 데이터 전송 방식을 지정 (GET 또는 POST)
     })
@@ -1372,7 +1372,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function deleteData(click_F_pnu) {
     // console.log("점수 삭제 완료");
     var url =
-      `./deleteData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}`;
+      `./jsp/deleteData.jsp?selected_pnu=${encodeURIComponent(click_F_pnu)}`;
     fetch(url, {
       method: "POST",
     })
@@ -1626,7 +1626,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function sumTotal() {
     const polydata03 = parseFloat(document.getElementById('polydata03').value) || 0;
     const polydata04 = parseFloat(document.getElementById('polydata04').value) || 0;
-    document.getElementById('polydata05').value = polydata03 + polydata04;
+    document.getElementById('polydata05').value = polydata03 - polydata04;
   }
 
   // 두개씩 선택 안하면 입력 수정 버튼 비활성화 함수
@@ -1675,23 +1675,23 @@ document.addEventListener("DOMContentLoaded", function () {
 // 추가 레이어 파트... wms, wfs 비교 필요
 const layerUrls = {
   bu_1km:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_1km&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_1km&outputFormat=application/json",
   bu_2km:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_2km&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_2km&outputFormat=application/json",
   bu_3km:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_3km&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:bu_3km&outputFormat=application/json",
   city_development_region:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:city_development_region&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:city_development_region&outputFormat=application/json",
   commerce_region:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:commerce_region&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:commerce_region&outputFormat=application/json",
   dwelling_region:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:dwelling_region&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:dwelling_region&outputFormat=application/json",
   industry_complex:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:industry_complex&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:industry_complex&outputFormat=application/json",
   industry_region:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:industry_region&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:industry_region&outputFormat=application/json",
   residential_area:
-    "http://localhost:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:residential_area&outputFormat=application/json",
+    "http://172.20.221.158:42888/geoserver/bootWS/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=bootWS:residential_area&outputFormat=application/json",
 };
 
 const mapLayers = {}; // 각 레이어 상태를 저장하기 위한 객체

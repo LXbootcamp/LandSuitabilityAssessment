@@ -7,18 +7,18 @@
   <script type="text/javascript">
     // 페이지 로드 시 로그인 여부 확인
     window.onload = function () {
-      fetch('check_session.jsp')
+      fetch('./jsp/check_session.jsp')
         .then(response => response.text())
         .then(data => {
           if (data.trim() === 'notLoggedIn') {
-            window.location.href = 'login.html';
+            window.location.href = './login.html';
           } else {
             document.getElementById('name').innerText = data.substring(4) + '님 반갑습니다.';
           }
         })
         .catch(error => {
           console.error('Error:', error);
-          window.location.href = 'login.html';
+          window.location.href = './login.html';
         });
     };
     
@@ -41,7 +41,7 @@
       </div>
       <div id="user-info">
         <span id="name"></span>
-        <a href="logout.jsp" id="logout">로그아웃</a>
+        <a href="./jsp/logout.jsp" id="logout">로그아웃</a>
         <button id="help-btn"><img src="https://img.icons8.com/ios-filled/50/000000/help.png" alt="Help"></button>
       </div>
     </div> <!-- header 닫힘 -->
@@ -106,9 +106,9 @@
               <th width="80"> 선택지표 </th>
               <td width="240" style="font-size: 14.5px;">
                 <input type="checkbox" class="dev-checkbox" id="checkbox_bbb01">
-                <label for="bbb01">도지용지비율(%)</label><br>
+                <label for="bbb01">도시용지비율(%)</label><br>
                 <input type="checkbox" class="dev-checkbox" id="checkbox_bbb04">
-                <label for="bbb04">선택영역 도지용지비율(%)</label><br>
+                <label for="bbb04">선택영역 도시용지비율(%)</label><br>
                 <input type="checkbox" class="dev-checkbox" id="checkbox_bbb02">
                 <label for="bbb02">도시용지인접비율(%)</label><br>
                 <input type="checkbox" class="dev-checkbox" id="checkbox_bbb03">
@@ -232,7 +232,7 @@
             <div class="center-btn">
               <button style="width: 120px; font-size: 15px;" id="showOnMap">지도로 결과
                 보기</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <button id="generateHWPX" style="width: 120px; font-size: 15px;">비밀</button>
+              <button id="generateHWPX" style="width: 120px; font-size: 15px;">출력</button>
             </div>
           </div>
         </div>
